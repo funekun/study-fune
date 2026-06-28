@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>study-fune プリント</title>
+<style>
+/* 画面表示用 */
+body{font-family:-apple-system,sans-serif;background:#f5f5f3;margin:0;padding:1rem 0 80px;}
+.screen-wrap{max-width:500px;margin:0 auto;padding:0 1rem;}
+.box{background:#fff;border-radius:12px;padding:1rem;margin-bottom:1rem;border:1px solid #e5e5e3;}
+.ok{color:#3B6D11;background:#EAF3DE;padding:8px 12px;border-radius:8px;font-size:14px;}
+.ng{color:#A32D2D;background:#FCEBEB;padding:8px 12px;border-radius:8px;font-size:14px;}
+h2{font-size:15px;margin:0 0 8px;}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
+.tab{padding:6px 14px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:13px;cursor:pointer;font-family:inherit;}
+.tab.on{background:#378ADD;color:#fff;border-color:#378ADD;}
+.row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0;}
+.row:last-child{border-bottom:none;}
+.ctr{display:flex;align-items:center;gap:8px;}
+.cbtn{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:16px;cursor:pointer;font-family:inherit;}
+.cval{font-size:15px;font-weight:700;min-width:18px;text-align:center;}
+.sbtn{width:100%;padding:12px;font-size:15px;font-weight:700;border:none;background:#378ADD;color:#fff;border-radius:8px;cursor:pointer;margin-top:8px;font-family:inherit;}
+.pbtn{width:100%;padding:12px;font-size:15px;font-weight:700;border:none;background:#3B6D11;color:#fff;border-radius:8px;cursor:pointer;margin-top:8px;font-family:inherit;}
+nav{position:fixed;bottom:0;left:0;right:0;height:50px;background:#fff;border-top:1px solid #eee;display:flex;}
+.nb{flex:1;font-size:13px;border:none;background:none;cursor:pointer;font-family:inherit;color:#999;}
+.nb.on{color:#378ADD;font-weight:700;}
+.page{display:none;}.page.on{display:block;}
+
+/* プリント用ページ */
+.print-page{background:#fff;width:210mm;min-height:297mm;margin:0 auto;padding:15mm;box-shadow:0 2px 8px rgba(0,0,0,0.15);font-family:'Hiragino Mincho ProN','Times New Roman',serif;}
+.print-header{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:16px;}
+.print-title{font-size:18px;font-weight:bold;}
+.print-meta{font-size:12px;text-align:right;line-height:1.8;}
+.print-meta-row{display:flex;gap:16px;justify-content:flex-end;margin-bottom:8px;}
+.score-box{border:1px solid #000;padding:4px 12px;font-size:13px;}
+.print-q{margin-bottom:20px;page-break-inside:avoid;}
+.print-q-num{font-size:13px;font-weight:bold;margin-bottom:4px;}
+.print-q-text{font-size:14px;line-height:1.9;margin-bottom:6px;}
+.print-q-answer{border-bottom:1px solid #666;min-height:32px;margin-top:8px;}
+.print-q-answer-label{font-size:12px;color:#666;margin-bottom:2px;}
+.choice-list{margin-left:16px;margin-top:4px;}
+.choice-item{font-size:13px;margin-bottom:4px;}
+.answer-line{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.answer-label{font-size:12px;white-space:nowrap;}
+.answer-blank{flex:1;border-bottom:1px solid #333;min-height:24px;}
+
+/* 印刷時 */
+@media print {
+  body{background:#fff;padding:0;}
+  .screen-wrap{display:none;}
+  nav{display:none;}
+  .print-page{box-shadow:none;margin:0;padding:15mm;width:auto;}
+  .print-q{page-break-inside:avoid;}
+}
+</style>
+</head>
+<body>
+
+<div class="screen-wrap">
+
+<!-- 選択画面 -->
+<div class="page on" id="p0">
+  <div class="box">
+    <h2 style="display:inline">プリント作成</h2>
+    <div style="margin-top:8px" id="st"></div>
+  </div>
+  <div class="box">
+    <h2>教科</h2>
+    <div class="tabs" id="tabs"><span style="color:#999;font-size:13px">読み込み中...</span></div>
+    <h2>カテゴリと問題数</h2>
+    <div id="cats"><p style="color:#999;font-size:13px">読み込み中...</p></div>
+  </div>
+  <div class="box">
+    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px">
+      <span>選択問題数</span><strong id="tq">0問</strong>
+    </div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:8px;cursor:pointer">
+      <input type="checkbox" id="show-answer"> 答えあり（先生用）
+    </label>
+    <button class="sbtn" onclick="genPrint()">プリントを作成する</button>
+  </div>
+</div>
+
+<!-- プリントプレビュー画面 -->
+<div class="page" id="p1">
+  <div class="box" style="display:flex;gap:8px;">
+    <button class="pbtn" style="flex:1" onclick="window.print()">🖨 印刷する</button>
+    <button class="sbtn" style="flex:1" onclick="sw(0)">← 戻る</button>
+  </div>
+</div>
+
+</div><!-- /screen-wrap -->
+
+<!-- プリント本体（印刷時に表示） -->
+<div class="print-page" id="print-page" style="display:none">
+  <div class="print-header">
+    <div>
+      <div class="print-title" id="print-title">数学 プリント</div>
+      <div style="font-size:12px;margin-top:4px">study-fune</div>
+    </div>
+    <div class="print-meta">
+      <div class="print-meta-row">
+        <span>名前：<span style="display:inline-block;border-bottom:1px solid #000;width:120px">&nbsp;</span></span>
+        <span>日付：<span style="display:inline-block;border-bottom:1px solid #000;width:80px">&nbsp;</span></span>
+      </div>
+      <div class="score-box">点数：&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/ <span id="print-total">0</span>点</div>
+    </div>
+  </div>
+  <div id="print-questions"></div>
+</div>
+
+<nav>
+  <button class="nb on" id="n0" onclick="sw(0)">✏ 選択</button>
+  <button class="nb" id="n1" onclick="sw(1)">📄 プレビュー</button>
+</nav>
+
+<script>
+var SURL = "https://nheriakfknzgfmhuncbj.supabase.co";
+var SKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZXJpYWtma256Z2ZtaHVuY2JqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MjM1NDQsImV4cCI6MjA5ODA5OTU0NH0.lVaGt3sK1rD2AZQuj568h-NCsZQ4tEb_Ff5QFbHEZQU";
+
+var si=0, subs=[], cmap={}, CNT={};
+
+function sw(i) {
+  document.getElementById("p0").classList[i===0?"add":"remove"]("on");
+  document.getElementById("p1").classList[i===1?"add":"remove"]("on");
+  document.getElementById("n0").classList[i===0?"add":"remove"]("on");
+  document.getElementById("n1").classList[i===1?"add":"remove"]("on");
+  // プリントページの表示切替
+  document.getElementById("print-page").style.display = i===1 ? "block" : "none";
+  window.scrollTo(0,0);
+}
+
+function rTabs() {
+  var h="";
+  for (var i=0;i<subs.length;i++)
+    h+='<button class="tab'+(i===si?" on":"")+'" onclick="selS('+i+')">'+subs[i]+"</button>";
+  document.getElementById("tabs").innerHTML=h;
+}
+function selS(i){si=i;rTabs();rCats();}
+function rCats() {
+  var h="";
+  for (var k in cmap) {
+    if (cmap[k].subj!==subs[si]) continue;
+    var c=cmap[k], eid="ev"+k.replace(/[^a-z0-9]/gi,"_");
+    h+='<div class="row"><div><strong>'+c.cat+'</strong><br><span style="font-size:12px;color:#999">'+c.qs.length+'問</span></div>'+
+      '<div class="ctr"><button class="cbtn" onclick="chg(''+k+'',-1)">-</button>'+
+      '<span class="cval" id="'+eid+'">'+(CNT[k]||0)+'</span>'+
+      '<button class="cbtn" onclick="chg(''+k+'',1)">+</button></div></div>';
+  }
+  document.getElementById("cats").innerHTML=h||'<p style="color:#999;font-size:13px">なし</p>';
+}
+function chg(k,d) {
+  CNT[k]=Math.max(0,Math.min(cmap[k].qs.length,(CNT[k]||0)+d));
+  var el=document.getElementById("ev"+k.replace(/[^a-z0-9]/gi,"_"));
+  if(el)el.textContent=CNT[k];
+  rSum();
+}
+function rSum() {
+  var tot=0;
+  for (var k in CNT) tot+=CNT[k];
+  document.getElementById("tq").textContent=tot+"問";
+}
+
+function genPrint() {
+  var pool=[];
+  var showAns = document.getElementById("show-answer").checked;
+  for (var k in CNT) {
+    var cnt=CNT[k]; if(!cnt) continue;
+    var arr=cmap[k].qs.slice();
+    arr.sort(function(){return Math.random()-.5;});
+    for(var j=0;j<Math.min(cnt,arr.length);j++) pool.push(arr[j]);
+  }
+  if(!pool.length){alert("問題を選んでください");return;}
+  pool.sort(function(){return Math.random()-.5;});
+
+  // タイトル
+  var subjs=[]; 
+  for(var i=0;i<pool.length;i++) if(subjs.indexOf(pool[i].subject)<0) subjs.push(pool[i].subject);
+  document.getElementById("print-title").textContent = subjs.join("・") + " プリント";
+  document.getElementById("print-total").textContent = pool.length * 10;
+
+  // 問題HTML生成
+  var h="";
+  var ptPerQ = Math.round(100/pool.length);
+  for (var i=0;i<pool.length;i++) {
+    var q=pool[i];
+    var txt = q.text.replace(/\n/g,"<br>").replace(/
+/g,"<br>");
+    h+='<div class="print-q">';
+    h+='<div class="print-q-num">【'+(i+1)+'】 （'+ptPerQ+'点）　'+q.category+'</div>';
+    h+='<div class="print-q-text">'+txt+'</div>';
+    if (q.type==="choice" && q.choices) {
+      var ch = typeof q.choices==="string" ? JSON.parse(q.choices) : q.choices;
+      h+='<div class="choice-list">';
+      var L=["ア","イ","ウ","エ"];
+      for(var j=0;j<ch.length;j++) h+='<div class="choice-item">'+L[j]+'．'+ch[j]+'</div>';
+      h+='</div>';
+      h+='<div class="answer-line"><span class="answer-label">答え：</span><div class="answer-blank">';
+      if(showAns) h+='<span style="color:#c00;font-weight:bold">'+L[parseInt(q.answer)]+'</span>';
+      h+='</div></div>';
+    } else {
+      h+='<div class="answer-line"><span class="answer-label">答え：</span><div class="answer-blank">';
+      if(showAns) h+='<span style="color:#c00;font-weight:bold">'+q.answer+'</span>';
+      h+='</div></div>';
+    }
+    h+='</div>';
+  }
+  document.getElementById("print-questions").innerHTML=h;
+  sw(1);
+}
+
+fetch(SURL + "/rest/v1/questions?is_active=eq.true&order=subject,category,difficulty", {
+  headers: {"apikey": SKEY, "Authorization": "Bearer " + SKEY}
+})
+.then(function(r){return r.json();})
+.then(function(data){
+  if(!Array.isArray(data)){
+    document.getElementById("st").innerHTML='<div class="ng">エラー: '+JSON.stringify(data).slice(0,60)+'</div>';
+    return;
+  }
+  document.getElementById("st").innerHTML='<div class="ok">✓ '+data.length+'問読み込み済み</div>';
+  for(var i=0;i<data.length;i++){
+    var q=data[i];
+    if(subs.indexOf(q.subject)<0) subs.push(q.subject);
+    var k=q.subject+"__"+q.category;
+    if(!cmap[k]){cmap[k]={subj:q.subject,cat:q.category,qs:[]};CNT[k]=0;}
+    cmap[k].qs.push(q);
+  }
+  rTabs();rCats();rSum();
+})
+.catch(function(e){
+  document.getElementById("st").innerHTML='<div class="ng">接続失敗: '+e.message+'</div>';
+});
+</script>
+</body>
+</html>
