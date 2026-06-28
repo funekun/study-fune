@@ -3,2191 +3,892 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>英進塾 まなびアプリ</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<title>Study on You</title>
 <style>
   :root {
-    --bg: #F5F5F3;
-    --surface: #FFFFFF;
-    --surface-sub: #F0F0EE;
-    --border: #E5E5E3;
-    --border-strong: #CCCCCA;
-    --text-primary: #1A1A18;
-    --text-secondary: #666664;
-    --text-muted: #9A9A98;
-    --accent: #185FA5;
-    --accent-bg: #E6F1FB;
-    --accent-mid: #378ADD;
-    --success: #3B6D11;
-    --success-bg: #EAF3DE;
-    --success-border: #C0DD97;
-    --warning: #BA7517;
-    --warning-bg: #FAEEDA;
-    --warning-dark: #633806;
-    --warning-mid: #854F0B;
-    --danger: #A32D2D;
-    --danger-bg: #FCEBEB;
-    --danger-border: #F7C1C1;
-    --purple-bg: #EEEDFE;
-    --purple: #534AB7;
-    --purple-dark: #3C3489;
-    --teal-bg: #E1F5EE;
-    --teal: #0F6E56;
-    --coral-bg: #FAECE7;
-    --coral: #993C1D;
-    --radius: 8px;
-    --radius-lg: 12px;
-    --nav-h: 56px;
+    --blue: #4A90E2;
+    --blue-dark: #2C6FC7;
+    --green: #27AE60;
+    --red: #E74C3C;
+    --yellow: #F39C12;
+    --purple: #8E44AD;
+    --orange: #E67E22;
+    --bg: #F5F7FA;
+    --card: #FFFFFF;
+    --text: #2C3E50;
+    --text-sub: #7F8C8D;
+    --border: #E0E6ED;
+    --radius: 14px;
+    --shadow: 0 2px 12px rgba(0,0,0,0.08);
   }
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body { font-family: -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
 
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html, body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
-    font-family: -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
-    background: var(--bg);
-    color: var(--text-primary);
-    height: 100%;
-  }
-
-  /* ── ボトムナビ ── */
-  .nav {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: var(--nav-h);
-    background: var(--surface);
-    border-top: 1px solid var(--border);
-    display: flex;
-    z-index: 100;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  .nav-tab {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: var(--text-muted);
-    font-size: 22px;
-    transition: color 0.15s;
-    border: none;
-    background: none;
-    padding: 0;
-  }
-  .nav-tab.active { color: var(--accent); }
-
-  /* ── 画面 ── */
-  .screen {
-    display: none;
-    padding: 1.25rem 1rem calc(var(--nav-h) + 1.25rem + env(safe-area-inset-bottom));
-    max-width: 500px;
-    margin: 0 auto;
-    width: 100%;
-    overflow-x: hidden;
-  }
+  /* ===== 画面共通 ===== */
+  .screen { display: none; min-height: 100vh; padding-bottom: 80px; }
   .screen.active { display: block; }
 
-  /* ── 共通 ── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: 1rem 1.25rem;
-    margin-bottom: 12px;
-    width: 100%;
-  }
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 10px;
-  }
-  .badge {
-    font-size: 11px;
-    padding: 2px 9px;
-    border-radius: 20px;
-    font-weight: 500;
-    display: inline-block;
-    white-space: nowrap;
-  }
-  .b-math   { background: var(--accent-bg);  color: var(--accent); }
-  .b-eng    { background: var(--teal-bg);    color: var(--teal); }
-  .b-jpn    { background: var(--purple-bg);  color: var(--purple-dark); }
-  .b-sci    { background: var(--warning-bg); color: var(--warning-mid); }
-  .b-attend { background: var(--success-bg); color: var(--success); }
-
-  button {
-    font-family: inherit;
-    font-size: 14px;
-    padding: 8px 18px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border-strong);
-    background: var(--surface);
-    color: var(--text-primary);
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-  }
-  button:hover  { background: var(--surface-sub); }
-  button:active { transform: scale(0.98); }
-  button.primary {
-    background: var(--accent-mid);
+  /* ===== ヘッダー ===== */
+  .header {
+    background: var(--blue);
     color: #fff;
-    border-color: var(--accent-mid);
+    padding: 16px 20px 14px;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; gap: 12px;
   }
-  button.primary:hover { background: var(--accent); }
+  .header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; flex: 1; }
+  .header .back-btn {
+    background: rgba(255,255,255,0.2);
+    border: none; border-radius: 8px;
+    color: #fff; font-size: 14px;
+    padding: 6px 12px; cursor: pointer;
+  }
+  .header .user-badge {
+    background: rgba(255,255,255,0.25);
+    border-radius: 20px; padding: 4px 12px;
+    font-size: 13px; font-weight: 600;
+  }
 
-  /* ── 共通トップバー ── */
-  .topbar {
+  /* ===== ボトムナビ ===== */
+  .bottom-nav {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: #fff;
+    border-top: 1px solid var(--border);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 1.25rem;
-    width: 100%;
+    z-index: 200;
+    padding-bottom: env(safe-area-inset-bottom);
   }
-  .student-info { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .avatar {
-    width: 38px; height: 38px; border-radius: 50%;
-    background: var(--accent-bg); flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600; color: var(--accent);
-  }
-  .s-name  { font-size: 15px; font-weight: 600; white-space: nowrap; }
-  .s-grade { font-size: 12px; color: var(--text-muted); }
-  .pt-pill {
-    display: flex; align-items: center; gap: 6px;
-    background: var(--warning-bg); border-radius: 20px;
-    padding: 6px 14px; flex-shrink: 0;
-  }
-  .pt-num  { font-size: 20px; font-weight: 600; color: var(--warning-dark); }
-  .pt-unit { font-size: 12px; color: var(--warning-mid); }
-
-  /* ── 画面1: 問題を解く ── */
-  .prog-row  { display: flex; align-items: center; gap: 10px; margin-bottom: 1.25rem; }
-  .prog-wrap { flex: 1; height: 6px; background: var(--surface-sub); border-radius: 99px; overflow: hidden; }
-  .prog-fill { height: 100%; border-radius: 99px; background: var(--accent-mid); transition: width 0.4s; }
-  .prog-txt  { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
-
-  .q-meta   { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
-  .q-chance { font-size: 12px; color: var(--text-muted); }
-  .q-text   { font-size: 16px; line-height: 1.7; margin-bottom: 1.25rem; word-break: break-word; }
-
-  .choices { display: flex; flex-direction: column; gap: 8px; }
-  .choice {
-    border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 10px 14px; cursor: pointer; font-size: 15px;
-    text-align: left; background: var(--surface);
-    display: flex; align-items: center; gap: 10px;
-    transition: border-color 0.15s, background 0.15s;
-    width: 100%; word-break: break-word;
-  }
-  .choice:hover    { border-color: var(--border-strong); background: var(--surface-sub); }
-  .choice.selected { border-color: var(--accent-mid); background: var(--accent-bg); color: var(--accent); }
-  .choice.correct  { border-color: var(--success); background: var(--success-bg); color: var(--success); }
-  .choice.wrong    { border-color: var(--danger);  background: var(--danger-bg);  color: var(--danger); }
-  .choice-letter {
-    width: 22px; height: 22px; border-radius: 50%;
-    border: 1.5px solid currentColor; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 600;
-  }
-
-  input[type="text"] {
-    width: 100%; font-size: 16px; padding: 10px 14px;
-    border-radius: var(--radius); border: 1px solid var(--border);
-    font-family: inherit; background: var(--surface); color: var(--text-primary);
-  }
-  input[type="text"]:focus { outline: none; border-color: var(--accent-mid); }
-  input.correct-inp { border-color: var(--success); background: var(--success-bg); }
-  input.wrong-inp   { border-color: var(--danger);  background: var(--danger-bg); }
-
-  .feedback {
-    border-radius: var(--radius); padding: 10px 14px;
-    font-size: 14px; margin: 12px 0;
-    display: none; align-items: center; gap: 8px;
-  }
-  .feedback.ok { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); display: flex; }
-  .feedback.ng { background: var(--danger-bg);  color: var(--danger);  border: 1px solid var(--danger-border);  display: flex; }
-
-  .btn-row { display: flex; justify-content: flex-end; margin-top: 10px; }
-
-  .result-wrap  { text-align: center; padding: 2rem 0; }
-  .result-icon-wrap {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: var(--success-bg); color: var(--success);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 32px; margin: 0 auto 1rem;
-  }
-  .result-score { font-size: 40px; font-weight: 600; }
-  .result-sub   { font-size: 14px; color: var(--text-secondary); margin-top: 4px; margin-bottom: 1.5rem; }
-  .earn-box {
-    background: var(--warning-bg); border-radius: var(--radius-lg);
-    padding: 1rem 1.5rem; margin-bottom: 1.5rem; display: inline-block;
-  }
-  .earn-label { font-size: 13px; color: var(--warning-mid); margin-bottom: 4px; }
-  .earn-val   { font-size: 32px; font-weight: 600; color: var(--warning-dark); }
-
-  /* ── 画面2: ユーザーページ ── */
-  .hist-row { display: flex; gap: 8px; margin-bottom: 1.25rem; width: 100%; }
-  .hist-cell {
-    flex: 1; background: var(--surface-sub); border-radius: var(--radius);
-    padding: 10px 8px; text-align: center; min-width: 0;
-  }
-  .hist-val { font-size: 15px; font-weight: 600; }
-  .hist-lbl { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.3; }
-
-  .next-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 1.25rem; }
-  .next-row  { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-  .next-icon {
-    width: 38px; height: 38px; border-radius: 8px;
-    background: var(--warning-bg); color: var(--warning);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px; flex-shrink: 0;
-  }
-  .next-name   { font-size: 14px; font-weight: 600; }
-  .next-remain { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
-  .bar6       { height: 6px; background: var(--surface-sub); border-radius: 99px; overflow: hidden; margin-bottom: 5px; }
-  .bar6-fill  { height: 100%; border-radius: 99px; background: var(--accent-mid); }
-  .bar6-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); }
-
-  .gift-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1.25rem; width: 100%; }
-  .gift-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 14px; cursor: pointer;
-    transition: border-color 0.15s; position: relative; min-width: 0;
-  }
-  .gift-card:hover:not(.locked) { border-color: var(--border-strong); }
-  .gift-card.locked   { opacity: 0.5; cursor: not-allowed; }
-  .gift-card.featured { border: 2px solid var(--accent-mid); }
-  .feat-tag {
-    position: absolute; top: -1px; right: 10px;
-    background: var(--accent-mid); color: #fff;
-    font-size: 10px; font-weight: 600; padding: 3px 9px;
-    border-radius: 0 0 6px 6px;
-  }
-  .gift-icon-wrap {
-    width: 44px; height: 44px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 10px; font-size: 20px;
-  }
-  .gi-gold { background: var(--warning-bg); color: var(--warning); }
-  .gi-book { background: var(--teal-bg);    color: var(--teal); }
-  .gi-game { background: var(--purple-bg);  color: var(--purple); }
-  .gi-food { background: var(--coral-bg);   color: var(--coral); }
-  .gift-name { font-size: 14px; font-weight: 600; margin-bottom: 4px; word-break: break-word; }
-  .gift-pt   { font-size: 13px; color: var(--text-muted); }
-  .gift-pt strong { color: var(--warning-dark); }
-  .lock-ico  { position: absolute; top: 10px; right: 10px; font-size: 14px; color: var(--text-muted); }
-
-  .toast {
-    display: none; align-items: center; gap: 8px;
-    background: var(--success-bg); border: 1px solid var(--success-border);
-    color: var(--success); border-radius: var(--radius);
-    padding: 10px 16px; font-size: 14px; margin-bottom: 1rem;
-    word-break: break-word;
-  }
-  .toast.show { display: flex; }
-
-  /* ── 画面3: 保護者 ── */
-  .parent-topbar {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 1.25rem; padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-  }
-  .app-brand { display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; color: var(--accent); }
-  .notif-btn { position: relative; cursor: pointer; background: none; border: none; padding: 4px; font-size: 22px; color: var(--text-secondary); }
-  .notif-dot { width: 7px; height: 7px; border-radius: 50%; background: #E24B4A; position: absolute; top: 2px; right: 2px; }
-
-  .stu-tabs { display: flex; gap: 8px; margin-bottom: 1.25rem; }
-  .stu-tab {
-    flex: 1; padding: 10px 12px; border-radius: var(--radius);
-    border: 1px solid var(--border); background: var(--surface);
-    cursor: pointer; text-align: center; transition: border-color 0.15s, background 0.15s;
-  }
-  .stu-tab.active { border-color: var(--accent-mid); background: var(--accent-bg); }
-  .stu-tab-name  { font-size: 14px; font-weight: 600; color: var(--text-primary); }
-  .stu-tab.active .stu-tab-name { color: var(--accent); }
-  .stu-tab-grade { font-size: 11px; color: var(--text-muted); }
-
-  .metrics-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 1.25rem; width: 100%; }
-  .metric-cell { background: var(--surface-sub); border-radius: var(--radius); padding: 10px 8px; text-align: center; min-width: 0; }
-  .metric-val  { font-size: 16px; font-weight: 600; }
-  .metric-lbl  { font-size: 11px; color: var(--text-muted); margin-top: 3px; line-height: 1.3; }
-
-  .pt-summary {
-    background: var(--warning-bg); border-radius: var(--radius-lg);
-    padding: 14px 16px; margin-bottom: 1.25rem;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .pt-sum-val   { font-size: 28px; font-weight: 600; color: var(--warning-dark); }
-  .pt-sum-label { font-size: 12px; color: var(--warning-mid); margin-bottom: 3px; }
-  .pt-sum-right { text-align: right; }
-  .pt-mini-bar  { width: 90px; height: 6px; background: #F5C4B3; border-radius: 99px; overflow: hidden; margin: 4px 0 4px auto; }
-  .pt-mini-fill { height: 100%; border-radius: 99px; background: var(--warning); }
-  .pt-mini-txt  { font-size: 11px; color: var(--warning-mid); }
-
-  .chart-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; margin-bottom: 1.25rem; }
-  .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 80px; margin-bottom: 6px; }
-  .bar-col    { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; min-width: 0; }
-  .bar-bg     { width: 100%; flex: 1; background: var(--surface-sub); border-radius: 4px; display: flex; align-items: flex-end; }
-  .bar-inner  { width: 100%; border-radius: 4px; background: var(--accent-mid); }
-  .bar-day    { font-size: 11px; color: var(--text-muted); }
-
-  .act-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 10px; overflow: hidden; }
-  .act-head  { display: flex; align-items: center; padding: 10px 16px; border-bottom: 1px solid var(--border); background: var(--surface-sub); }
-  .act-date  { font-size: 13px; font-weight: 600; }
-  .act-body  { padding: 4px 16px; }
-  .act-row   { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--border); gap: 8px; }
-  .act-row:last-child { border-bottom: none; }
-  .act-left  { display: flex; align-items: center; gap: 8px; font-size: 14px; min-width: 0; flex: 1; word-break: break-word; }
-  .score-good { font-size: 13px; font-weight: 600; color: var(--success); white-space: nowrap; }
-  .score-ok   { font-size: 13px; font-weight: 600; color: var(--warning); white-space: nowrap; }
-  .score-pt   { font-size: 13px; font-weight: 600; color: var(--warning-dark); white-space: nowrap; }
-
-  .comment-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 14px 16px; }
-  .comment-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-  .comment-av   { width: 28px; height: 28px; border-radius: 50%; background: var(--accent-bg); color: var(--accent); font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .comment-from { font-size: 13px; color: var(--text-secondary); }
-  .comment-text { font-size: 14px; line-height: 1.75; background: var(--surface-sub); border-radius: var(--radius); padding: 10px 12px; word-break: break-word; }
-
-  /* ── 画面4: プロフィール登録 ── */
-  .profile-avatar-wrap {
-    display: flex; flex-direction: column; align-items: center;
-    margin-bottom: 1.5rem; gap: 10px;
-  }
-  .profile-avatar-big {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: var(--accent-bg); color: var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; font-weight: 600; cursor: pointer;
-    border: 2px dashed var(--accent-mid); position: relative;
-  }
-  .profile-avatar-big .edit-icon {
-    position: absolute; bottom: 0; right: 0;
-    width: 22px; height: 22px; border-radius: 50%;
-    background: var(--accent-mid); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px;
-  }
-  .profile-avatar-hint { font-size: 12px; color: var(--text-muted); }
-
-  .form-group { margin-bottom: 1rem; }
-  .form-label {
-    font-size: 13px; font-weight: 600; color: var(--text-secondary);
-    margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
-  }
-  .required-tag {
-    font-size: 10px; background: #FCEBEB; color: #A32D2D;
-    border-radius: 4px; padding: 1px 6px; font-weight: 600;
-  }
-  .optional-tag {
-    font-size: 10px; background: var(--surface-sub); color: var(--text-muted);
-    border-radius: 4px; padding: 1px 6px; font-weight: 500;
-  }
-  .form-input {
-    width: 100%; font-size: 15px; padding: 10px 14px;
-    border-radius: var(--radius); border: 1px solid var(--border);
-    font-family: inherit; background: var(--surface); color: var(--text-primary);
-    transition: border-color 0.15s;
-  }
-  .form-input:focus { outline: none; border-color: var(--accent-mid); }
-  .form-input.error { border-color: var(--danger); background: var(--danger-bg); }
-  textarea.form-input { resize: none; line-height: 1.6; }
-  select.form-input { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239A9A98' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
-  .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 5px; }
-  .form-error { font-size: 12px; color: var(--danger); margin-top: 5px; display: none; }
-  .form-error.show { display: block; }
-
-  .visibility-row {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-top: 6px;
-  }
-  .vis-toggle {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--text-muted); cursor: pointer;
-    border: 1px solid var(--border); border-radius: 20px;
-    padding: 4px 10px; background: var(--surface); transition: all 0.15s;
-    user-select: none;
-  }
-  .vis-toggle.public { border-color: var(--success); color: var(--success); background: var(--success-bg); }
-  .vis-toggle.private { border-color: var(--border-strong); color: var(--text-muted); background: var(--surface-sub); }
-
-  .form-divider { border: none; border-top: 1px solid var(--border); margin: 1.25rem 0; }
-  .save-btn-wrap { margin-top: 1.5rem; }
-  .save-btn-wrap button { width: 100%; padding: 13px; font-size: 16px; font-weight: 600; }
-
-  .profile-saved-toast {
-    display: none; align-items: center; gap: 8px;
-    background: var(--success-bg); border: 1px solid var(--success-border);
-    color: var(--success); border-radius: var(--radius);
-    padding: 10px 16px; font-size: 14px; margin-bottom: 1rem;
-  }
-  .profile-saved-toast.show { display: flex; }
-
-  /* ── ログイン画面 ── */
-  .login-screen {
-    display: none; position: fixed; inset: 0;
-    background: var(--bg); z-index: 300;
-    flex-direction: column; align-items: center; justify-content: center;
-    padding: 2rem 1.5rem;
-  }
-  .login-screen.show { display: flex; }
-  .login-logo {
-    display: flex; flex-direction: column; align-items: center;
-    gap: 8px; margin-bottom: 2.5rem;
-  }
-  .login-logo-icon {
-    width: 64px; height: 64px; border-radius: 16px;
-    background: var(--accent-mid); color: #fff;
-    display: flex; align-items: center; justify-content: center; font-size: 30px;
-  }
-  .login-logo-name { font-size: 22px; font-weight: 700; color: var(--text-primary); }
-  .login-logo-sub  { font-size: 13px; color: var(--text-muted); }
-  .login-card {
-    background: var(--surface); border-radius: var(--radius-lg);
-    border: 1px solid var(--border); padding: 1.5rem;
-    width: 100%; max-width: 360px; margin-bottom: 1rem;
-  }
-  .login-tabs {
-    display: flex; border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden; margin-bottom: 1.5rem;
-  }
-  .login-tab {
-    flex: 1; padding: 8px; font-size: 14px; font-weight: 600;
-    border: none; background: var(--surface); color: var(--text-muted);
-    cursor: pointer; transition: background 0.15s, color 0.15s;
-  }
-  .login-tab.active { background: var(--accent-mid); color: #fff; }
-  .login-field { margin-bottom: 1rem; }
-  .login-field label { font-size: 13px; font-weight: 600; color: var(--text-secondary); display: block; margin-bottom: 5px; }
-  .login-field input {
-    width: 100%; font-size: 15px; padding: 10px 14px;
-    border-radius: var(--radius); border: 1px solid var(--border);
-    font-family: inherit; background: var(--surface); color: var(--text-primary);
-  }
-  .login-field input:focus { outline: none; border-color: var(--accent-mid); }
-  .login-field input.error { border-color: var(--danger); background: var(--danger-bg); }
-  .login-err { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
-  .login-err.show { display: block; }
-  .login-btn { width: 100%; padding: 12px; font-size: 15px; font-weight: 600; margin-top: 0.5rem; }
-  .login-forgot { text-align: center; font-size: 13px; color: var(--accent); cursor: pointer; margin-top: 1rem; }
-  .login-divider { display: flex; align-items: center; gap: 10px; margin: 1.25rem 0; }
-  .login-divider span { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
-  .login-divider::before, .login-divider::after { content:''; flex:1; border-top: 1px solid var(--border); }
-  .login-guest { width: 100%; padding: 11px; font-size: 14px; }
-
-  /* ── プロフィール表示画面 ── */
-  .pv-header {
-    position: relative; margin-bottom: 1rem;
-  }
-  .pv-banner {
-    height: 90px; border-radius: var(--radius-lg);
-    background: linear-gradient(135deg, #378ADD 0%, #185FA5 100%);
-    margin-bottom: 0;
-  }
-  .pv-avatar-wrap {
-    position: absolute; bottom: -36px; left: 1rem;
-  }
-  .pv-avatar {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: var(--accent-bg); color: var(--accent);
-    font-size: 26px; font-weight: 700;
-    display: flex; align-items: center; justify-content: center;
-    border: 3px solid var(--surface);
-  }
-  .pv-edit-btn {
-    position: absolute; bottom: -36px; right: 0;
-    font-size: 13px; padding: 7px 14px;
-  }
-  .pv-name-row { margin-top: 44px; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
-  .pv-name  { font-size: 20px; font-weight: 700; }
-  .pv-grade-badge {
-    font-size: 11px; padding: 2px 9px; border-radius: 20px; font-weight: 600;
-    background: var(--accent-bg); color: var(--accent);
-  }
-  .pv-塾  { font-size: 13px; color: var(--text-muted); margin-bottom: 1rem; }
-
-  .pv-stats {
-    display: grid; grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px; margin-bottom: 1.25rem;
-  }
-  .pv-stat {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 12px 8px; text-align: center;
-  }
-  .pv-stat-val { font-size: 18px; font-weight: 700; color: var(--text-primary); }
-  .pv-stat-lbl { font-size: 11px; color: var(--text-muted); margin-top: 3px; }
-
-  .pv-section { margin-bottom: 1.25rem; }
-  .pv-row {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 12px 16px;
-    display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px;
-  }
-  .pv-row-icon {
-    width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center; font-size: 16px;
-  }
-  .pv-row-icon.blue   { background: var(--accent-bg);  color: var(--accent); }
-  .pv-row-icon.green  { background: var(--success-bg); color: var(--success); }
-  .pv-row-icon.purple { background: var(--purple-bg);  color: var(--purple); }
-  .pv-row-label { font-size: 12px; color: var(--text-muted); margin-bottom: 2px; }
-  .pv-row-val   { font-size: 15px; color: var(--text-primary); font-weight: 500; }
-
-  .pv-bio-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius-lg); padding: 14px 16px;
-  }
-  .pv-bio-title { font-size: 12px; color: var(--text-muted); margin-bottom: 8px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; }
-  .pv-bio-text  { font-size: 14px; color: var(--text-primary); line-height: 1.75; }
-
-  .pv-pt-card {
-    background: var(--warning-bg); border-radius: var(--radius-lg);
-    padding: 14px 16px; display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 1.25rem;
-  }
-  .pv-pt-left .lbl  { font-size: 12px; color: var(--warning-mid); margin-bottom: 2px; }
-  .pv-pt-left .val  { font-size: 26px; font-weight: 700; color: var(--warning-dark); }
-  .pv-pt-rank {
-    text-align: right;
-  }
-  .pv-pt-rank .rank-num  { font-size: 22px; font-weight: 700; color: var(--warning-dark); }
-  .pv-pt-rank .rank-lbl  { font-size: 11px; color: var(--warning-mid); }
-
-  /* ── 画面: スケジュール ── */
-  .cal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
-  .cal-month{font-size:17px;font-weight:700;}
-  .cal-nav{display:flex;gap:4px;}
-  .cal-nav button{border:none;background:none;font-size:20px;color:var(--text-secondary);padding:4px 8px;cursor:pointer;}
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:1.25rem;}
-  .cal-dow{text-align:center;font-size:11px;color:var(--text-muted);font-weight:600;padding:4px 0;}
-  .cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:14px;border-radius:50%;cursor:pointer;position:relative;transition:background 0.12s;}
-  .cal-day:hover:not(.empty){background:var(--surface-sub);}
-  .cal-day.today{font-weight:700;color:var(--accent);}
-  .cal-day.selected{background:var(--accent-mid);color:#fff;font-weight:700;}
-  .cal-day.has-event::after{content:'';width:5px;height:5px;border-radius:50%;background:var(--warning);position:absolute;bottom:2px;left:50%;transform:translateX(-50%);}
-  .cal-day.selected.has-event::after{background:#fff;}
-  .cal-day.empty{cursor:default;}
-  .sched-selected-date{font-size:14px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;}
-  .sched-empty{text-align:center;padding:1.5rem;color:var(--text-muted);font-size:14px;}
-  .sched-item{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
-  .sched-item-time{font-size:15px;font-weight:700;color:var(--accent);min-width:48px;}
-  .sched-item-body{flex:1;min-width:0;}
-  .sched-item-title{font-size:14px;font-weight:600;margin-bottom:2px;}
-  .sched-item-meta{font-size:12px;color:var(--text-muted);}
-  .sched-item-badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:600;white-space:nowrap;}
-  .sib-upcoming{background:var(--accent-bg);color:var(--accent);}
-  .sib-done{background:var(--success-bg);color:var(--success);}
-  .sib-now{background:#FCEBEB;color:var(--danger);}
-  .add-sched-btn{width:100%;padding:12px;font-size:14px;font-weight:600;margin-top:4px;}
-  .sched-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:200;align-items:flex-end;justify-content:center;}
-  .sched-modal-overlay.open{display:flex;}
-  .sched-modal{background:var(--surface);border-radius:20px 20px 0 0;padding:1.5rem 1.25rem calc(1.5rem + env(safe-area-inset-bottom));width:100%;max-width:500px;}
-  .sched-modal-title{font-size:17px;font-weight:700;margin-bottom:1.25rem;}
-  .sched-field{margin-bottom:1rem;}
-  .sched-field label{font-size:13px;font-weight:600;color:var(--text-secondary);display:block;margin-bottom:5px;}
-  .sched-field select,.sched-field input{width:100%;font-size:15px;padding:10px 14px;border-radius:var(--radius);border:1px solid var(--border);font-family:inherit;background:var(--surface);color:var(--text-primary);appearance:none;}
-  .sched-field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239A9A98' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:36px;}
-  .sched-row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .sched-modal-btns{display:flex;gap:8px;margin-top:1.25rem;}
-  .sched-modal-btns button{flex:1;padding:12px;font-size:15px;font-weight:600;}
-  .session-overlay{display:none;position:fixed;inset:0;background:var(--bg);z-index:400;flex-direction:column;}
-  .session-overlay.show{display:flex;}
-  .session-header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 1rem;display:flex;align-items:center;justify-content:space-between;}
-  .session-title{font-size:15px;font-weight:700;}
-  .session-timer{font-size:15px;font-weight:700;color:var(--accent);display:flex;align-items:center;gap:5px;}
-  .session-warning-bar{background:#FCEBEB;border-bottom:1px solid var(--danger-border);padding:8px 1rem;font-size:13px;color:var(--danger);display:none;align-items:center;gap:6px;}
-  .session-warning-bar.show{display:flex;}
-  .session-body{flex:1;overflow-y:auto;padding:1.25rem 1rem;max-width:500px;width:100%;margin:0 auto;}
-  .session-status{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:10px 16px;margin-bottom:1rem;display:flex;align-items:center;justify-content:space-between;font-size:13px;color:var(--text-secondary);}
-  .session-status strong{color:var(--text-primary);}
-  .session-leave-count{color:var(--danger);font-weight:700;}
-  .countdown-wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:60vh;text-align:center;}
-  .countdown-icon{font-size:48px;color:var(--accent-mid);margin-bottom:1rem;}
-  .countdown-label{font-size:15px;color:var(--text-secondary);margin-bottom:0.5rem;}
-  .countdown-num{font-size:72px;font-weight:700;color:var(--text-primary);line-height:1;}
-  .countdown-sub{font-size:14px;color:var(--text-muted);margin-top:1rem;}
-  .report-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:1.25rem;}
-  .report-head{background:var(--surface-sub);padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-  .report-head-title{font-size:14px;font-weight:700;}
-  .report-head-date{font-size:12px;color:var(--text-muted);}
-  .report-body{padding:12px 16px;}
-  .report-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:14px;}
-  .report-row:last-child{border-bottom:none;}
-  .report-row-label{color:var(--text-secondary);}
-  .report-row-val{font-weight:700;}
-  .report-row-val.good{color:var(--success);}
-  .report-row-val.warn{color:var(--warning);}
-  .report-row-val.danger{color:var(--danger);}
-  .report-leave-detail{background:var(--danger-bg);border-radius:var(--radius);padding:8px 12px;margin-top:8px;font-size:12px;color:var(--danger);}
-
-  /* ── 広告・課金 ── */
-  .ad-banner{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;margin-bottom:12px;display:flex;align-items:center;gap:10px;position:relative;}
-  .ad-label{font-size:10px;color:var(--text-muted);border:1px solid var(--border);border-radius:3px;padding:1px 4px;flex-shrink:0;}
-  .ad-content{flex:1;min-width:0;}
-  .ad-title{font-size:13px;font-weight:600;color:var(--text-primary);}
-  .ad-sub{font-size:11px;color:var(--text-muted);}
-  .ad-cta{font-size:12px;font-weight:600;color:var(--accent);white-space:nowrap;flex-shrink:0;}
-  .ad-close{position:absolute;top:4px;right:6px;font-size:14px;color:var(--text-muted);cursor:pointer;border:none;background:none;padding:0;line-height:1;}
-  .interstitial-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:350;align-items:center;justify-content:center;padding:1rem;}
-  .interstitial-overlay.show{display:flex;}
-  .interstitial-card{background:var(--surface);border-radius:16px;width:100%;max-width:340px;overflow:hidden;}
-  .interstitial-head{background:var(--accent-mid);color:#fff;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;}
-  .interstitial-head-label{font-size:11px;opacity:0.8;}
-  .interstitial-head-skip{font-size:13px;font-weight:600;cursor:pointer;border:none;background:rgba(255,255,255,0.2);color:#fff;border-radius:20px;padding:4px 12px;}
-  .interstitial-body{padding:1.5rem;text-align:center;}
-  .interstitial-icon{font-size:48px;margin-bottom:12px;color:var(--accent);}
-  .interstitial-title{font-size:17px;font-weight:700;margin-bottom:6px;}
-  .interstitial-text{font-size:14px;color:var(--text-secondary);line-height:1.6;margin-bottom:1.25rem;}
-  .interstitial-btn{width:100%;padding:12px;font-size:15px;font-weight:700;}
-  .interstitial-countdown{font-size:12px;color:var(--text-muted);margin-top:10px;}
-  .limit-banner{background:var(--danger-bg);border:1px solid var(--danger-border);border-radius:var(--radius-lg);padding:12px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-  .limit-banner i{font-size:22px;color:var(--danger);flex-shrink:0;}
-  .limit-banner-text{flex:1;}
-  .limit-banner-title{font-size:14px;font-weight:700;color:var(--danger);margin-bottom:2px;}
-  .limit-banner-sub{font-size:12px;color:#791F1F;}
-  .plan-hero{text-align:center;padding:1.5rem 0 1rem;}
-  .plan-hero-title{font-size:22px;font-weight:700;margin-bottom:6px;}
-  .plan-hero-sub{font-size:14px;color:var(--text-secondary);line-height:1.6;}
-  .free-usage-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px;margin-bottom:1.25rem;}
-  .free-usage-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
-  .free-usage-label{font-size:14px;font-weight:600;}
-  .free-usage-val{font-size:14px;color:var(--text-secondary);}
-  .free-usage-bar{height:8px;background:var(--surface-sub);border-radius:99px;overflow:hidden;}
-  .free-usage-fill{height:100%;border-radius:99px;background:var(--accent-mid);transition:width 0.4s;}
-  .free-usage-fill.warn{background:var(--warning);}
-  .free-usage-fill.danger{background:var(--danger);}
-  .plan-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:12px;position:relative;}
-  .plan-card.recommended{border:2px solid var(--accent-mid);}
-  .plan-rec-tag{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:var(--accent-mid);color:#fff;font-size:11px;font-weight:700;padding:3px 16px;border-radius:0 0 10px 10px;white-space:nowrap;}
-  .plan-name{font-size:17px;font-weight:700;margin-bottom:4px;}
-  .plan-price{font-size:28px;font-weight:700;color:var(--accent);margin-bottom:4px;}
-  .plan-price span{font-size:14px;font-weight:400;color:var(--text-muted);}
-  .plan-desc{font-size:13px;color:var(--text-secondary);margin-bottom:1rem;line-height:1.6;}
-  .plan-features{list-style:none;margin-bottom:1rem;}
-  .plan-features li{font-size:13px;padding:5px 0;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border);}
-  .plan-features li:last-child{border-bottom:none;}
-  .plan-features .ok{color:var(--success);}
-  .plan-features .ng{color:var(--text-muted);}
-  .plan-btn{width:100%;padding:12px;font-size:15px;font-weight:700;}
-  .pt-packs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.25rem;}
-  .pt-pack{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px;text-align:center;cursor:pointer;transition:border-color 0.15s;}
-  .pt-pack:hover{border-color:var(--border-strong);}
-  .pt-pack.selected{border:2px solid var(--accent-mid);background:var(--accent-bg);}
-  .pt-pack-time{font-size:22px;font-weight:700;margin-bottom:4px;}
-  .pt-pack-price{font-size:14px;color:var(--text-secondary);}
-  .pt-pack-unit{font-size:11px;color:var(--text-muted);margin-top:2px;}
-  .pt-buy-btn{width:100%;padding:12px;font-size:15px;font-weight:700;}
-  .current-plan-badge{display:inline-flex;align-items:center;gap:5px;background:var(--success-bg);color:var(--success);border-radius:20px;padding:4px 12px;font-size:12px;font-weight:700;margin-bottom:1rem;}
-
-  /* ── モーダル ── */
-  .modal-overlay {
-    display: none; position: fixed; inset: 0;
-    background: rgba(0,0,0,0.4); z-index: 200;
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    padding: 1rem;
+    padding: 10px 4px 8px;
+    cursor: pointer;
+    border: none; background: none;
+    color: var(--text-sub); font-size: 10px; gap: 4px;
+    text-decoration: none;
   }
-  .modal-overlay.open { display: flex; }
-  .modal {
-    background: var(--surface); border-radius: 16px;
-    padding: 1.75rem; width: 100%; max-width: 320px; text-align: center;
+  .nav-item.active { color: var(--blue); }
+  .nav-item svg { width: 24px; height: 24px; }
+
+  /* ===== ログイン画面 ===== */
+  #screen-login {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh; padding: 40px 24px;
   }
-  .modal-emoji  { font-size: 40px; margin-bottom: 12px; }
-  .modal-title  { font-size: 17px; font-weight: 600; margin-bottom: 8px; }
-  .modal-body   { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 1rem; }
-  .modal-ptshow { font-size: 22px; font-weight: 600; color: var(--warning-dark); margin-bottom: 1.25rem; }
-  .modal-btns   { display: flex; gap: 8px; }
-  .modal-btns button { flex: 1; }
+  .login-logo {
+    font-size: 32px; font-weight: 800;
+    color: var(--blue); margin-bottom: 6px;
+    letter-spacing: -0.5px;
+  }
+  .login-sub { color: var(--text-sub); font-size: 14px; margin-bottom: 40px; }
+  .login-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 28px 24px; width: 100%; max-width: 360px;
+    box-shadow: var(--shadow);
+  }
+  .login-card h2 { font-size: 18px; margin-bottom: 20px; }
+  .form-group { margin-bottom: 16px; }
+  .form-group label { font-size: 13px; color: var(--text-sub); display: block; margin-bottom: 6px; }
+  .form-group input {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: 15px; outline: none;
+    -webkit-appearance: none;
+    transition: border 0.2s;
+  }
+  .form-group input:focus { border-color: var(--blue); }
+  .btn-primary {
+    width: 100%; padding: 14px;
+    background: var(--blue); color: #fff;
+    border: none; border-radius: 10px;
+    font-size: 16px; font-weight: 700;
+    cursor: pointer; margin-top: 8px;
+  }
+  .btn-primary:active { background: var(--blue-dark); }
+  .login-switch { text-align: center; margin-top: 16px; font-size: 14px; color: var(--text-sub); }
+  .login-switch span { color: var(--blue); font-weight: 600; cursor: pointer; }
+  .guest-btn {
+    margin-top: 16px; width: 100%; padding: 12px;
+    background: transparent; border: 1.5px solid var(--border);
+    border-radius: 10px; font-size: 14px; color: var(--text-sub);
+    cursor: pointer;
+  }
+  .tab-btns { display: flex; margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--border); }
+  .tab-btn { flex: 1; padding: 10px; border: none; background: #fff; font-size: 14px; cursor: pointer; font-weight: 600; color: var(--text-sub); }
+  .tab-btn.active { background: var(--blue); color: #fff; }
+
+  /* ===== ホーム画面 ===== */
+  .home-hero {
+    background: linear-gradient(135deg, var(--blue) 0%, #6C63FF 100%);
+    padding: 24px 20px 32px; color: #fff;
+  }
+  .home-hero .greeting { font-size: 14px; opacity: 0.85; margin-bottom: 4px; }
+  .home-hero .name { font-size: 24px; font-weight: 800; margin-bottom: 16px; }
+  .stats-row { display: flex; gap: 10px; }
+  .stat-chip {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px; padding: 10px 14px; flex: 1; text-align: center;
+  }
+  .stat-chip .val { font-size: 22px; font-weight: 800; }
+  .stat-chip .lbl { font-size: 11px; opacity: 0.85; margin-top: 2px; }
+
+  .section-title { font-size: 16px; font-weight: 700; padding: 20px 20px 10px; }
+  .subject-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
+  .subject-card {
+    background: var(--card); border-radius: var(--radius);
+    padding: 18px 16px; box-shadow: var(--shadow);
+    cursor: pointer; border: none; text-align: left;
+    position: relative; overflow: hidden;
+  }
+  .subject-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0;
+    height: 4px;
+  }
+  .subject-card.math::before { background: var(--blue); }
+  .subject-card.english::before { background: var(--green); }
+  .subject-card.japanese::before { background: var(--red); }
+  .subject-card.science::before { background: var(--orange); }
+  .subject-card.social::before { background: var(--purple); }
+  .subject-card .s-icon { font-size: 28px; margin-bottom: 8px; }
+  .subject-card .s-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+  .subject-card .s-count { font-size: 12px; color: var(--text-sub); }
+  .subject-card .s-progress {
+    margin-top: 10px; height: 4px; background: var(--border);
+    border-radius: 2px; overflow: hidden;
+  }
+  .subject-card .s-progress-bar { height: 100%; border-radius: 2px; }
+  .subject-card.math .s-progress-bar { background: var(--blue); }
+  .subject-card.english .s-progress-bar { background: var(--green); }
+  .subject-card.japanese .s-progress-bar { background: var(--red); }
+  .subject-card.science .s-progress-bar { background: var(--orange); }
+  .subject-card.social .s-progress-bar { background: var(--purple); }
+
+  /* ===== 問題画面 ===== */
+  .quiz-progress-bar { height: 4px; background: var(--border); }
+  .quiz-progress-fill { height: 100%; background: var(--blue); transition: width 0.3s; }
+  .quiz-meta { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; font-size: 13px; color: var(--text-sub); }
+  .quiz-body { padding: 20px; }
+  .quiz-question { font-size: 18px; font-weight: 600; line-height: 1.6; margin-bottom: 24px; }
+  .choice-list { display: flex; flex-direction: column; gap: 12px; }
+  .choice-btn {
+    width: 100%; padding: 16px;
+    background: var(--card); border: 2px solid var(--border);
+    border-radius: var(--radius); font-size: 15px;
+    text-align: left; cursor: pointer; font-family: inherit;
+    transition: all 0.15s; line-height: 1.5;
+  }
+  .choice-btn:active { transform: scale(0.98); }
+  .choice-btn.correct { border-color: var(--green); background: #E8F8EF; color: #1A7A3F; }
+  .choice-btn.wrong { border-color: var(--red); background: #FEF0EF; color: #C0392B; }
+  .choice-btn.disabled { cursor: default; }
+  .explanation-box {
+    margin-top: 20px; padding: 16px;
+    background: #EEF4FF; border-radius: var(--radius);
+    border-left: 4px solid var(--blue);
+    font-size: 14px; line-height: 1.6; color: var(--text);
+  }
+  .explanation-box .ex-label { font-weight: 700; color: var(--blue); margin-bottom: 6px; font-size: 13px; }
+  .next-btn {
+    width: calc(100% - 40px); margin: 20px 20px 0;
+    padding: 16px; background: var(--blue); color: #fff;
+    border: none; border-radius: var(--radius);
+    font-size: 16px; font-weight: 700; cursor: pointer;
+  }
+
+  /* ===== 結果画面 ===== */
+  .result-body { padding: 30px 20px; text-align: center; }
+  .result-emoji { font-size: 72px; margin-bottom: 16px; }
+  .result-score { font-size: 48px; font-weight: 800; color: var(--blue); }
+  .result-label { font-size: 16px; color: var(--text-sub); margin-bottom: 24px; }
+  .result-msg { font-size: 18px; font-weight: 600; margin-bottom: 32px; line-height: 1.5; }
+  .result-actions { display: flex; flex-direction: column; gap: 12px; }
+  .btn-secondary {
+    padding: 14px; border: 2px solid var(--blue);
+    border-radius: var(--radius); background: #fff;
+    color: var(--blue); font-size: 15px; font-weight: 700; cursor: pointer;
+  }
+
+  /* ===== ランキング画面 ===== */
+  .rank-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .rank-item {
+    background: var(--card); border-radius: var(--radius);
+    padding: 14px 16px; display: flex; align-items: center;
+    gap: 14px; box-shadow: var(--shadow);
+  }
+  .rank-num { font-size: 20px; font-weight: 800; width: 30px; text-align: center; }
+  .rank-num.gold { color: #F1C40F; }
+  .rank-num.silver { color: #BDC3C7; }
+  .rank-num.bronze { color: #CA6F1E; }
+  .rank-avatar {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--blue); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700;
+  }
+  .rank-info { flex: 1; }
+  .rank-name { font-size: 15px; font-weight: 700; }
+  .rank-detail { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
+  .rank-pt { font-size: 18px; font-weight: 800; color: var(--blue); }
+
+  /* ===== プロフィール画面 ===== */
+  .profile-hero {
+    background: linear-gradient(135deg, var(--blue) 0%, #6C63FF 100%);
+    padding: 30px 20px; text-align: center; color: #fff;
+  }
+  .profile-avatar {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; font-weight: 800; margin: 0 auto 12px;
+    color: #fff;
+  }
+  .profile-name { font-size: 20px; font-weight: 800; }
+  .profile-grade { font-size: 14px; opacity: 0.85; margin-top: 4px; }
+  .profile-stats { display: flex; justify-content: center; gap: 0; margin-top: 20px; }
+  .p-stat { flex: 1; text-align: center; border-right: 1px solid rgba(255,255,255,0.3); }
+  .p-stat:last-child { border-right: none; }
+  .p-stat .val { font-size: 22px; font-weight: 800; }
+  .p-stat .lbl { font-size: 11px; opacity: 0.8; margin-top: 2px; }
+  .profile-section { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .profile-row {
+    background: var(--card); border-radius: var(--radius);
+    padding: 16px; display: flex; align-items: center;
+    justify-content: space-between; box-shadow: var(--shadow);
+  }
+  .profile-row .p-label { font-size: 14px; color: var(--text-sub); }
+  .profile-row .p-value { font-size: 15px; font-weight: 600; }
+
+  /* ===== エラー/トースト ===== */
+  .toast {
+    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+    background: #2C3E50; color: #fff; padding: 12px 20px;
+    border-radius: 30px; font-size: 14px; font-weight: 600;
+    opacity: 0; transition: opacity 0.3s; z-index: 999; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
-<!-- ========== ログイン画面 ========== -->
-<div class="login-screen show" id="login-screen">
-  <div class="login-logo">
-    <div class="login-logo-icon"><i class="ti ti-school"></i></div>
-    <div class="login-logo-name">英進塾 まなびアプリ</div>
-    <div class="login-logo-sub">学習をもっと楽しく、もっと身近に</div>
-  </div>
-
+<!-- ===== ログイン画面 ===== -->
+<div id="screen-login" class="screen active">
+  <div class="login-logo">Study on You</div>
+  <p class="login-sub">あなたに合った勉強を</p>
   <div class="login-card">
-    <div class="login-tabs">
-      <button class="login-tab active" id="ltab-login" onclick="switchLoginTab('login')">ログイン</button>
-      <button class="login-tab" id="ltab-register" onclick="switchLoginTab('register')">新規登録</button>
+    <div class="tab-btns">
+      <button class="tab-btn active" onclick="switchLoginTab('login')">ログイン</button>
+      <button class="tab-btn" onclick="switchLoginTab('register')">新規登録</button>
     </div>
 
     <!-- ログインフォーム -->
     <div id="login-form">
-      <div class="login-field">
+      <div class="form-group">
         <label>ユーザーネーム</label>
-        <input type="text" id="l-username" placeholder="sakura_tanaka">
-        <div class="login-err" id="l-err-user">ユーザーネームを入力してください</div>
+        <input type="text" id="login-username" placeholder="username" autocomplete="username">
       </div>
-      <div class="login-field">
+      <div class="form-group">
         <label>パスワード</label>
-        <input type="password" id="l-password" placeholder="••••••••">
-        <div class="login-err" id="l-err-pass">パスワードを入力してください</div>
+        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
       </div>
-      <div class="login-err" id="l-err-general" style="text-align:center;margin-bottom:8px"></div>
-      <button class="primary login-btn" onclick="doLogin()">ログイン</button>
-      <div class="login-forgot">パスワードを忘れた方はこちら</div>
+      <button class="btn-primary" onclick="doLogin()">ログイン</button>
+      <button class="guest-btn" onclick="doGuest()">ゲストとして試してみる</button>
     </div>
 
-    <!-- 新規登録フォーム -->
-    <div id="register-form" style="display:none">
-      <div class="login-field">
+    <!-- 登録フォーム -->
+    <div id="register-form" style="display:none;">
+      <div class="form-group">
         <label>氏名</label>
-        <input type="text" id="r-name" placeholder="田中 さくら">
-        <div class="login-err" id="r-err-name">氏名を入力してください</div>
+        <input type="text" id="reg-name" placeholder="山田 太郎">
       </div>
-      <div class="login-field">
+      <div class="form-group">
         <label>ユーザーネーム</label>
-        <input type="text" id="r-username" placeholder="sakura_tanaka">
-        <div class="login-err" id="r-err-user">半角英数字・アンダースコアのみ</div>
+        <input type="text" id="reg-username" placeholder="yamada_taro">
       </div>
-      <div class="login-field">
-        <label>パスワード</label>
-        <input type="password" id="r-password" placeholder="8文字以上">
-        <div class="login-err" id="r-err-pass">8文字以上で入力してください</div>
+      <div class="form-group">
+        <label>パスワード（8文字以上）</label>
+        <input type="password" id="reg-password" placeholder="••••••••" autocomplete="new-password">
       </div>
-      <button class="primary login-btn" onclick="doRegister()">アカウントを作成</button>
-    </div>
-
-    <div class="login-divider"><span>または</span></div>
-    <button class="login-guest" onclick="doGuestLogin()">ゲストとして試してみる</button>
-  </div>
-</div>
-
-<!-- ========== 画面5: プロフィール表示 ========== -->
-<div class="screen" id="screen-profileview">
-
-  <div class="pv-header">
-    <div class="pv-banner"></div>
-    <div class="pv-avatar-wrap">
-      <div class="pv-avatar" id="pv-avatar">さく</div>
-    </div>
-    <button class="pv-edit-btn" onclick="goEditProfile()">
-      <i class="ti ti-edit" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i>編集
-    </button>
-  </div>
-
-  <div class="pv-name-row">
-    <span class="pv-name" id="pv-name">田中 さくら</span>
-    <span class="pv-grade-badge" id="pv-grade">中2</span>
-  </div>
-  <div class="pv-塾">英進塾</div>
-
-  <div class="pv-pt-card">
-    <div class="pv-pt-left">
-      <div class="lbl">保有ポイント</div>
-      <div class="val" id="pv-pt">680 pt</div>
-    </div>
-    <div class="pv-pt-rank">
-      <div class="rank-lbl">塾内ランキング</div>
-      <div class="rank-num">3位</div>
-    </div>
-  </div>
-
-  <div class="pv-stats">
-    <div class="pv-stat">
-      <div class="pv-stat-val">14回</div>
-      <div class="pv-stat-lbl">今月出席</div>
-    </div>
-    <div class="pv-stat">
-      <div class="pv-stat-val">87%</div>
-      <div class="pv-stat-lbl">平均正答率</div>
-    </div>
-    <div class="pv-stat">
-      <div class="pv-stat-val">42問</div>
-      <div class="pv-stat-lbl">解いた問題数</div>
-    </div>
-  </div>
-
-  <div class="pv-section">
-    <div class="pv-row" id="pv-row-school">
-      <div class="pv-row-icon blue"><i class="ti ti-building"></i></div>
-      <div>
-        <div class="pv-row-label">学校</div>
-        <div class="pv-row-val" id="pv-school">——</div>
-      </div>
-    </div>
-    <div class="pv-row" id="pv-row-target">
-      <div class="pv-row-icon green"><i class="ti ti-target"></i></div>
-      <div>
-        <div class="pv-row-label">志望校</div>
-        <div class="pv-row-val" id="pv-target">——</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pv-bio-card" id="pv-bio-card">
-    <div class="pv-bio-title">自己紹介</div>
-    <div class="pv-bio-text" id="pv-bio">まだ自己紹介が登録されていません。</div>
-  </div>
-
-</div>
-
-<!-- ========== 画面1: 問題を解く ========== -->
-<div class="screen active" id="screen-quiz">
-  <div class="topbar">
-    <div class="student-info">
-      <div class="avatar">さく</div>
-      <div>
-        <div class="s-name">田中 さくら</div>
-        <div class="s-grade">中2 · 英進塾</div>
-      </div>
-    </div>
-    <div class="pt-pill">
-      <i class="ti ti-star" style="font-size:16px;color:#BA7517"></i>
-      <span class="pt-num" id="quiz-pt">680</span>
-      <span class="pt-unit">pt</span>
-    </div>
-  </div>
-  <div class="prog-row">
-    <div class="prog-wrap"><div class="prog-fill" id="q-prog" style="width:0%"></div></div>
-    <span class="prog-txt" id="q-prog-txt">1 / 3</span>
-  </div>
-  <div id="quiz-area"></div>
-</div>
-
-<!-- ========== 画面2: ユーザーページ ========== -->
-<div class="screen" id="screen-user">
-  <div class="topbar">
-    <div class="student-info">
-      <div class="avatar">さく</div>
-      <div>
-        <div class="s-name">田中 さくら</div>
-        <div class="s-grade">中2 · 英進塾</div>
-      </div>
-    </div>
-    <div class="pt-pill">
-      <i class="ti ti-star" style="font-size:16px;color:#BA7517"></i>
-      <span class="pt-num" id="user-pt">680</span>
-      <span class="pt-unit">pt</span>
-    </div>
-  </div>
-
-  <div class="hist-row">
-    <div class="hist-cell">
-      <div class="hist-val">340 pt</div>
-      <div class="hist-lbl">出席<br>ポイント</div>
-    </div>
-    <div class="hist-cell">
-      <div class="hist-val">340 pt</div>
-      <div class="hist-lbl">学習<br>ポイント</div>
-    </div>
-    <div class="hist-cell">
-      <div class="hist-val">320 pt</div>
-      <div class="hist-lbl">交換済み<br>ポイント</div>
-    </div>
-  </div>
-
-  <div id="user-toast" class="toast">
-    <i class="ti ti-circle-check" style="font-size:18px;flex-shrink:0"></i>
-    <span id="user-toast-msg"></span>
-  </div>
-
-  <p class="section-label">次の景品まで</p>
-  <div class="next-card">
-    <div class="next-row">
-      <div class="next-icon"><i class="ti ti-gift"></i></div>
-      <div>
-        <div class="next-name">Amazonギフトカード 5,000円</div>
-        <div class="next-remain" id="user-remain">あと 320 pt で交換できます</div>
-      </div>
-    </div>
-    <div class="bar6"><div class="bar6-fill" id="user-next-bar" style="width:68%"></div></div>
-    <div class="bar6-labels"><span>0</span><span>1,000 pt</span></div>
-  </div>
-
-  <p class="section-label">景品と交換する</p>
-  <div class="gift-grid">
-    <div class="gift-card" onclick="shopModal(0)">
-      <div class="gift-icon-wrap gi-book"><i class="ti ti-book" style="font-size:20px"></i></div>
-      <div class="gift-name">好きな参考書</div>
-      <div class="gift-pt"><strong>300 pt</strong> で交換</div>
-    </div>
-    <div class="gift-card" onclick="shopModal(1)">
-      <div class="gift-icon-wrap gi-food"><i class="ti ti-shopping-bag" style="font-size:20px"></i></div>
-      <div class="gift-name">コンビニ券 500円</div>
-      <div class="gift-pt"><strong>500 pt</strong> で交換</div>
-    </div>
-    <div class="gift-card featured" onclick="shopModal(2)">
-      <span class="feat-tag">人気</span>
-      <div class="gift-icon-wrap gi-gold"><i class="ti ti-gift" style="font-size:20px"></i></div>
-      <div class="gift-name">ギフトカード 5,000円</div>
-      <div class="gift-pt"><strong>1,000 pt</strong> で交換</div>
-    </div>
-    <div class="gift-card locked" onclick="shopModal(3)">
-      <i class="ti ti-lock lock-ico"></i>
-      <div class="gift-icon-wrap gi-game"><i class="ti ti-device-gamepad-2" style="font-size:20px"></i></div>
-      <div class="gift-name">ゲームソフト券</div>
-      <div class="gift-pt"><strong>1,500 pt</strong> で交換</div>
-    </div>
-  </div>
-</div>
-
-<!-- ========== 画面3: 保護者 ========== -->
-<div class="screen" id="screen-parent">
-  <div class="parent-topbar">
-    <div class="app-brand">
-      <i class="ti ti-school" style="font-size:20px"></i>
-      英進塾 まなびポータル
-    </div>
-    <button class="notif-btn">
-      <i class="ti ti-bell"></i>
-      <div class="notif-dot"></div>
-    </button>
-  </div>
-
-  <div class="stu-tabs">
-    <div class="stu-tab active" onclick="switchChild(0,this)">
-      <div class="stu-tab-name">さくら</div>
-      <div class="stu-tab-grade">中学2年</div>
-    </div>
-    <div class="stu-tab" onclick="switchChild(1,this)">
-      <div class="stu-tab-name">けんた</div>
-      <div class="stu-tab-grade">小学5年</div>
-    </div>
-  </div>
-
-  <div id="parent-content"></div>
-  <div id="parent-reports"></div>
-</div>
-
-<!-- ========== 画面4: プロフィール登録 ========== -->
-<div class="screen" id="screen-profile">
-
-  <div class="profile-avatar-wrap">
-    <div class="profile-avatar-big" id="prof-avatar">
-      <span id="prof-avatar-initials">?</span>
-      <div class="edit-icon"><i class="ti ti-camera" style="font-size:11px"></i></div>
-    </div>
-    <div class="profile-avatar-hint">タップして写真を変更</div>
-  </div>
-
-  <div class="profile-saved-toast" id="prof-toast">
-    <i class="ti ti-circle-check" style="font-size:18px;flex-shrink:0"></i>
-    プロフィールを保存しました！
-  </div>
-
-  <!-- 氏名 -->
-  <div class="form-group">
-    <div class="form-label">
-      氏名 <span class="required-tag">必須</span>
-    </div>
-    <input type="text" class="form-input" id="prof-name" placeholder="田中 さくら" oninput="updateAvatar()">
-    <div class="form-error" id="err-name">氏名を入力してください</div>
-    <div class="visibility-row">
-      <div class="form-hint">他のユーザーに表示されます</div>
-      <div class="vis-toggle public" id="vis-name" onclick="toggleVis('name')">
-        <i class="ti ti-eye" style="font-size:13px"></i> 公開
-      </div>
-    </div>
-  </div>
-
-  <!-- ユーザーネーム -->
-  <div class="form-group">
-    <div class="form-label">
-      ユーザーネーム <span class="required-tag">必須</span>
-    </div>
-    <input type="text" class="form-input" id="prof-username" placeholder="sakura_tanaka">
-    <div class="form-error" id="err-username">ユーザーネームを入力してください</div>
-    <div class="form-hint">半角英数字・アンダースコアのみ。常に非公開です。</div>
-  </div>
-
-  <!-- 学年 -->
-  <div class="form-group">
-    <div class="form-label">
-      学年 <span class="required-tag">必須</span>
-    </div>
-    <select class="form-input" id="prof-grade">
-      <option value="">選択してください</option>
-      <optgroup label="小学生">
-        <option value="小1">小学1年</option>
-        <option value="小2">小学2年</option>
-        <option value="小3">小学3年</option>
-        <option value="小4">小学4年</option>
-        <option value="小5">小学5年</option>
-        <option value="小6">小学6年</option>
-      </optgroup>
-      <optgroup label="中学生">
-        <option value="中1">中学1年</option>
-        <option value="中2" selected>中学2年</option>
-        <option value="中3">中学3年</option>
-      </optgroup>
-      <optgroup label="高校生">
-        <option value="高1">高校1年</option>
-        <option value="高2">高校2年</option>
-        <option value="高3">高校3年</option>
-      </optgroup>
-    </select>
-    <div class="form-error" id="err-grade">学年を選択してください</div>
-    <div class="visibility-row">
-      <div></div>
-      <div class="vis-toggle public" id="vis-grade" onclick="toggleVis('grade')">
-        <i class="ti ti-eye" style="font-size:13px"></i> 公開
-      </div>
-    </div>
-  </div>
-
-  <hr class="form-divider">
-
-  <!-- 学校 -->
-  <div class="form-group">
-    <div class="form-label">
-      学校名 <span class="optional-tag">任意</span>
-    </div>
-    <input type="text" class="form-input" id="prof-school" placeholder="〇〇中学校">
-    <div class="visibility-row">
-      <div class="form-hint">在籍している学校</div>
-      <div class="vis-toggle private" id="vis-school" onclick="toggleVis('school')">
-        <i class="ti ti-eye-off" style="font-size:13px"></i> 非公開
-      </div>
-    </div>
-  </div>
-
-  <!-- 志望校 -->
-  <div class="form-group">
-    <div class="form-label">
-      志望校 <span class="optional-tag">任意</span>
-    </div>
-    <input type="text" class="form-input" id="prof-target" placeholder="〇〇高校・〇〇大学">
-    <div class="visibility-row">
-      <div class="form-hint">目標としている学校</div>
-      <div class="vis-toggle private" id="vis-target" onclick="toggleVis('target')">
-        <i class="ti ti-eye-off" style="font-size:13px"></i> 非公開
-      </div>
-    </div>
-  </div>
-
-  <!-- 自己紹介 -->
-  <div class="form-group">
-    <div class="form-label">
-      自己紹介 <span class="optional-tag">任意</span>
-    </div>
-    <textarea class="form-input" id="prof-bio" rows="4" placeholder="得意な科目や勉強の目標など、自由に書いてください"></textarea>
-    <div class="visibility-row">
-      <div class="form-hint" id="bio-count">0 / 200文字</div>
-      <div class="vis-toggle public" id="vis-bio" onclick="toggleVis('bio')">
-        <i class="ti ti-eye" style="font-size:13px"></i> 公開
-      </div>
-    </div>
-  </div>
-
-  <div class="save-btn-wrap">
-    <button class="primary" onclick="saveProfile()">プロフィールを保存する</button>
-  </div>
-
-</div>
-
-<!-- 全画面広告オーバーレイ -->
-<div class="interstitial-overlay" id="interstitial">
-  <div class="interstitial-card">
-    <div class="interstitial-head">
-      <span class="interstitial-head-label">広告</span>
-      <button class="interstitial-head-skip" id="interstitial-skip" onclick="skipInterstitial()">スキップ <span id="interstitial-cd">5</span></button>
-    </div>
-    <div class="interstitial-body">
-      <div class="interstitial-icon"><i class="ti ti-crown"></i></div>
-      <div class="interstitial-title">プレミアムにアップグレード</div>
-      <div class="interstitial-text">広告なし・演習時間無制限・全機能開放。月額480円で今すぐ始めよう！</div>
-      <button class="primary interstitial-btn" onclick="goToPlan()">プランを見る</button>
-      <div class="interstitial-countdown" id="interstitial-msg">広告を閉じるまであと5秒…</div>
-    </div>
-  </div>
-</div>
-
-<!-- ========== 画面: プラン ========== -->
-<div class="screen" id="screen-plan">
-  <div class="plan-hero">
-    <div class="plan-hero-title">プランを選ぶ</div>
-    <div class="plan-hero-sub">週2時間まで無料。<br>それ以上はプレミアムか時間購入で。</div>
-  </div>
-
-  <div class="free-usage-card">
-    <div class="free-usage-row">
-      <span class="free-usage-label">今週の無料演習</span>
-      <span class="free-usage-val" id="plan-usage-val">72分 / 120分</span>
-    </div>
-    <div class="free-usage-bar">
-      <div class="free-usage-fill warn" id="plan-usage-bar" style="width:60%"></div>
-    </div>
-  </div>
-
-  <div id="plan-current-badge"></div>
-
-  <!-- フリープラン -->
-  <div class="plan-card">
-    <div class="plan-name">フリープラン</div>
-    <div class="plan-price">¥0 <span>/ 月</span></div>
-    <div class="plan-desc">まずは無料で試してみよう。週2時間の演習と基本機能が使えます。</div>
-    <ul class="plan-features">
-      <li><i class="ti ti-check ok"></i>週2時間の演習</li>
-      <li><i class="ti ti-check ok"></i>問題を解いてポイント獲得</li>
-      <li><i class="ti ti-check ok"></i>スケジュール予約</li>
-      <li><i class="ti ti-x ng"></i>広告が表示されます</li>
-      <li><i class="ti ti-x ng"></i>演習時間は週2時間まで</li>
-    </ul>
-    <button class="plan-btn" id="free-plan-btn" onclick="selectPlan('free')">このプランを使う</button>
-  </div>
-
-  <!-- プレミアムプラン -->
-  <div class="plan-card recommended" style="margin-top:1.5rem">
-    <div class="plan-rec-tag">おすすめ</div>
-    <div class="plan-name">プレミアムプラン</div>
-    <div class="plan-price">¥480 <span>/ 月</span></div>
-    <div class="plan-desc">広告なし・演習時間無制限。本気で勉強したい生徒に。</div>
-    <ul class="plan-features">
-      <li><i class="ti ti-check ok"></i>演習時間 無制限</li>
-      <li><i class="ti ti-check ok"></i>広告なし</li>
-      <li><i class="ti ti-check ok"></i>問題を解いてポイント獲得</li>
-      <li><i class="ti ti-check ok"></i>スケジュール予約（無制限）</li>
-      <li><i class="ti ti-check ok"></i>詳細な学習レポート</li>
-    </ul>
-    <button class="primary plan-btn" id="premium-plan-btn" onclick="selectPlan('premium')">プレミアムにする（¥480/月）</button>
-  </div>
-
-  <!-- 時間購入 -->
-  <div style="margin-top:1.5rem">
-    <p class="section-label">時間を買い足す（都度購入）</p>
-    <div class="pt-packs">
-      <div class="pt-pack" id="pack0" onclick="selectPack(0)">
-        <div class="pt-pack-time">+1時間</div>
-        <div class="pt-pack-price">¥120</div>
-        <div class="pt-pack-unit">1時間分の演習</div>
-      </div>
-      <div class="pt-pack" id="pack1" onclick="selectPack(1)">
-        <div class="pt-pack-time">+3時間</div>
-        <div class="pt-pack-price">¥300</div>
-        <div class="pt-pack-unit">お得パック</div>
-      </div>
-      <div class="pt-pack" id="pack2" onclick="selectPack(2)">
-        <div class="pt-pack-time">+5時間</div>
-        <div class="pt-pack-price">¥450</div>
-        <div class="pt-pack-unit">週1回分のまとめ買い</div>
-      </div>
-      <div class="pt-pack" id="pack3" onclick="selectPack(3)">
-        <div class="pt-pack-time">+10時間</div>
-        <div class="pt-pack-price">¥800</div>
-        <div class="pt-pack-unit">月まとめ買い・最安</div>
-      </div>
-    </div>
-    <button class="primary pt-buy-btn" id="pt-buy-btn" onclick="buyTimePack()">選択して購入する</button>
-  </div>
-</div>
-
-<!-- ========== 画面: スケジュール ========== -->
-<div class="screen" id="screen-schedule">
-  <div class="cal-header">
-    <span class="cal-month" id="cal-month-label"></span>
-    <div class="cal-nav">
-      <button onclick="moveMonth(-1)"><i class="ti ti-chevron-left"></i></button>
-      <button onclick="moveMonth(1)"><i class="ti ti-chevron-right"></i></button>
-    </div>
-  </div>
-  <div class="cal-grid" id="cal-grid"></div>
-
-  <p class="sched-selected-date" id="sched-date-label"></p>
-  <div id="sched-list"></div>
-  <button class="add-sched-btn" onclick="openSchedModal()">
-    <i class="ti ti-plus" style="font-size:15px;vertical-align:-1px;margin-right:4px"></i>この日に演習を予約する
-  </button>
-</div>
-
-<!-- 予約モーダル -->
-<div class="sched-modal-overlay" id="sched-modal">
-  <div class="sched-modal">
-    <div class="sched-modal-title">演習を予約する</div>
-    <div class="sched-field">
-      <label>教科</label>
-      <select id="sm-subject">
-        <option value="数学">数学</option>
-        <option value="英語">英語</option>
-        <option value="国語">国語</option>
-        <option value="理科">理科</option>
-        <option value="社会">社会</option>
-      </select>
-    </div>
-    <div class="sched-row2">
-      <div class="sched-field">
-        <label>開始時刻</label>
-        <input type="time" id="sm-time" value="17:00">
-      </div>
-      <div class="sched-field">
-        <label>演習時間</label>
-        <select id="sm-duration">
-          <option value="10">10分</option>
-          <option value="15">15分</option>
-          <option value="20" selected>20分</option>
-          <option value="30">30分</option>
-          <option value="45">45分</option>
-          <option value="60">60分</option>
+      <div class="form-group">
+        <label>学年</label>
+        <select id="reg-grade" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;background:#fff;-webkit-appearance:none;">
+          <option value="">選択してください</option>
+          <option>中学1年</option>
+          <option>中学2年</option>
+          <option>中学3年</option>
+          <option>高校1年</option>
+          <option>高校2年</option>
+          <option>高校3年</option>
         </select>
       </div>
-    </div>
-    <div class="sched-field">
-      <label>メモ（任意）</label>
-      <input type="text" id="sm-memo" placeholder="例：2次方程式の復習">
-    </div>
-    <div class="sched-modal-btns">
-      <button onclick="closeSchedModal()">キャンセル</button>
-      <button class="primary" onclick="addSchedule()">予約する</button>
+      <button class="btn-primary" onclick="doRegister()">アカウントを作成</button>
     </div>
   </div>
 </div>
 
-<!-- 演習セッションオーバーレイ -->
-<div class="session-overlay" id="session-overlay">
-  <div class="session-header">
-    <div class="session-title" id="sess-title">演習中</div>
-    <div class="session-timer">
-      <i class="ti ti-clock" style="font-size:16px"></i>
-      <span id="sess-timer">20:00</span>
+<!-- ===== ホーム画面 ===== -->
+<div id="screen-home" class="screen">
+  <div class="home-hero">
+    <div class="greeting">おかえり👋</div>
+    <div class="name" id="home-username">ゲスト さん</div>
+    <div class="stats-row">
+      <div class="stat-chip">
+        <div class="val" id="home-total">0</div>
+        <div class="lbl">解いた問題</div>
+      </div>
+      <div class="stat-chip">
+        <div class="val" id="home-correct-rate">--%</div>
+        <div class="lbl">正答率</div>
+      </div>
+      <div class="stat-chip">
+        <div class="val" id="home-points">0</div>
+        <div class="lbl">ポイント</div>
+      </div>
     </div>
   </div>
-  <div class="session-warning-bar" id="sess-warn">
-    <i class="ti ti-alert-triangle" style="font-size:16px;flex-shrink:0"></i>
-    <span id="sess-warn-msg">他の画面への切り替えを検知しました</span>
-  </div>
-  <div class="session-body">
-    <div id="sess-limit-banner"></div>
-    <div id="sess-ad-banner"></div>
-    <div class="session-status">
-      <span>離脱検知回数</span>
-      <span class="session-leave-count" id="sess-leave-count">0回</span>
-    </div>
-    <div id="sess-quiz-area"></div>
+  <div class="section-title">教科を選ぶ</div>
+  <div class="subject-grid">
+    <button class="subject-card math" onclick="startSubject('math')">
+      <div class="s-icon">📐</div>
+      <div class="s-name">数学</div>
+      <div class="s-count" id="cnt-math">10問</div>
+      <div class="s-progress"><div class="s-progress-bar" id="prog-math" style="width:0%"></div></div>
+    </button>
+    <button class="subject-card english" onclick="startSubject('english')">
+      <div class="s-icon">🔤</div>
+      <div class="s-name">英語</div>
+      <div class="s-count" id="cnt-english">10問</div>
+      <div class="s-progress"><div class="s-progress-bar" id="prog-english" style="width:0%"></div></div>
+    </button>
+    <button class="subject-card japanese" onclick="startSubject('japanese')">
+      <div class="s-icon">📖</div>
+      <div class="s-name">国語</div>
+      <div class="s-count" id="cnt-japanese">10問</div>
+      <div class="s-progress"><div class="s-progress-bar" id="prog-japanese" style="width:0%"></div></div>
+    </button>
+    <button class="subject-card science" onclick="startSubject('science')">
+      <div class="s-icon">🔬</div>
+      <div class="s-name">理科</div>
+      <div class="s-count" id="cnt-science">10問</div>
+      <div class="s-progress"><div class="s-progress-bar" id="prog-science" style="width:0%"></div></div>
+    </button>
+    <button class="subject-card social" onclick="startSubject('social')" style="grid-column: span 2;">
+      <div class="s-icon">🌍</div>
+      <div class="s-name">社会</div>
+      <div class="s-count" id="cnt-social">10問</div>
+      <div class="s-progress"><div class="s-progress-bar" id="prog-social" style="width:0%"></div></div>
+    </button>
   </div>
 </div>
 
-<!-- ボトムナビ -->
-<nav class="nav">
-  <button class="nav-tab active" onclick="showScreen('quiz',this)" aria-label="問題を解く">
-    <i class="ti ti-pencil"></i>
+<!-- ===== 問題画面 ===== -->
+<div id="screen-quiz" class="screen">
+  <div class="header">
+    <button class="back-btn" onclick="goBack()">← 戻る</button>
+    <h1 id="quiz-subject-title">数学</h1>
+  </div>
+  <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress-fill"></div></div>
+  <div class="quiz-meta">
+    <span id="quiz-meta-num">1 / 10</span>
+    <span id="quiz-meta-score">正解: 0問</span>
+  </div>
+  <div class="quiz-body">
+    <div class="quiz-question" id="quiz-question"></div>
+    <div class="choice-list" id="choice-list"></div>
+    <div class="explanation-box" id="explanation-box" style="display:none;">
+      <div class="ex-label">💡 解説</div>
+      <div id="explanation-text"></div>
+    </div>
+  </div>
+  <button class="next-btn" id="next-btn" style="display:none;" onclick="nextQuestion()">次の問題へ →</button>
+</div>
+
+<!-- ===== 結果画面 ===== -->
+<div id="screen-result" class="screen">
+  <div class="header"><h1>結果</h1></div>
+  <div class="result-body">
+    <div class="result-emoji" id="result-emoji">🎉</div>
+    <div class="result-score" id="result-score">8 / 10</div>
+    <div class="result-label">正解数</div>
+    <div class="result-msg" id="result-msg">すばらしい！</div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="retryQuiz()">もう一度挑戦する</button>
+      <button class="btn-secondary" onclick="showScreen('home')">ホームに戻る</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ランキング画面 ===== -->
+<div id="screen-ranking" class="screen">
+  <div class="header"><h1>ランキング</h1></div>
+  <div class="rank-list" id="rank-list"></div>
+</div>
+
+<!-- ===== プロフィール画面 ===== -->
+<div id="screen-profile" class="screen">
+  <div class="profile-hero">
+    <div class="profile-avatar" id="profile-avatar">G</div>
+    <div class="profile-name" id="profile-name">ゲスト</div>
+    <div class="profile-grade" id="profile-grade">学年未設定</div>
+    <div class="profile-stats">
+      <div class="p-stat">
+        <div class="val" id="p-total">0</div>
+        <div class="lbl">解いた問題</div>
+      </div>
+      <div class="p-stat">
+        <div class="val" id="p-rate">--%</div>
+        <div class="lbl">正答率</div>
+      </div>
+      <div class="p-stat">
+        <div class="val" id="p-points">0</div>
+        <div class="lbl">ポイント</div>
+      </div>
+    </div>
+  </div>
+  <div class="profile-section">
+    <div class="profile-row">
+      <span class="p-label">ユーザーネーム</span>
+      <span class="p-value" id="p-username">guest</span>
+    </div>
+    <div class="profile-row">
+      <span class="p-label">学年</span>
+      <span class="p-value" id="p-grade-row">未設定</span>
+    </div>
+    <div class="profile-row" style="cursor:pointer;" onclick="doLogout()">
+      <span class="p-label" style="color:var(--red);">ログアウト</span>
+      <span style="color:var(--text-sub);">→</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ボトムナビ ===== -->
+<nav class="bottom-nav" id="bottom-nav" style="display:none;">
+  <button class="nav-item active" id="nav-home" onclick="showScreen('home')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9L12 2l9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    ホーム
   </button>
-  <button class="nav-tab" onclick="showScreen('schedule',this)" aria-label="スケジュール">
-    <i class="ti ti-calendar"></i>
+  <button class="nav-item" id="nav-ranking" onclick="showScreen('ranking')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
+    ランキング
   </button>
-  <button class="nav-tab" onclick="showScreen('user',this)" aria-label="ユーザーページ">
-    <i class="ti ti-user"></i>
-  </button>
-  <button class="nav-tab" onclick="showScreen('parent',this)" aria-label="保護者ページ">
-    <i class="ti ti-users"></i>
-  </button>
-  <button class="nav-tab" onclick="showScreen('plan',this)" aria-label="プラン">
-    <i class="ti ti-crown"></i>
-  </button>
-  <button class="nav-tab" onclick="showScreen('profileview',this)" aria-label="プロフィール">
-    <i class="ti ti-user-circle"></i>
+  <button class="nav-item" id="nav-profile" onclick="showScreen('profile')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    プロフィール
   </button>
 </nav>
 
-<!-- モーダル -->
-<div class="modal-overlay" id="shop-modal">
-  <div class="modal">
-    <div class="modal-emoji" id="m-emoji"></div>
-    <div class="modal-title"  id="m-title"></div>
-    <div class="modal-body"   id="m-body"></div>
-    <div class="modal-ptshow" id="m-pt"></div>
-    <div class="modal-btns">
-      <button onclick="closeShopModal()">キャンセル</button>
-      <button class="primary" id="m-confirm" onclick="doExchange()">交換する</button>
-    </div>
-  </div>
-</div>
+<div class="toast" id="toast"></div>
 
 <script>
-/* ── ログイン ── */
-const DEMO_USER = { username: 'sakura_tanaka', password: 'pass1234' };
+// ===================================================
+// 問題データ（fetch不使用・Safari対応）
+// ===================================================
+var QUESTIONS = {
+  math: [
+    { q:"3x + 6 = 18 のとき、x の値は？", choices:["x = 4","x = 3","x = 6","x = 2"], answer:0, exp:"3x = 18 - 6 = 12、x = 12 ÷ 3 = 4" },
+    { q:"(-3)² の値は？", choices:["9","-9","6","-6"], answer:0, exp:"(-3)² = (-3) × (-3) = 9。マイナス×マイナスはプラスになります。" },
+    { q:"2x - 5 = 9 のとき、x の値は？", choices:["x = 7","x = 5","x = 4","x = 2"], answer:0, exp:"2x = 9 + 5 = 14、x = 14 ÷ 2 = 7" },
+    { q:"連立方程式 x + y = 5、x - y = 1 の解は？", choices:["x=3, y=2","x=2, y=3","x=4, y=1","x=1, y=4"], answer:0, exp:"2式を足すと 2x = 6、x = 3。x + y = 5 に代入して y = 2。" },
+    { q:"√36 の値は？", choices:["6","5","7","4"], answer:0, exp:"6 × 6 = 36 なので √36 = 6 です。" },
+    { q:"一次関数 y = 2x + 3 で、x = 4 のとき y は？", choices:["11","9","10","8"], answer:0, exp:"y = 2 × 4 + 3 = 8 + 3 = 11" },
+    { q:"三角形の内角の和は何度？", choices:["180度","360度","90度","270度"], answer:0, exp:"三角形の内角の和は常に 180° です。" },
+    { q:"4² - 3² の値は？", choices:["7","5","9","1"], answer:0, exp:"4² = 16、3² = 9、16 - 9 = 7" },
+    { q:"比例式 3 : x = 6 : 10 のとき、x の値は？", choices:["5","4","6","3"], answer:0, exp:"外項の積 = 内項の積 → 3 × 10 = 6 × x → x = 30 ÷ 6 = 5" },
+    { q:"2(x + 3) = 14 のとき、x の値は？", choices:["x = 4","x = 5","x = 3","x = 7"], answer:0, exp:"x + 3 = 7、x = 4" }
+  ],
+  english: [
+    { q:"「私は昨日学校に行きました」を英語にすると？", choices:["I went to school yesterday.","I go to school yesterday.","I gone to school yesterday.","I was go to school yesterday."], answer:0, exp:"「行った」は go の過去形 went を使います。" },
+    { q:"「beautiful」の意味は？", choices:["美しい","強い","速い","悲しい"], answer:0, exp:"beautiful は「美しい、きれいな」という意味の形容詞です。" },
+    { q:"（　）の中に入る適切な語は？ I （　）TV now.", choices:["am watching","watch","watched","watches"], answer:0, exp:"now（今）があるので現在進行形。be動詞 + -ing を使います。" },
+    { q:"「He plays soccer.」を否定文にすると？", choices:["He doesn't play soccer.","He don't play soccer.","He not play soccer.","He isn't play soccer."], answer:0, exp:"三人称単数現在の否定は doesn't を使います。" },
+    { q:"「library」の意味は？", choices:["図書館","書店","病院","学校"], answer:0, exp:"library は「図書館」です。bookstore（書店）と混同しないようにしましょう。" },
+    { q:"（　）に入る正しい語は？ She is （　）than me.", choices:["taller","tall","tallest","more tall"], answer:0, exp:"比較級は形容詞 + er。tall → taller" },
+    { q:"「have」の過去形は？", choices:["had","haved","has","having"], answer:0, exp:"have の過去形は had です。不規則変化動詞です。" },
+    { q:"「I like music.」の疑問文は？", choices:["Do you like music?","Are you like music?","Does you like music?","Did you like music?"], answer:0, exp:"一般動詞の疑問文は Do/Does を主語の前に置きます。" },
+    { q:"「difficult」の反対語は？", choices:["easy","hard","soft","simple"], answer:0, exp:"difficult（難しい）の反対は easy（簡単な）です。" },
+    { q:"「This is （　） apple.」に入る正しい語は？", choices:["an","a","the","×(不要)"], answer:0, exp:"apple は母音（a）で始まるので、冠詞は「an」を使います。" }
+  ],
+  japanese: [
+    { q:"「快晴」の読み方は？", choices:["かいせい","かっせい","かいき","くもり"], answer:0, exp:"快晴（かいせい）は、雲一つなく晴れ渡っていることを表します。" },
+    { q:"「走る」の未然形は？", choices:["走ら","走り","走っ","走れ"], answer:0, exp:"未然形は「〜ない」につながる形。「走らない」の「走ら」が未然形です。" },
+    { q:"「山が高い。」の「が」の品詞は？", choices:["助詞","助動詞","副詞","接続詞"], answer:0, exp:"「が」は主語を示す格助詞です。助詞は付属語で自立しません。" },
+    { q:"「竹取物語」の作者は不明だが、かぐや姫はどこに帰る？", choices:["月","太陽","星","海"], answer:0, exp:"かぐや姫は月から来た存在で、最後は月に帰ります。" },
+    { q:"「以心伝心」の意味は？", choices:["言葉なく心が通じる","心を込めて伝える","遠くに心を伝える","心を一つにする"], answer:0, exp:"以心伝心（いしんでんしん）は言葉や文字を使わず、心から心へ通じ合うこと。" },
+    { q:"「彼女は本を読んでいる。」の主語は？", choices:["彼女","本","読んでいる","は"], answer:0, exp:"「は」の前にある「彼女」が主語です。" },
+    { q:"「起承転結」で「転」の役割は？", choices:["話を展開させる","話を始める","話をまとめる","話を受ける"], answer:0, exp:"起（始まり）→承（受ける）→転（展開・変化）→結（まとめ）の構成です。" },
+    { q:"「雨が降る」を敬語（尊敬語）にすると？", choices:["お降りになる","降られる","降ります","お降りします"], answer:0, exp:"尊敬語は相手の行為を高める表現。「お〜になる」の形が典型です。" },
+    { q:"「拝啓」は手紙のどの部分で使う？", choices:["頭語","結語","前文","末文"], answer:0, exp:"「拝啓」は手紙の冒頭（頭語）に使います。結語は「敬具」です。" },
+    { q:"「春はあけぼの」で有名な随筆の作者は？", choices:["清少納言","紫式部","与謝野晶子","松尾芭蕉"], answer:0, exp:"「枕草子」の冒頭。平安時代の清少納言が書きました。" }
+  ],
+  science: [
+    { q:"光合成で植物が吸収するものは？", choices:["二酸化炭素と水","酸素と水","窒素と光","炭素と窒素"], answer:0, exp:"光合成では光・水・二酸化炭素を使い、酸素とデンプンを作ります。" },
+    { q:"水の沸点は何℃？（1気圧）", choices:["100℃","0℃","212℃","50℃"], answer:0, exp:"1気圧のとき水は100℃で沸騰します。0℃は凝固点（融点）です。" },
+    { q:"電流の単位は？", choices:["A（アンペア）","V（ボルト）","W（ワット）","Ω（オーム）"], answer:0, exp:"電流はA（アンペア）、電圧はV（ボルト）、抵抗はΩ（オーム）で表します。" },
+    { q:"ヒトの細胞に含まれる染色体は何本？", choices:["46本","23本","48本","44本"], answer:0, exp:"ヒトの細胞には23対＝46本の染色体があります。生殖細胞は23本。" },
+    { q:"地球の大気中で最も多い気体は？", choices:["窒素","酸素","二酸化炭素","アルゴン"], answer:0, exp:"大気の約78%は窒素、約21%は酸素です。" },
+    { q:"塩酸（HCl）の液性は？", choices:["酸性","アルカリ性","中性","両性"], answer:0, exp:"塩酸は強酸性です。リトマス紙を赤く変えます。" },
+    { q:"月が自ら光を出さずに輝いて見える理由は？", choices:["太陽の光を反射するから","地球の光を受けるから","自ら発光するから","星の光を反射するから"], answer:0, exp:"月は太陽の光を反射して光って見えます。惑星も同様です。" },
+    { q:"「作用・反作用の法則」はニュートンの第何法則？", choices:["第3法則","第1法則","第2法則","第4法則"], answer:0, exp:"第1法則＝慣性の法則、第2法則＝運動方程式、第3法則＝作用反作用。" },
+    { q:"植物の葉で蒸散が行われる主な部分は？", choices:["気孔","葉脈","葉緑体","表皮"], answer:0, exp:"気孔は葉の裏側に多くあり、水蒸気の放出（蒸散）を行います。" },
+    { q:"岩石が熱と圧力で変化したものを何という？", choices:["変成岩","火成岩","堆積岩","溶岩"], answer:0, exp:"変成岩は既存の岩石が熱・圧力で変化したもの。大理石・片岩など。" }
+  ],
+  social: [
+    { q:"日本の首都は？", choices:["東京","大阪","京都","名古屋"], answer:0, exp:"日本の首都は東京都。1869年に江戸から東京へ遷都されました。" },
+    { q:"日本国憲法が施行されたのは何年？", choices:["1947年","1945年","1952年","1950年"], answer:0, exp:"日本国憲法は1946年11月3日に公布、1947年5月3日に施行されました。" },
+    { q:"世界で最も面積が大きい国は？", choices:["ロシア","カナダ","アメリカ","中国"], answer:0, exp:"ロシア連邦の面積は約1,710万km²で世界最大です。" },
+    { q:"江戸幕府を開いたのは誰？", choices:["徳川家康","織田信長","豊臣秀吉","徳川秀忠"], answer:0, exp:"1603年、徳川家康が征夷大将軍となり江戸幕府を開きました。" },
+    { q:"国連本部はどこにある？", choices:["ニューヨーク","ジュネーブ","ロンドン","パリ"], answer:0, exp:"国連本部はアメリカのニューヨーク市にあります。" },
+    { q:"日本の国会は何院制？", choices:["二院制","一院制","三院制","四院制"], answer:0, exp:"衆議院と参議院の二院制（両院制）です。" },
+    { q:"フランス革命が起きたのは何年？", choices:["1789年","1776年","1848年","1815年"], answer:0, exp:"フランス革命は1789年。バスティーユ牢獄襲撃が象徴的事件です。" },
+    { q:"日本で最も長い川は？", choices:["信濃川","利根川","阿賀野川","石狩川"], answer:0, exp:"信濃川（367km）が日本最長の川です。利根川は流域面積最大。" },
+    { q:"需要と供給について、需要が増えると価格はどうなる？", choices:["上がる","下がる","変わらない","ゼロになる"], answer:0, exp:"需要が増えると希少性が上がり、価格は上昇する傾向があります。" },
+    { q:"「基本的人権の尊重」「国民主権」ともう一つ、日本国憲法の三大原則は？", choices:["平和主義","民主主義","資本主義","議会主義"], answer:0, exp:"日本国憲法の三大原則は①国民主権 ②基本的人権の尊重 ③平和主義です。" }
+  ]
+};
 
+var SUBJECT_NAMES = { math:"数学", english:"英語", japanese:"国語", science:"理科", social:"社会" };
+
+// ===================================================
+// アプリ状態
+// ===================================================
+var state = {
+  user: null,
+  currentSubject: null,
+  currentQuestions: [],
+  currentIndex: 0,
+  correctCount: 0,
+  answered: false
+};
+
+// ローカルストレージからユーザー一覧取得
+function getUsers() {
+  try { return JSON.parse(localStorage.getItem('soy_users') || '{}'); } catch(e) { return {}; }
+}
+function saveUsers(users) {
+  localStorage.setItem('soy_users', JSON.stringify(users));
+}
+function getCurrentUser() {
+  try { return JSON.parse(localStorage.getItem('soy_current') || 'null'); } catch(e) { return null; }
+}
+function saveCurrentUser(user) {
+  localStorage.setItem('soy_current', JSON.stringify(user));
+}
+
+// ===================================================
+// ログイン・登録
+// ===================================================
 function switchLoginTab(tab) {
-  document.getElementById('ltab-login').classList.toggle('active', tab === 'login');
-  document.getElementById('ltab-register').classList.toggle('active', tab === 'register');
-  document.getElementById('login-form').style.display    = tab === 'login' ? '' : 'none';
-  document.getElementById('register-form').style.display = tab === 'register' ? '' : 'none';
+  var btns = document.querySelectorAll('.tab-btn');
+  if (tab === 'login') {
+    btns[0].classList.add('active'); btns[1].classList.remove('active');
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('register-form').style.display = 'none';
+  } else {
+    btns[1].classList.add('active'); btns[0].classList.remove('active');
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+  }
 }
 
 function doLogin() {
-  const u = document.getElementById('l-username').value.trim();
-  const p = document.getElementById('l-password').value;
-  let ok = true;
-  document.getElementById('l-err-user').classList.remove('show');
-  document.getElementById('l-err-pass').classList.remove('show');
-  document.getElementById('l-err-general').classList.remove('show');
-  document.getElementById('l-username').classList.remove('error');
-  document.getElementById('l-password').classList.remove('error');
-  if (!u) { document.getElementById('l-err-user').classList.add('show'); document.getElementById('l-username').classList.add('error'); ok = false; }
-  if (!p) { document.getElementById('l-err-pass').classList.add('show'); document.getElementById('l-password').classList.add('error'); ok = false; }
-  if (!ok) return;
-  if (u === DEMO_USER.username && p === DEMO_USER.password) {
-    enterApp();
-  } else {
-    const el = document.getElementById('l-err-general');
-    el.textContent = 'ユーザーネームまたはパスワードが違います';
-    el.classList.add('show');
+  var username = document.getElementById('login-username').value.trim();
+  var password = document.getElementById('login-password').value;
+  if (!username || !password) { showToast('ユーザーネームとパスワードを入力してください'); return; }
+  var users = getUsers();
+  if (!users[username] || users[username].password !== password) {
+    showToast('ユーザーネームまたはパスワードが違います'); return;
   }
+  state.user = users[username];
+  saveCurrentUser(state.user);
+  enterApp();
 }
 
 function doRegister() {
-  const name = document.getElementById('r-name').value.trim();
-  const u    = document.getElementById('r-username').value.trim();
-  const p    = document.getElementById('r-password').value;
-  let ok = true;
-  ['r-err-name','r-err-user','r-err-pass'].forEach(id => document.getElementById(id).classList.remove('show'));
-  ['r-name','r-username','r-password'].forEach(id => document.getElementById(id).classList.remove('error'));
-  if (!name) { document.getElementById('r-err-name').classList.add('show'); document.getElementById('r-name').classList.add('error'); ok = false; }
-  if (!u || !/^[a-zA-Z0-9_]+$/.test(u)) { document.getElementById('r-err-user').classList.add('show'); document.getElementById('r-username').classList.add('error'); ok = false; }
-  if (p.length < 8) { document.getElementById('r-err-pass').classList.add('show'); document.getElementById('r-password').classList.add('error'); ok = false; }
-  if (!ok) return;
-  document.getElementById('prof-name').value = name;
-  document.getElementById('prof-username').value = u;
-  updateAvatar();
+  var name = document.getElementById('reg-name').value.trim();
+  var username = document.getElementById('reg-username').value.trim();
+  var password = document.getElementById('reg-password').value;
+  var grade = document.getElementById('reg-grade').value;
+  if (!name || !username || !password || !grade) { showToast('すべての項目を入力してください'); return; }
+  if (password.length < 8) { showToast('パスワードは8文字以上にしてください'); return; }
+  var users = getUsers();
+  if (users[username]) { showToast('そのユーザーネームは既に使われています'); return; }
+  var newUser = { name, username, password, grade, points: 0, totalAnswered: 0, totalCorrect: 0, history: {} };
+  users[username] = newUser;
+  saveUsers(users);
+  state.user = newUser;
+  saveCurrentUser(state.user);
   enterApp();
 }
 
-function doGuestLogin() {
+function doGuest() {
+  state.user = { name:'ゲスト', username:'guest', grade:'', points:0, totalAnswered:0, totalCorrect:0, history:{} };
   enterApp();
+}
+
+function doLogout() {
+  if (!confirm('ログアウトしますか？')) return;
+  state.user = null;
+  localStorage.removeItem('soy_current');
+  showScreen('login');
 }
 
 function enterApp() {
-  document.getElementById('login-screen').classList.remove('show');
+  updateHomeStats();
+  updateProfile();
+  buildRanking();
+  showScreen('home');
+  document.getElementById('bottom-nav').style.display = 'flex';
 }
 
-/* ── プロフィール表示の更新 ── */
-function updateProfileView() {
-  const name   = document.getElementById('prof-name').value.trim() || '田中 さくら';
-  const grade  = document.getElementById('prof-grade').value || '中2';
-  const school = document.getElementById('prof-school').value.trim();
-  const target = document.getElementById('prof-target').value.trim();
-  const bio    = document.getElementById('prof-bio').value.trim();
+// ===================================================
+// 画面遷移
+// ===================================================
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  var s = document.getElementById('screen-' + name);
+  if (s) { s.classList.add('active'); s.scrollTop = 0; window.scrollTo(0,0); }
 
-  const initials = name.length >= 2 ? name.slice(0,2) : name || '?';
-  document.getElementById('pv-avatar').textContent = initials;
-  document.getElementById('pv-name').textContent   = name;
-  document.getElementById('pv-grade').textContent  = grade;
-  document.getElementById('pv-pt').textContent     = sharedPt + ' pt';
+  var navMap = { home:'nav-home', ranking:'nav-ranking', profile:'nav-profile' };
+  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
+  if (navMap[name]) {
+    var el = document.getElementById(navMap[name]);
+    if (el) el.classList.add('active');
+  }
 
-  const schoolRow = document.getElementById('pv-row-school');
-  if (school && visState.school) {
-    document.getElementById('pv-school').textContent = school;
-    schoolRow.style.display = '';
+  if (name === 'login') {
+    document.getElementById('bottom-nav').style.display = 'none';
   } else {
-    schoolRow.style.display = 'none';
-  }
-  const targetRow = document.getElementById('pv-row-target');
-  if (target && visState.target) {
-    document.getElementById('pv-target').textContent = target;
-    targetRow.style.display = '';
-  } else {
-    targetRow.style.display = 'none';
-  }
-  const bioCard = document.getElementById('pv-bio-card');
-  if (bio && visState.bio) {
-    document.getElementById('pv-bio').textContent = bio;
-    bioCard.style.display = '';
-  } else {
-    bioCard.style.display = 'none';
+    document.getElementById('bottom-nav').style.display = 'flex';
   }
 }
 
-function goEditProfile() {
-  const navBtns = document.querySelectorAll('.nav-tab');
-  showScreen('profile', navBtns[navBtns.length - 1]);
+function goBack() {
+  showScreen('home');
 }
 
-/* ── ナビ ── */
-function showScreen(id, el) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('screen-' + id).classList.add('active');
-  el.classList.add('active');
-  window.scrollTo(0, 0);
-  if (id === 'profileview') updateProfileView();
-  if (id === 'schedule') renderCalendar();
-  if (id === 'parent') renderParentReports();
-  if (id === 'plan') renderPlanScreen();
-}
+// ===================================================
+// ホーム統計更新
+// ===================================================
+function updateHomeStats() {
+  var u = state.user;
+  document.getElementById('home-username').textContent = (u.name || u.username) + ' さん';
+  document.getElementById('home-total').textContent = u.totalAnswered || 0;
+  var rate = u.totalAnswered > 0 ? Math.round(u.totalCorrect / u.totalAnswered * 100) : '--';
+  document.getElementById('home-correct-rate').textContent = (rate === '--') ? '--%' : rate + '%';
+  document.getElementById('home-points').textContent = u.points || 0;
 
-/* ── 共有ポイント ── */
-let sharedPt = 680;
-function syncPt() {
-  document.getElementById('quiz-pt').textContent = sharedPt;
-  document.getElementById('user-pt').textContent = sharedPt;
-  const rem = Math.max(1000 - sharedPt, 0);
-  const pct = Math.min(Math.round(sharedPt / 1000 * 100), 100);
-  document.getElementById('user-next-bar').style.width = pct + '%';
-  document.getElementById('user-remain').textContent = rem > 0 ? `あと ${rem} pt で交換できます` : '交換できます！';
-}
-
-/* ── 画面1: クイズ ── */
-const questions = [
-  { type:'choice', subject:'数学', badge:'b-math', pts:10,
-    text:'次の計算をしなさい。\n3x + 7 = 22 のとき、x の値は？',
-    choices:['3','5','7','9'], answer:1 },
-  { type:'input', subject:'英語', badge:'b-eng', pts:15,
-    text:'次の日本語を英語にしなさい。\n「私は毎朝6時に起きます。」\nI _____ up at six every morning.',
-    answer:'wake', hint:'「起きる」を意味する動詞' },
-  { type:'choice', subject:'国語', badge:'b-jpn', pts:10,
-    text:'「紅葉」の読み方として正しいものはどれですか？',
-    choices:['こうよう','もみじ','どちらも正しい','どちらも間違い'], answer:2 }
-];
-let qIdx = 0, qScore = 0, qEarned = 0, qAnswered = false;
-
-function renderQuiz() {
-  if (qIdx >= questions.length) { showResult(); return; }
-  const q = questions[qIdx];
-  const pct = Math.round(qIdx / questions.length * 100);
-  document.getElementById('q-prog').style.width = pct + '%';
-  document.getElementById('q-prog-txt').textContent = (qIdx + 1) + ' / ' + questions.length;
-
-  let html = `<div class="card">
-    <div class="q-meta">
-      <span class="badge ${q.badge}">${q.subject}</span>
-      <span class="q-chance">${q.pts}pt 獲得チャンス</span>
-    </div>
-    <p class="q-text">${q.text.replace(/\n/g,'<br>')}</p>`;
-
-  if (q.type === 'choice') {
-    html += `<div class="choices">`;
-    ['A','B','C','D'].forEach((l,i) => {
-      html += `<button class="choice" id="c${i}" onclick="pickChoice(${i})">
-        <span class="choice-letter">${l}</span>${q.choices[i]}
-      </button>`;
-    });
-    html += `</div>`;
-  } else {
-    html += `<input type="text" id="text-ans" placeholder="${q.hint}" style="margin-bottom:4px">`;
-  }
-
-  html += `<div class="feedback" id="fb"></div>
-    <div class="btn-row"><button onclick="submitQ()">答えを確認</button></div>
-  </div>`;
-  document.getElementById('quiz-area').innerHTML = html;
-  qAnswered = false;
-}
-
-function pickChoice(i) {
-  if (qAnswered) return;
-  document.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
-  document.getElementById('c' + i).classList.add('selected');
-}
-
-function submitQ() {
-  if (qAnswered) { qIdx++; renderQuiz(); return; }
-  const q = questions[qIdx];
-  qAnswered = true;
-  let correct = false;
-
-  if (q.type === 'choice') {
-    let sel = -1;
-    document.querySelectorAll('.choice').forEach((b,i) => { if (b.classList.contains('selected')) sel = i; });
-    if (sel < 0) return;
-    correct = sel === q.answer;
-    document.querySelectorAll('.choice').forEach((b,i) => {
-      if (i === q.answer) b.classList.add('correct');
-      else if (b.classList.contains('selected')) b.classList.add('wrong');
-    });
-  } else {
-    const inp = document.getElementById('text-ans');
-    correct = inp.value.trim().toLowerCase() === q.answer.toLowerCase();
-    inp.classList.add(correct ? 'correct-inp' : 'wrong-inp');
-    inp.disabled = true;
-  }
-
-  const fb = document.getElementById('fb');
-  if (correct) {
-    qScore++; qEarned += q.pts; sharedPt += q.pts;
-    syncPt();
-    fb.className = 'feedback ok';
-    fb.innerHTML = `<i class="ti ti-circle-check" style="font-size:18px"></i>正解！ +${q.pts}pt 獲得`;
-  } else {
-    fb.className = 'feedback ng';
-    const ans = q.type === 'choice' ? q.choices[q.answer] : q.answer;
-    fb.innerHTML = `<i class="ti ti-circle-x" style="font-size:18px"></i>残念。正解は「${ans}」です。`;
-  }
-  document.querySelector('#quiz-area .btn-row button').textContent = '次の問題へ';
-}
-
-function showResult() {
-  document.getElementById('q-prog').style.width = '100%';
-  document.getElementById('q-prog-txt').textContent = questions.length + ' / ' + questions.length;
-  const pct = Math.round(qScore / questions.length * 100);
-  document.getElementById('quiz-area').innerHTML = `
-    <div class="result-wrap">
-      <div class="result-icon-wrap"><i class="ti ti-trophy" style="font-size:32px"></i></div>
-      <div class="result-score">${qScore} / ${questions.length} 問正解</div>
-      <div class="result-sub">正答率 ${pct}%</div>
-      <div class="earn-box">
-        <div class="earn-label">今回獲得したポイント</div>
-        <div class="earn-val">+${qEarned} pt</div>
-      </div><br>
-      <button onclick="resetQuiz()">もう一度挑戦する</button>
-    </div>`;
-}
-
-function resetQuiz() {
-  qIdx = 0; qScore = 0; qEarned = 0; qAnswered = false;
-  renderQuiz();
-}
-
-/* ── 画面2: ユーザーページ ── */
-const gifts = [
-  { name:'好きな参考書',         pt:300,  emoji:'📚' },
-  { name:'コンビニ券 500円',     pt:500,  emoji:'🛍️' },
-  { name:'ギフトカード 5,000円', pt:1000, emoji:'🎁' },
-  { name:'ゲームソフト券',       pt:1500, emoji:'🎮', locked:true },
-];
-let currentGift = null;
-
-function shopModal(i) {
-  const g = gifts[i];
-  currentGift = g;
-  document.getElementById('m-emoji').textContent = g.emoji;
-  if (g.locked) {
-    document.getElementById('m-title').textContent = 'まだ交換できません';
-    document.getElementById('m-body').textContent = `あと ${g.pt - sharedPt} pt 貯めると交換できます。`;
-    document.getElementById('m-confirm').style.display = 'none';
-  } else if (sharedPt < g.pt) {
-    document.getElementById('m-title').textContent = g.name + 'と交換';
-    document.getElementById('m-body').textContent = `ポイントが足りません。あと ${g.pt - sharedPt} pt 必要です。`;
-    document.getElementById('m-confirm').style.display = 'none';
-  } else {
-    document.getElementById('m-title').textContent = g.name + 'と交換';
-    document.getElementById('m-body').textContent = `${g.pt} pt を使って交換します。よろしいですか？`;
-    document.getElementById('m-confirm').style.display = '';
-  }
-  document.getElementById('m-pt').textContent = `現在 ${sharedPt} pt`;
-  document.getElementById('shop-modal').classList.add('open');
-}
-
-function closeShopModal() {
-  document.getElementById('shop-modal').classList.remove('open');
-}
-
-function doExchange() {
-  if (!currentGift || sharedPt < currentGift.pt) return;
-  sharedPt -= currentGift.pt;
-  closeShopModal();
-  syncPt();
-  const t = document.getElementById('user-toast');
-  document.getElementById('user-toast-msg').textContent = `「${currentGift.name}」の交換申請を送りました！先生に確認してもらおう。`;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 4000);
-}
-
-/* ── 画面3: 保護者 ── */
-const children = [
-  {
-    name:'さくら', grade:'中学2年', pts:680, ptTarget:1000,
-    metrics:[{val:'14回',lbl:'今月の出席'},{val:'87%',lbl:'平均正答率'},{val:'+120pt',lbl:'今週の獲得'}],
-    weekPts:[20,35,10,50,45,30,0],
-    activities:[
-      { date:'6月27日（今日）', rows:[
-        {label:'出席', badge:'b-attend', badgeText:'出席', type:'pt', val:'+2pt'},
-        {label:'数学 — 計算練習', badge:'b-math', badgeText:'数学', type:'score', val:'100%', cls:'score-good'},
-        {label:'英語 — 単語テスト', badge:'b-eng', badgeText:'英語', type:'score', val:'80%', cls:'score-ok'},
-      ]},
-      { date:'6月25日（火）', rows:[
-        {label:'出席', badge:'b-attend', badgeText:'出席', type:'pt', val:'+2pt'},
-        {label:'国語 — 読解問題', badge:'b-jpn', badgeText:'国語', type:'score', val:'93%', cls:'score-good'},
-      ]},
-    ],
-    comment:{ from:'山田 先生', initial:'山', text:'さくらさんは数学の計算力がとても伸びています。英語の単語は少し苦手なようなので、毎日少しずつ復習してみましょう。来週のテストに向けて一緒に頑張りましょう！' }
-  },
-  {
-    name:'けんた', grade:'小学5年', pts:210, ptTarget:300,
-    metrics:[{val:'10回',lbl:'今月の出席'},{val:'72%',lbl:'平均正答率'},{val:'+60pt',lbl:'今週の獲得'}],
-    weekPts:[10,15,0,30,20,10,5],
-    activities:[
-      { date:'6月26日（水）', rows:[
-        {label:'出席', badge:'b-attend', badgeText:'出席', type:'pt', val:'+2pt'},
-        {label:'算数 — 分数の計算', badge:'b-math', badgeText:'算数', type:'score', val:'70%', cls:'score-ok'},
-      ]},
-      { date:'6月24日（月）', rows:[
-        {label:'出席', badge:'b-attend', badgeText:'出席', type:'pt', val:'+2pt'},
-        {label:'理科 — 植物のはたらき', badge:'b-sci', badgeText:'理科', type:'score', val:'85%', cls:'score-good'},
-      ]},
-    ],
-    comment:{ from:'鈴木 先生', initial:'鈴', text:'けんたくんは理科がとても好きで積極的に取り組んでいます。算数の分数がまだ少し難しいようなので、お家でも分数の練習を一緒にしてあげると効果的です。' }
-  }
-];
-const days = ['月','火','水','木','金','土','日'];
-
-function switchChild(i, el) {
-  document.querySelectorAll('.stu-tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  renderParent(i);
-}
-
-function renderParent(i) {
-  const c = children[i];
-  const pct = Math.min(Math.round(c.pts / c.ptTarget * 100), 100);
-  const remain = Math.max(c.ptTarget - c.pts, 0);
-  const maxBar = Math.max(...c.weekPts, 1);
-
-  const barsHtml = c.weekPts.map((v,di) => `
-    <div class="bar-col">
-      <div class="bar-bg">
-        <div class="bar-inner" style="height:${Math.round(v/maxBar*100)}%;${v>0?'min-height:4px':''}"></div>
-      </div>
-      <div class="bar-day">${days[di]}</div>
-    </div>`).join('');
-
-  const activHtml = c.activities.map(a => `
-    <div class="act-card">
-      <div class="act-head">
-        <i class="ti ti-calendar" style="font-size:14px;margin-right:6px"></i>
-        <span class="act-date">${a.date}</span>
-      </div>
-      <div class="act-body">
-        ${a.rows.map(r => `
-          <div class="act-row">
-            <div class="act-left">
-              <span class="badge ${r.badge}">${r.badgeText}</span>${r.label}
-            </div>
-            ${r.type==='pt' ? `<span class="score-pt">${r.val}</span>` : `<span class="${r.cls}">${r.val}</span>`}
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
-
-  document.getElementById('parent-content').innerHTML = `
-    <div class="metrics-row">
-      ${c.metrics.map(m=>`<div class="metric-cell"><div class="metric-val">${m.val}</div><div class="metric-lbl">${m.lbl}</div></div>`).join('')}
-    </div>
-    <div class="pt-summary">
-      <div>
-        <div class="pt-sum-label">保有ポイント</div>
-        <div class="pt-sum-val">${c.pts} pt</div>
-      </div>
-      <div class="pt-sum-right">
-        <div class="pt-mini-txt">次の景品まで</div>
-        <div class="pt-mini-bar"><div class="pt-mini-fill" style="width:${pct}%"></div></div>
-        <div class="pt-mini-txt">あと ${remain} pt</div>
-      </div>
-    </div>
-    <p class="section-label">今週の学習時間（分）</p>
-    <div class="chart-card"><div class="chart-bars">${barsHtml}</div></div>
-    <p class="section-label">最近の学習記録</p>
-    ${activHtml}
-    <p class="section-label" style="margin-top:1.25rem">先生からのコメント</p>
-    <div class="comment-card">
-      <div class="comment-head">
-        <div class="comment-av">${c.comment.initial}</div>
-        <span class="comment-from">${c.comment.from}</span>
-      </div>
-      <div class="comment-text">${c.comment.text}</div>
-    </div>`;
-}
-
-/* ── 画面4: プロフィール ── */
-const visState = { name: true, grade: true, school: false, target: false, bio: true };
-
-function toggleVis(field) {
-  visState[field] = !visState[field];
-  const el = document.getElementById('vis-' + field);
-  if (visState[field]) {
-    el.className = 'vis-toggle public';
-    el.innerHTML = '<i class="ti ti-eye" style="font-size:13px"></i> 公開';
-  } else {
-    el.className = 'vis-toggle private';
-    el.innerHTML = '<i class="ti ti-eye-off" style="font-size:13px"></i> 非公開';
-  }
-}
-
-function updateAvatar() {
-  const name = document.getElementById('prof-name').value.trim();
-  const el = document.getElementById('prof-avatar-initials');
-  if (name.length >= 2) {
-    el.textContent = name.slice(0, 2);
-  } else if (name.length === 1) {
-    el.textContent = name[0];
-  } else {
-    el.textContent = '?';
-  }
-}
-
-document.getElementById('prof-bio').addEventListener('input', function() {
-  const len = this.value.length;
-  document.getElementById('bio-count').textContent = len + ' / 200文字';
-  if (len > 200) this.value = this.value.slice(0, 200);
-});
-
-function saveProfile() {
-  const name     = document.getElementById('prof-name').value.trim();
-  const username = document.getElementById('prof-username').value.trim();
-  const grade    = document.getElementById('prof-grade').value;
-  let valid = true;
-
-  const errName = document.getElementById('err-name');
-  const errUser = document.getElementById('err-username');
-  const errGrade = document.getElementById('err-grade');
-  const nameInp  = document.getElementById('prof-name');
-  const userInp  = document.getElementById('prof-username');
-  const gradeInp = document.getElementById('prof-grade');
-
-  errName.classList.remove('show'); nameInp.classList.remove('error');
-  errUser.classList.remove('show'); userInp.classList.remove('error');
-  errGrade.classList.remove('show'); gradeInp.classList.remove('error');
-
-  if (!name) {
-    errName.classList.add('show'); nameInp.classList.add('error'); valid = false;
-  }
-  if (!username) {
-    errUser.classList.add('show'); userInp.classList.add('error'); valid = false;
-  } else if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-    errUser.textContent = '半角英数字とアンダースコアのみ使用できます';
-    errUser.classList.add('show'); userInp.classList.add('error'); valid = false;
-  } else {
-    errUser.textContent = 'ユーザーネームを入力してください';
-  }
-  if (!grade) {
-    errGrade.classList.add('show'); gradeInp.classList.add('error'); valid = false;
-  }
-  if (!valid) return;
-
-  const toast = document.getElementById('prof-toast');
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 3000);
-  updateProfileView();
-  window.scrollTo(0, 0);
-}
-
-/* ── スケジュール ── */
-const MONTHS_JA = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-const DAYS_JA   = ['日','月','火','水','木','金','土'];
-let calYear, calMonth, calSelected;
-let schedules = [
-  { date:'2026-06-27', time:'17:00', subject:'数学', duration:20, memo:'2次方程式の復習', done:false },
-  { date:'2026-06-29', time:'19:00', subject:'英語', duration:30, memo:'単語テスト対策',  done:true,
-    report:{ score:87, leaveCount:1, leaveTimes:['19:08'], duration:30 } },
-];
-
-function initCalendar() {
-  const now = new Date();
-  calYear = now.getFullYear(); calMonth = now.getMonth();
-  calSelected = now.toISOString().slice(0,10);
-  renderCalendar();
-}
-
-function moveMonth(d) {
-  calMonth += d;
-  if (calMonth < 0)  { calMonth = 11; calYear--; }
-  if (calMonth > 11) { calMonth = 0;  calYear++; }
-  renderCalendar();
-}
-
-function renderCalendar() {
-  document.getElementById('cal-month-label').textContent = calYear + '年 ' + MONTHS_JA[calMonth];
-  const grid = document.getElementById('cal-grid');
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
-  const today = new Date().toISOString().slice(0,10);
-  let html = DAYS_JA.map(d => `<div class="cal-dow">${d}</div>`).join('');
-  for (let i=0; i<firstDay; i++) html += `<div class="cal-day empty"></div>`;
-  for (let d=1; d<=daysInMonth; d++) {
-    const dateStr = calYear+'-'+String(calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
-    const hasEv = schedules.some(s => s.date===dateStr);
-    const cls = [
-      'cal-day',
-      dateStr===today ? 'today' : '',
-      dateStr===calSelected ? 'selected' : '',
-      hasEv ? 'has-event' : ''
-    ].filter(Boolean).join(' ');
-    html += `<div class="${cls}" onclick="selectDay('${dateStr}')">${d}</div>`;
-  }
-  grid.innerHTML = html;
-  renderSchedList();
-}
-
-function selectDay(dateStr) {
-  calSelected = dateStr;
-  renderCalendar();
-}
-
-function renderSchedList() {
-  const [y,m,d] = calSelected.split('-');
-  const label = y+'年'+parseInt(m)+'月'+parseInt(d)+'日（'+DAYS_JA[new Date(calSelected).getDay()]+'）';
-  document.getElementById('sched-date-label').textContent = label;
-  const items = schedules.filter(s => s.date===calSelected);
-  if (!items.length) {
-    document.getElementById('sched-list').innerHTML = `<div class="sched-empty"><i class="ti ti-calendar-off" style="font-size:24px;display:block;margin:0 auto 8px"></i>この日の予約はありません</div>`;
-    return;
-  }
-  document.getElementById('sched-list').innerHTML = items.map((s,i) => {
-    const badge = s.done
-      ? `<span class="sched-item-badge sib-done">完了</span>`
-      : `<span class="sched-item-badge sib-upcoming">予約済</span>`;
-    const startBtn = !s.done ? `<button onclick="startSession(${schedules.indexOf(s)})" style="padding:6px 12px;font-size:12px;font-weight:600;white-space:nowrap">開始</button>` : '';
-    return `<div class="sched-item">
-      <div class="sched-item-time">${s.time}</div>
-      <div class="sched-item-body">
-        <div class="sched-item-title">${s.subject}　${s.duration}分演習</div>
-        <div class="sched-item-meta">${s.memo||'メモなし'}</div>
-      </div>
-      ${badge}${startBtn}
-    </div>`;
-  }).join('');
-}
-
-function openSchedModal() {
-  document.getElementById('sched-modal').classList.add('open');
-}
-function closeSchedModal() {
-  document.getElementById('sched-modal').classList.remove('open');
-}
-function addSchedule() {
-  const subj = document.getElementById('sm-subject').value;
-  const time  = document.getElementById('sm-time').value;
-  const dur   = parseInt(document.getElementById('sm-duration').value);
-  const memo  = document.getElementById('sm-memo').value.trim();
-  schedules.push({ date:calSelected, time, subject:subj, duration:dur, memo, done:false });
-  schedules.sort((a,b) => (a.date+a.time).localeCompare(b.date+b.time));
-  closeSchedModal();
-  renderCalendar();
-}
-
-/* ── 演習セッション ── */
-let sessTimer=null, sessRemain=0, sessLeave=0, sessLeaveTimes=[], sessSchedIdx=-1;
-let sessQIdx=0, sessQScore=0, sessQAnswered=false, sessDuration=0;
-
-function startSession(idx) {
-  const s = schedules[idx];
-  sessSchedIdx = idx;
-  sessRemain   = s.duration * 60;
-  sessDuration = s.duration;
-  sessLeave    = 0;
-  sessLeaveTimes = [];
-  sessQIdx     = 0;
-  sessQScore   = 0;
-  sessQAnswered= false;
-
-  document.getElementById('sess-title').textContent = s.subject + '　' + s.duration + '分演習';
-  document.getElementById('sess-leave-count').textContent = '0回';
-  document.getElementById('sess-warn').classList.remove('show');
-  updateSessTimer();
-  renderAdBanner('sess-ad-banner');
-  renderLimitBanner('sess-limit-banner');
-
-  const overlay = document.getElementById('session-overlay');
-  overlay.classList.add('show');
-
-  renderSessionCountdown(s.duration);
-}
-
-function renderSessionCountdown(min) {
-  document.getElementById('sess-quiz-area').innerHTML = `
-    <div class="countdown-wrap">
-      <div class="countdown-icon"><i class="ti ti-player-play"></i></div>
-      <div class="countdown-label">演習を開始します</div>
-      <div class="countdown-num" id="cd-num">3</div>
-      <div class="countdown-sub">${min}分間、他の画面を開かずに取り組みましょう</div>
-    </div>`;
-  let cd = 3;
-  const iv = setInterval(() => {
-    cd--;
-    if (cd <= 0) { clearInterval(iv); startSessQuiz(); return; }
-    const el = document.getElementById('cd-num');
-    if (el) el.textContent = cd;
-  }, 1000);
-  sessTimer = setInterval(() => {
-    sessRemain--;
-    updateSessTimer();
-    if (sessRemain <= 0) { clearInterval(sessTimer); endSession(); }
-  }, 1000);
-  document.addEventListener('visibilitychange', onVisChange);
-}
-
-function onVisChange() {
-  if (document.hidden) {
-    sessLeave++;
-    const now = new Date();
-    sessLeaveTimes.push(now.getHours()+':'+String(now.getMinutes()).padStart(2,'0'));
-    document.getElementById('sess-leave-count').textContent = sessLeave + '回';
-    const warn = document.getElementById('sess-warn');
-    document.getElementById('sess-warn-msg').textContent = `他の画面への切り替えを検知しました（計${sessLeave}回）`;
-    warn.classList.add('show');
-    setTimeout(() => warn.classList.remove('show'), 4000);
-  }
-}
-
-function updateSessTimer() {
-  const m = Math.floor(sessRemain/60), s = sessRemain%60;
-  document.getElementById('sess-timer').textContent = String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
-}
-
-function startSessQuiz() {
-  renderSessQuestion();
-}
-
-function renderSessQuestion() {
-  if (sessQIdx >= questions.length) {
-    document.getElementById('sess-quiz-area').innerHTML = `
-      <div style="text-align:center;padding:2rem 0;color:var(--text-secondary);font-size:15px">
-        <i class="ti ti-circle-check" style="font-size:36px;color:var(--success);display:block;margin:0 auto 12px"></i>
-        問題を全問解きました！<br>時間終了まで待つか、終了ボタンを押してください。
-        <br><br><button class="primary" onclick="endSession()" style="margin:0 auto;display:block">演習を終了する</button>
-      </div>`;
-    return;
-  }
-  const q = questions[sessQIdx];
-  let html = `<div class="card">
-    <div class="q-meta"><span class="badge ${q.badge}">${q.subject}</span><span class="q-chance">${q.pts}pt</span></div>
-    <p class="q-text">${q.text.replace(/\n/g,'<br>')}</p>`;
-  if (q.type==='choice') {
-    html += `<div class="choices">`;
-    ['A','B','C','D'].forEach((l,i) => {
-      html += `<button class="choice" id="sq${i}" onclick="pickSessChoice(${i})"><span class="choice-letter">${l}</span>${q.choices[i]}</button>`;
-    });
-    html += `</div>`;
-  } else {
-    html += `<input type="text" id="sess-text-ans" placeholder="${q.hint}" style="margin-bottom:4px">`;
-  }
-  html += `<div class="feedback" id="sess-fb"></div>
-    <div class="btn-row"><button onclick="submitSessQ()">答えを確認</button></div></div>`;
-  document.getElementById('sess-quiz-area').innerHTML = html;
-  sessQAnswered = false;
-}
-
-function pickSessChoice(i) {
-  if (sessQAnswered) return;
-  document.querySelectorAll('.choice').forEach(b => b.classList.remove('selected'));
-  document.getElementById('sq'+i).classList.add('selected');
-}
-
-function submitSessQ() {
-  if (sessQAnswered) {
-    sessQIdx++;
-    showInterstitial(() => renderSessQuestion());
-    return;
-  }
-  const q = questions[sessQIdx];
-  sessQAnswered = true;
-  let correct = false;
-  if (q.type==='choice') {
-    let sel=-1;
-    document.querySelectorAll('.choice').forEach((b,i) => { if(b.classList.contains('selected')) sel=i; });
-    if (sel<0) return;
-    correct = sel===q.answer;
-    document.querySelectorAll('.choice').forEach((b,i) => {
-      if(i===q.answer) b.classList.add('correct');
-      else if(b.classList.contains('selected')) b.classList.add('wrong');
-    });
-  } else {
-    const inp = document.getElementById('sess-text-ans');
-    correct = inp.value.trim().toLowerCase()===q.answer.toLowerCase();
-    inp.classList.add(correct?'correct-inp':'wrong-inp'); inp.disabled=true;
-  }
-  const fb = document.getElementById('sess-fb');
-  if (correct) {
-    sessQScore++; sharedPt += q.pts; syncPt();
-    fb.className='feedback ok';
-    fb.innerHTML=`<i class="ti ti-circle-check" style="font-size:18px"></i>正解！ +${q.pts}pt`;
-  } else {
-    fb.className='feedback ng';
-    fb.innerHTML=`<i class="ti ti-circle-x" style="font-size:18px"></i>正解は「${q.type==='choice'?q.choices[q.answer]:q.answer}」`;
-  }
-  document.querySelector('#sess-quiz-area .btn-row button').textContent='次の問題へ';
-}
-
-function endSession() {
-  clearInterval(sessTimer);
-  document.removeEventListener('visibilitychange', onVisChange);
-  const elapsed = sessDuration - Math.ceil(sessRemain/60);
-  const totalQ  = questions.length;
-  const pct     = Math.round(sessQScore/totalQ*100);
-  const report  = { score:pct, leaveCount:sessLeave, leaveTimes:sessLeaveTimes, duration:sessDuration };
-  if (sessSchedIdx>=0) {
-    schedules[sessSchedIdx].done   = true;
-    schedules[sessSchedIdx].report = report;
-  }
-  document.getElementById('session-overlay').classList.remove('show');
-  sessionReports.unshift({ ...report, subject: sessSchedIdx>=0 ? schedules[sessSchedIdx].subject : '演習',
-    date: new Date().toLocaleDateString('ja-JP',{month:'long',day:'numeric',weekday:'short'}) });
-  renderCalendar();
-  renderParentReports();
-  alert(`演習終了！\n正答率：${pct}%\n離脱検知：${sessLeave}回`);
-}
-
-/* ── 監視レポート ── */
-let sessionReports = [
-  { subject:'英語', date:'6月29日（日）', score:87, leaveCount:1, leaveTimes:['19:08'], duration:30 }
-];
-
-function renderReportCard(r) {
-  const lvCls = r.leaveCount===0?'good':r.leaveCount<=2?'warn':'danger';
-  const scCls = r.score>=80?'good':r.score>=60?'warn':'danger';
-  return `<div class="report-card">
-    <div class="report-head">
-      <span class="report-head-title"><i class="ti ti-report" style="font-size:14px;vertical-align:-1px;margin-right:4px"></i>${r.subject}　演習レポート</span>
-      <span class="report-head-date">${r.date}</span>
-    </div>
-    <div class="report-body">
-      <div class="report-row"><span class="report-row-label">演習時間</span><span class="report-row-val">${r.duration}分</span></div>
-      <div class="report-row"><span class="report-row-label">正答率</span><span class="report-row-val ${scCls}">${r.score}%</span></div>
-      <div class="report-row"><span class="report-row-label">画面離脱</span><span class="report-row-val ${lvCls}">${r.leaveCount}回</span></div>
-      ${r.leaveCount>0 ? `<div class="report-leave-detail"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-1px;margin-right:4px"></i>離脱時刻：${r.leaveTimes.join('、')}</div>` : ''}
-    </div>
-  </div>`;
-}
-
-function renderParentReports() {
-  const el = document.getElementById('parent-reports');
-  if (!el) return;
-  if (!sessionReports.length) { el.innerHTML=''; return; }
-  el.innerHTML = `<p class="section-label" style="margin-top:1.25rem">演習レポート</p>` + sessionReports.map(renderReportCard).join('');
-}
-
-/* ── プラン・課金・広告 ── */
-let currentPlan = 'free';       // 'free' | 'premium'
-let freeUsedMin = 72;           // 今週使用済み分数
-const FREE_LIMIT_MIN = 120;     // 週2時間 = 120分
-let extraMin = 0;               // 購入した追加時間（分）
-let selectedPack = -1;
-let interstitialTimer = null;
-let interstitialCount = 0;      // 問題間の広告表示カウント
-
-const packs = [
-  { hours:1,  price:120 },
-  { hours:3,  price:300 },
-  { hours:5,  price:450 },
-  { hours:10, price:800 },
-];
-
-function isPremium() { return currentPlan === 'premium'; }
-
-function freeRemainMin() {
-  return Math.max(FREE_LIMIT_MIN + extraMin - freeUsedMin, 0);
-}
-
-function renderPlanScreen() {
-  const used = freeUsedMin, total = FREE_LIMIT_MIN + extraMin;
-  const pct  = Math.min(Math.round(used/total*100), 100);
-  document.getElementById('plan-usage-val').textContent = used+'分 / '+total+'分';
-  const bar = document.getElementById('plan-usage-bar');
-  bar.style.width = pct+'%';
-  bar.className = 'free-usage-fill' + (pct>=100?' danger':pct>=75?' warn':'');
-
-  const badge = document.getElementById('plan-current-badge');
-  if (isPremium()) {
-    badge.innerHTML = `<div class="current-plan-badge"><i class="ti ti-crown" style="font-size:14px"></i> プレミアムプラン 利用中</div>`;
-    document.getElementById('premium-plan-btn').textContent = '現在のプラン';
-    document.getElementById('premium-plan-btn').disabled = true;
-    document.getElementById('free-plan-btn').textContent = 'フリーに戻す';
-  } else {
-    badge.innerHTML = `<div class="current-plan-badge" style="background:var(--surface-sub);color:var(--text-secondary)"><i class="ti ti-check" style="font-size:14px"></i> フリープラン 利用中</div>`;
-    document.getElementById('premium-plan-btn').textContent = 'プレミアムにする（¥480/月）';
-    document.getElementById('premium-plan-btn').disabled = false;
-    document.getElementById('free-plan-btn').textContent = '現在のプラン';
-    document.getElementById('free-plan-btn').disabled = true;
-  }
-}
-
-function selectPlan(plan) {
-  if (plan === 'premium') {
-    if (confirm('プレミアムプランに加入します（¥480/月）\n※デモのため実際の課金は発生しません')) {
-      currentPlan = 'premium';
-      alert('プレミアムプランへようこそ！\n広告なし・演習時間無制限でご利用いただけます。');
-    }
-  } else {
-    currentPlan = 'free';
-  }
-  renderPlanScreen();
-}
-
-function selectPack(i) {
-  selectedPack = i;
-  document.querySelectorAll('.pt-pack').forEach((el,j) => {
-    el.classList.toggle('selected', i===j);
+  var subjects = ['math','english','japanese','science','social'];
+  subjects.forEach(function(s){
+    var h = (u.history && u.history[s]) || { answered: 0, correct: 0 };
+    var total = QUESTIONS[s].length;
+    var pct = total > 0 ? Math.round(h.answered / total * 100) : 0;
+    document.getElementById('prog-' + s).style.width = pct + '%';
+    document.getElementById('cnt-' + s).textContent = total + '問';
   });
-  document.getElementById('pt-buy-btn').textContent = `+${packs[i].hours}時間を購入（¥${packs[i].price}）`;
 }
 
-function buyTimePack() {
-  if (selectedPack<0) { alert('パックを選択してください'); return; }
-  const p = packs[selectedPack];
-  if (confirm(`+${p.hours}時間（¥${p.price}）を購入します\n※デモのため実際の課金は発生しません`)) {
-    extraMin += p.hours * 60;
-    alert(`+${p.hours}時間追加されました！\n残り演習時間：${freeRemainMin()}分`);
-    selectedPack = -1;
-    document.querySelectorAll('.pt-pack').forEach(el => el.classList.remove('selected'));
-    document.getElementById('pt-buy-btn').textContent = '選択して購入する';
-    renderPlanScreen();
+// ===================================================
+// 問題開始
+// ===================================================
+function startSubject(subject) {
+  state.currentSubject = subject;
+  state.currentQuestions = shuffle(QUESTIONS[subject].slice());
+  state.currentIndex = 0;
+  state.correctCount = 0;
+  state.answered = false;
+  document.getElementById('quiz-subject-title').textContent = SUBJECT_NAMES[subject];
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function shuffle(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+  }
+  return arr;
+}
+
+function renderQuestion() {
+  var q = state.currentQuestions[state.currentIndex];
+  var total = state.currentQuestions.length;
+  var idx = state.currentIndex;
+
+  document.getElementById('quiz-progress-fill').style.width = ((idx / total) * 100) + '%';
+  document.getElementById('quiz-meta-num').textContent = (idx + 1) + ' / ' + total;
+  document.getElementById('quiz-meta-score').textContent = '正解: ' + state.correctCount + '問';
+  document.getElementById('quiz-question').textContent = q.q;
+
+  var list = document.getElementById('choice-list');
+  list.innerHTML = '';
+  q.choices.forEach(function(c, i){
+    var btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = c;
+    btn.onclick = function(){ if (!state.answered) selectAnswer(i, q.answer, q.exp); };
+    list.appendChild(btn);
+  });
+
+  document.getElementById('explanation-box').style.display = 'none';
+  document.getElementById('next-btn').style.display = 'none';
+  state.answered = false;
+}
+
+function selectAnswer(selected, correct, exp) {
+  state.answered = true;
+  var btns = document.querySelectorAll('.choice-btn');
+  btns.forEach(function(b, i){
+    b.classList.add('disabled');
+    if (i === correct) b.classList.add('correct');
+    else if (i === selected) b.classList.add('wrong');
+  });
+
+  var isCorrect = (selected === correct);
+  if (isCorrect) state.correctCount++;
+
+  document.getElementById('explanation-text').textContent = exp;
+  document.getElementById('explanation-box').style.display = 'block';
+
+  var isLast = (state.currentIndex >= state.currentQuestions.length - 1);
+  var nextBtn = document.getElementById('next-btn');
+  nextBtn.style.display = 'block';
+  nextBtn.textContent = isLast ? '結果を見る' : '次の問題へ →';
+
+  saveProgress(isCorrect);
+}
+
+function nextQuestion() {
+  state.currentIndex++;
+  if (state.currentIndex >= state.currentQuestions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+    window.scrollTo(0, 0);
   }
 }
 
-/* 広告バナー */
-function renderAdBanner(containerId) {
-  if (isPremium()) { document.getElementById(containerId).innerHTML=''; return; }
-  document.getElementById(containerId).innerHTML = `
-    <div class="ad-banner">
-      <span class="ad-label">広告</span>
-      <div class="ad-content">
-        <div class="ad-title">英進塾プレミアム</div>
-        <div class="ad-sub">広告なし・演習無制限・月額480円</div>
-      </div>
-      <span class="ad-cta" onclick="goToPlan()">詳しく</span>
-      <button class="ad-close" onclick="this.closest('.ad-banner').remove()">×</button>
-    </div>`;
+function saveProgress(isCorrect) {
+  if (!state.user || state.user.username === 'guest') return;
+  var u = state.user;
+  u.totalAnswered = (u.totalAnswered || 0) + 1;
+  if (isCorrect) {
+    u.totalCorrect = (u.totalCorrect || 0) + 1;
+    u.points = (u.points || 0) + 10;
+  }
+  if (!u.history) u.history = {};
+  if (!u.history[state.currentSubject]) u.history[state.currentSubject] = { answered:0, correct:0 };
+  u.history[state.currentSubject].answered++;
+  if (isCorrect) u.history[state.currentSubject].correct++;
+
+  var users = getUsers();
+  users[u.username] = u;
+  saveUsers(users);
+  saveCurrentUser(u);
 }
 
-/* 上限バナー */
-function renderLimitBanner(containerId) {
-  const remain = freeRemainMin();
-  if (isPremium() || remain > 0) { document.getElementById(containerId).innerHTML=''; return; }
-  document.getElementById(containerId).innerHTML = `
-    <div class="limit-banner">
-      <i class="ti ti-clock-off"></i>
-      <div class="limit-banner-text">
-        <div class="limit-banner-title">今週の無料演習時間を使い切りました</div>
-        <div class="limit-banner-sub">プレミアムまたは時間購入で続けられます</div>
-      </div>
-    </div>`;
+// ===================================================
+// 結果表示
+// ===================================================
+function showResult() {
+  var correct = state.correctCount;
+  var total = state.currentQuestions.length;
+  var pct = Math.round(correct / total * 100);
+
+  document.getElementById('result-score').textContent = correct + ' / ' + total;
+
+  var emoji, msg;
+  if (pct >= 90) { emoji = '🏆'; msg = '完璧！すばらしい結果です！'; }
+  else if (pct >= 70) { emoji = '🎉'; msg = 'よくできました！次も頑張ろう！'; }
+  else if (pct >= 50) { emoji = '📚'; msg = 'もう少し！復習して再挑戦しよう！'; }
+  else { emoji = '💪'; msg = '難しかったね。もう一度チャレンジ！'; }
+
+  document.getElementById('result-emoji').textContent = emoji;
+  document.getElementById('result-msg').textContent = msg;
+
+  if (state.user && state.user.username !== 'guest') {
+    var earned = correct * 10;
+    document.getElementById('result-msg').textContent = msg + '\n+' + earned + ' ポイント獲得！';
+  }
+
+  updateHomeStats();
+  updateProfile();
+  buildRanking();
+  showScreen('result');
 }
 
-/* 全画面広告 */
-function showInterstitial(callback) {
-  if (isPremium()) { if(callback) callback(); return; }
-  interstitialCount++;
-  if (interstitialCount % 3 !== 0) { if(callback) callback(); return; }
-  let cd = 5;
-  document.getElementById('interstitial-cd').textContent = cd;
-  document.getElementById('interstitial-msg').textContent = `広告を閉じるまであと${cd}秒…`;
-  document.getElementById('interstitial-skip').disabled = true;
-  document.getElementById('interstitial').classList.add('show');
-  interstitialTimer = setInterval(() => {
-    cd--;
-    document.getElementById('interstitial-cd').textContent = cd;
-    document.getElementById('interstitial-msg').textContent = `広告を閉じるまであと${cd}秒…`;
-    if (cd<=0) {
-      clearInterval(interstitialTimer);
-      document.getElementById('interstitial-skip').disabled = false;
-      document.getElementById('interstitial-msg').textContent = 'スキップできます';
-      if(callback) { skipInterstitial(); callback(); }
-    }
-  }, 1000);
+function retryQuiz() {
+  startSubject(state.currentSubject);
 }
 
-function skipInterstitial() {
-  clearInterval(interstitialTimer);
-  document.getElementById('interstitial').classList.remove('show');
+// ===================================================
+// ランキング
+// ===================================================
+function buildRanking() {
+  var users = getUsers();
+  var list = Object.values(users).sort(function(a,b){ return (b.points||0) - (a.points||0); });
+  // ゲストデモ用サンプルを追加
+  var samples = [
+    { name:'田中 さくら', username:'sakura', grade:'中学2年', points:680, totalAnswered:42, totalCorrect:37 },
+    { name:'鈴木 けんた', username:'kenta', grade:'中学1年', points:520, totalAnswered:33, totalCorrect:26 },
+    { name:'山田 あおい', username:'aoi', grade:'中学3年', points:910, totalAnswered:61, totalCorrect:55 }
+  ];
+  var combined = samples.concat(list).sort(function(a,b){ return (b.points||0) - (a.points||0); });
+
+  var container = document.getElementById('rank-list');
+  container.innerHTML = '';
+  combined.slice(0,10).forEach(function(u, i){
+    var numClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    var initials = (u.name || u.username).charAt(0).toUpperCase();
+    var rate = u.totalAnswered > 0 ? Math.round((u.totalCorrect||0) / u.totalAnswered * 100) : 0;
+    var isMe = state.user && state.user.username === u.username;
+    container.innerHTML += '<div class="rank-item" style="' + (isMe ? 'border:2px solid var(--blue);' : '') + '">'
+      + '<div class="rank-num ' + numClass + '">' + (i+1) + '</div>'
+      + '<div class="rank-avatar">' + initials + '</div>'
+      + '<div class="rank-info"><div class="rank-name">' + (u.name||u.username) + (isMe ? ' 👈 あなた' : '') + '</div>'
+      + '<div class="rank-detail">' + (u.grade||'') + ' · 正答率 ' + rate + '%</div></div>'
+      + '<div class="rank-pt">' + (u.points||0) + '<span style="font-size:12px;font-weight:400;color:var(--text-sub)"> pt</span></div>'
+      + '</div>';
+  });
 }
 
-function goToPlan() {
-  skipInterstitial();
-  const navBtns = document.querySelectorAll('.nav-tab');
-  showScreen('plan', navBtns[4]);
+// ===================================================
+// プロフィール
+// ===================================================
+function updateProfile() {
+  var u = state.user;
+  if (!u) return;
+  var initial = (u.name || u.username).charAt(0).toUpperCase();
+  document.getElementById('profile-avatar').textContent = initial;
+  document.getElementById('profile-name').textContent = u.name || u.username;
+  document.getElementById('profile-grade').textContent = u.grade || '学年未設定';
+  document.getElementById('p-username').textContent = u.username;
+  document.getElementById('p-grade-row').textContent = u.grade || '未設定';
+  document.getElementById('p-total').textContent = u.totalAnswered || 0;
+  var rate = u.totalAnswered > 0 ? Math.round((u.totalCorrect||0) / u.totalAnswered * 100) : '--';
+  document.getElementById('p-rate').textContent = (rate === '--') ? '--%' : rate + '%';
+  document.getElementById('p-points').textContent = u.points || 0;
 }
 
-/* 初期化 */
-renderQuiz();
-renderParent(0);
-syncPt();
-initCalendar();
+// ===================================================
+// トースト
+// ===================================================
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+}
+
+// ===================================================
+// 起動時チェック
+// ===================================================
+(function init(){
+  var saved = getCurrentUser();
+  if (saved) {
+    state.user = saved;
+    enterApp();
+  }
+})();
 </script>
 </body>
 </html>
