@@ -5,29 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>study-fune</title>
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:-apple-system,sans-serif;background:#f5f5f3;margin:0;}
-.page{display:none;padding:1rem 1rem 80px;}
-.page.on{display:block;}
+body{font-family:-apple-system,sans-serif;background:#f5f5f3;margin:0 0 60px;padding:0;}
+.page{display:none;}.page.on{display:block;}
 nav{position:fixed;bottom:0;left:0;right:0;height:56px;background:#fff;border-top:1px solid #e5e5e3;display:flex;}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-family:inherit;color:#9A9A98;gap:2px;}
+.nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;border:none;background:none;cursor:pointer;font-family:inherit;color:#9A9A98;gap:2px;font-size:10px;font-weight:600;}
 .nb.on{color:#378ADD;}
-.nb-icon{font-size:20px;line-height:1;}
-.nb-label{font-size:10px;font-weight:600;}
-.card{background:#fff;border-radius:12px;padding:1rem;margin-bottom:12px;border:1px solid #e5e5e3;}
-.stitle{font-size:12px;font-weight:700;color:#9A9A98;letter-spacing:0.05em;margin-bottom:8px;}
-.btn-blue{width:100%;padding:13px;font-size:15px;font-weight:700;border:none;background:#378ADD;color:#fff;border-radius:10px;cursor:pointer;font-family:inherit;}
-.btn-white{width:100%;padding:12px;font-size:14px;font-weight:600;border:1px solid #ddd;background:#fff;color:#333;border-radius:10px;cursor:pointer;font-family:inherit;margin-top:8px;}
-.home-header{background:linear-gradient(135deg,#185FA5,#378ADD);padding:1.5rem 1rem 2.5rem;color:#fff;margin:-1rem -1rem 0;margin-bottom:0;}
-.stat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
-.stat-card{background:#fff;border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #e5e5e3;}
-.stat-val{font-size:20px;font-weight:700;}
-.stat-lbl{font-size:11px;color:#9A9A98;margin-top:2px;}
-.menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
-.menu-card{background:#fff;border-radius:12px;padding:1rem;border:1px solid #e5e5e3;cursor:pointer;}
-.menu-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:8px;}
-.menu-title{font-size:14px;font-weight:700;margin-bottom:2px;}
-.menu-sub{font-size:12px;color:#9A9A98;}
+.nb b{font-size:16px;font-weight:700;}
+.wrap{padding:1rem;}
+.box{background:#fff;border-radius:12px;padding:1rem;margin-bottom:12px;border:1px solid #e5e5e3;}
+.ok{color:#3B6D11;background:#EAF3DE;padding:8px 12px;border-radius:8px;font-size:13px;}
+.ng{color:#A32D2D;background:#FCEBEB;padding:8px 12px;border-radius:8px;font-size:13px;}
+.sbtn{width:100%;padding:12px;font-size:15px;font-weight:700;border:none;background:#378ADD;color:#fff;border-radius:10px;cursor:pointer;font-family:inherit;}
 .tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;}
 .tab{padding:6px 14px;border-radius:20px;border:1px solid #ddd;background:#fff;font-size:13px;cursor:pointer;font-family:inherit;}
 .tab.on{background:#378ADD;color:#fff;border-color:#378ADD;}
@@ -36,226 +24,169 @@ nav{position:fixed;bottom:0;left:0;right:0;height:56px;background:#fff;border-to
 .ctr{display:flex;align-items:center;gap:8px;}
 .cbtn{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:16px;cursor:pointer;font-family:inherit;}
 .cval{font-size:15px;font-weight:700;min-width:18px;text-align:center;}
-.ok{color:#3B6D11;background:#EAF3DE;padding:8px 12px;border-radius:8px;font-size:13px;}
-.ng{color:#A32D2D;background:#FCEBEB;padding:8px 12px;border-radius:8px;font-size:13px;}
-.user-header{background:linear-gradient(135deg,#185FA5,#378ADD);padding:1.5rem 1rem 3rem;color:#fff;margin:-1rem -1rem 0;text-align:center;}
-.user-av{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;color:#fff;margin:0 auto 8px;}
-.pt-card{background:#FAEEDA;border-radius:12px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;}
-.pt-val{font-size:28px;font-weight:700;color:#633806;}
-.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
-.cal-nav{width:32px;height:32px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:14px;cursor:pointer;font-family:inherit;}
-.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:12px;}
-.cal-dow{text-align:center;font-size:11px;color:#9A9A98;font-weight:600;padding:4px 0;}
-.cal-day{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:14px;border-radius:50%;cursor:pointer;}
-.cal-day.today{font-weight:700;color:#378ADD;}
-.cal-day.sel{background:#378ADD;color:#fff;font-weight:700;}
+.sg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.sc{background:#fff;border-radius:10px;padding:10px 8px;text-align:center;border:1px solid #e5e5e3;}
+.sv{font-size:20px;font-weight:700;}
+.sl{font-size:11px;color:#9A9A98;margin-top:2px;}
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
+.mc{background:#fff;border-radius:12px;padding:1rem;border:1px solid #e5e5e3;cursor:pointer;}
+.mi{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;margin-bottom:8px;}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:12px;}
+.cdow{text-align:center;font-size:11px;color:#9A9A98;font-weight:600;padding:4px 0;}
+.cday{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:14px;border-radius:50%;cursor:pointer;}
+.cday.today{font-weight:700;color:#378ADD;}
+.cday.sel{background:#378ADD;color:#fff;font-weight:700;}
 .nc{background:#fff;border-radius:12px;overflow:hidden;margin-bottom:10px;border:1px solid #e5e5e3;}
-.nc-head{padding:12px 14px;border-bottom:1px solid #f0f0f0;}
+.nth{padding:12px 14px;border-bottom:1px solid #f0f0f0;}
 .ntag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block;margin-bottom:4px;}
-.tag-i{background:#E6F1FB;color:#185FA5;}
-.tag-u{background:#EAF3DE;color:#3B6D11;}
-.tag-e{background:#FAEEDA;color:#854F0B;}
-.nc-body{padding:12px 14px;font-size:13px;color:#666;line-height:1.7;}
+.ti{background:#E6F1FB;color:#185FA5;}
+.tu{background:#EAF3DE;color:#3B6D11;}
+.te{background:#FAEEDA;color:#854F0B;}
+.nb2{padding:12px 14px;font-size:13px;color:#666;line-height:1.7;}
 </style>
 </head>
 <body>
 
-<!-- ホーム -->
 <div class="page on" id="p0">
-  <div class="home-header">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+  <div style="background:linear-gradient(135deg,#185FA5,#378ADD);padding:1.5rem 1rem 2rem;color:#fff">
+    <div style="display:flex;justify-content:space-between;align-items:center">
       <div style="display:flex;align-items:center;gap:10px">
-        <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff">さく</div>
+        <div style="width:44px;height:44px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;color:#fff;flex-shrink:0">さく</div>
         <div>
-          <div style="font-size:13px;opacity:0.85">おはようございます</div>
-          <div style="font-size:18px;font-weight:700">田中 さくら</div>
+          <div style="font-size:12px;opacity:0.85">おはようございます</div>
+          <div style="font-size:17px;font-weight:700">田中 さくら</div>
         </div>
       </div>
-      <div style="background:rgba(255,255,255,0.2);border-radius:20px;padding:5px 14px;font-size:14px;font-weight:700">680 pt</div>
+      <div style="background:rgba(255,255,255,0.2);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:700">680 pt</div>
     </div>
   </div>
-  <div style="height:20px"></div>
-  <div class="stat-grid">
-    <div class="stat-card"><div class="stat-val">14</div><div class="stat-lbl">今月出席</div></div>
-    <div class="stat-card"><div class="stat-val">87%</div><div class="stat-lbl">正答率</div></div>
-    <div class="stat-card"><div class="stat-val">42</div><div class="stat-lbl">解いた問題</div></div>
-  </div>
-  <p class="stitle">メニュー</p>
-  <div class="menu-grid">
-    <div class="menu-card" onclick="goTo(1)">
-      <div class="menu-icon" style="background:#E6F1FB;font-size:18px">問</div>
-      <div class="menu-title">問題を解く</div>
-      <div class="menu-sub">ランダム出題</div>
+  <div class="wrap">
+    <div class="sg">
+      <div class="sc"><div class="sv">14</div><div class="sl">今月出席</div></div>
+      <div class="sc"><div class="sv">87%</div><div class="sl">正答率</div></div>
+      <div class="sc"><div class="sv">42</div><div class="sl">解いた問題</div></div>
     </div>
-    <div class="menu-card" onclick="goTo(3)">
-      <div class="menu-icon" style="background:#EAF3DE;font-size:18px">予</div>
-      <div class="menu-title">スケジュール</div>
-      <div class="menu-sub">演習を予約</div>
-    </div>
-    <div class="menu-card">
-      <div class="menu-icon" style="background:#FAEEDA;font-size:18px">景</div>
-      <div class="menu-title">景品交換</div>
-      <div class="menu-sub">680 pt 保有</div>
-    </div>
-    <div class="menu-card" onclick="goTo(4)">
-      <div class="menu-icon" style="background:#EEEDFE;font-size:18px">知</div>
-      <div class="menu-title">お知らせ</div>
-      <div class="menu-sub">新着 2件</div>
-    </div>
-  </div>
-  <p class="stitle">最新のお知らせ</p>
-  <div class="card">
-    <div style="display:flex;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0">
-      <div style="width:8px;height:8px;border-radius:50%;background:#378ADD;flex-shrink:0;margin-top:5px"></div>
-      <div>
-        <div style="font-size:14px;font-weight:600">夏期講習のお知らせ</div>
-        <div style="font-size:12px;color:#9A9A98">2026年6月29日</div>
+    <div style="font-size:12px;font-weight:700;color:#9A9A98;margin-bottom:8px">メニュー</div>
+    <div class="mg">
+      <div class="mc" onclick="goTo(1)">
+        <div class="mi" style="background:#E6F1FB;color:#185FA5">問</div>
+        <div style="font-size:14px;font-weight:700">問題を解く</div>
+        <div style="font-size:12px;color:#9A9A98">ランダム出題</div>
+      </div>
+      <div class="mc" onclick="goTo(3)">
+        <div class="mi" style="background:#EAF3DE;color:#3B6D11">予</div>
+        <div style="font-size:14px;font-weight:700">スケジュール</div>
+        <div style="font-size:12px;color:#9A9A98">演習を予約</div>
+      </div>
+      <div class="mc">
+        <div class="mi" style="background:#FAEEDA;color:#854F0B">景</div>
+        <div style="font-size:14px;font-weight:700">景品交換</div>
+        <div style="font-size:12px;color:#9A9A98">680 pt 保有</div>
+      </div>
+      <div class="mc" onclick="goTo(4)">
+        <div class="mi" style="background:#EEEDFE;color:#534AB7">知</div>
+        <div style="font-size:14px;font-weight:700">お知らせ</div>
+        <div style="font-size:12px;color:#9A9A98">新着 2件</div>
       </div>
     </div>
-    <div style="display:flex;gap:10px;padding:8px 0">
-      <div style="width:8px;height:8px;border-radius:50%;background:#BA7517;flex-shrink:0;margin-top:5px"></div>
-      <div>
-        <div style="font-size:14px;font-weight:600">アプリをアップデートしました</div>
-        <div style="font-size:12px;color:#9A9A98">2026年6月25日</div>
+    <div style="font-size:12px;font-weight:700;color:#9A9A98;margin-bottom:8px">最新のお知らせ</div>
+    <div class="box">
+      <div style="display:flex;gap:10px;padding:6px 0;border-bottom:1px solid #f0f0f0">
+        <div style="width:7px;height:7px;border-radius:50%;background:#378ADD;flex-shrink:0;margin-top:5px"></div>
+        <div><div style="font-size:14px;font-weight:600">夏期講習のお知らせ</div><div style="font-size:12px;color:#9A9A98">2026年6月29日</div></div>
+      </div>
+      <div style="display:flex;gap:10px;padding:6px 0">
+        <div style="width:7px;height:7px;border-radius:50%;background:#BA7517;flex-shrink:0;margin-top:5px"></div>
+        <div><div style="font-size:14px;font-weight:600">アプリをアップデートしました</div><div style="font-size:12px;color:#9A9A98">2026年6月25日</div></div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 問題選択 -->
 <div class="page" id="p1">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-    <div style="font-size:18px;font-weight:700">問題を解く</div>
-    <div style="background:#FAEEDA;border-radius:20px;padding:4px 12px;font-size:14px;font-weight:700;color:#633806"><span id="ptd">0</span> pt</div>
-  </div>
-  <div id="st" style="margin-bottom:8px"></div>
-  <div class="card">
-    <p class="stitle">教科</p>
-    <div class="tabs" id="tabs"><span style="color:#999;font-size:13px">読み込み中...</span></div>
-    <p class="stitle" style="margin-top:10px">カテゴリと問題数</p>
-    <div id="cats"><p style="color:#999;font-size:13px">読み込み中...</p></div>
-  </div>
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px">
-      <span>選択問題数</span><strong id="tq">0問</strong>
+  <div class="wrap">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <div style="font-size:18px;font-weight:700">問題を解く</div>
+      <div style="background:#FAEEDA;border-radius:20px;padding:4px 12px;font-size:14px;font-weight:700;color:#633806"><span id="ptd">0</span> pt</div>
     </div>
-    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px">
-      <span>獲得ポイント（最大）</span><strong id="tp" style="color:#633806">0pt</strong>
+    <div id="st" style="margin-bottom:8px"></div>
+    <div class="box">
+      <div style="font-size:12px;font-weight:700;color:#9A9A98;margin-bottom:8px">教科</div>
+      <div class="tabs" id="tabs"><span style="color:#999;font-size:13px">読み込み中...</span></div>
+      <div style="font-size:12px;font-weight:700;color:#9A9A98;margin:10px 0 8px">カテゴリと問題数</div>
+      <div id="cats"><p style="color:#999;font-size:13px">読み込み中...</p></div>
     </div>
-    <button class="btn-blue" onclick="startQuiz()">この問題セットで始める</button>
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px"><span>選択問題数</span><strong id="tq">0問</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px"><span>獲得ポイント（最大）</span><strong id="tp" style="color:#633806">0pt</strong></div>
+      <button class="sbtn" onclick="startQuiz()">この問題セットで始める</button>
+    </div>
   </div>
 </div>
 
-<!-- マイページ -->
 <div class="page" id="p2">
-  <div class="user-header">
-    <div class="user-av">さく</div>
+  <div style="background:linear-gradient(135deg,#185FA5,#378ADD);padding:1.5rem 1rem 2.5rem;color:#fff;text-align:center">
+    <div style="width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#fff;margin:0 auto 8px">さく</div>
     <div style="font-size:20px;font-weight:700">田中 さくら</div>
     <div style="font-size:13px;opacity:0.85;margin-top:2px">中学2年 · 英進塾</div>
   </div>
-  <div style="height:24px"></div>
-  <div class="pt-card">
-    <div>
-      <div style="font-size:12px;color:#854F0B;margin-bottom:2px">保有ポイント</div>
-      <div class="pt-val">680 pt</div>
+  <div class="wrap">
+    <div style="background:#FAEEDA;border-radius:12px;padding:14px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:12px;color:#854F0B;margin-bottom:2px">保有ポイント</div><div style="font-size:28px;font-weight:700;color:#633806">680 pt</div></div>
+      <div style="text-align:right"><div style="font-size:11px;color:#854F0B;margin-bottom:2px">塾内ランキング</div><div style="font-size:22px;font-weight:700;color:#633806">3位</div></div>
     </div>
-    <div style="text-align:right">
-      <div style="font-size:11px;color:#854F0B;margin-bottom:2px">塾内ランキング</div>
-      <div style="font-size:22px;font-weight:700;color:#633806">3位</div>
+    <div class="sg">
+      <div class="sc"><div class="sv">14</div><div class="sl">今月出席</div></div>
+      <div class="sc"><div class="sv">87%</div><div class="sl">正答率</div></div>
+      <div class="sc"><div class="sv">42</div><div class="sl">解いた問題</div></div>
     </div>
+    <div style="font-size:12px;font-weight:700;color:#9A9A98;margin-bottom:8px">プロフィール</div>
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:14px"><span style="color:#666">学校</span><span style="font-weight:600">〇〇中学校</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:14px"><span style="color:#666">志望校</span><span style="font-weight:600">〇〇高校</span></div>
+      <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:14px"><span style="color:#666">プラン</span><span style="font-weight:600;color:#378ADD">フリープラン</span></div>
+    </div>
+    <button class="sbtn">プロフィールを編集</button>
   </div>
-  <div class="stat-grid" style="margin-bottom:12px">
-    <div class="stat-card"><div class="stat-val">14</div><div class="stat-lbl">今月出席</div></div>
-    <div class="stat-card"><div class="stat-val">87%</div><div class="stat-lbl">正答率</div></div>
-    <div class="stat-card"><div class="stat-val">42</div><div class="stat-lbl">解いた問題</div></div>
-  </div>
-  <p class="stitle">プロフィール</p>
-  <div class="card">
-    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:14px">
-      <span style="color:#666">学校</span><span style="font-weight:600">〇〇中学校</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:14px">
-      <span style="color:#666">志望校</span><span style="font-weight:600">〇〇高校</span>
-    </div>
-    <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:14px">
-      <span style="color:#666">プラン</span><span style="font-weight:600;color:#378ADD">フリープラン</span>
-    </div>
-  </div>
-  <button class="btn-blue">プロフィールを編集</button>
-  <button class="btn-white">プレミアムにアップグレード</button>
 </div>
 
-<!-- カレンダー -->
 <div class="page" id="p3">
-  <div style="font-size:18px;font-weight:700;margin-bottom:12px">スケジュール</div>
-  <div class="card">
-    <div class="cal-header">
-      <button class="cal-nav" onclick="moveMonth(-1)">&lt;</button>
-      <div style="font-size:16px;font-weight:700" id="cal-month">2026年6月</div>
-      <button class="cal-nav" onclick="moveMonth(1)">&gt;</button>
+  <div class="wrap">
+    <div style="font-size:18px;font-weight:700;margin-bottom:12px">スケジュール</div>
+    <div class="box">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <button onclick="moveMonth(-1)" style="width:32px;height:32px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:14px;cursor:pointer">&lt;</button>
+        <div style="font-size:16px;font-weight:700" id="cal-month">2026年6月</div>
+        <button onclick="moveMonth(1)" style="width:32px;height:32px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:14px;cursor:pointer">&gt;</button>
+      </div>
+      <div class="cal-g" id="cal-grid"></div>
     </div>
-    <div class="cal-grid" id="cal-grid"></div>
-  </div>
-  <p class="stitle" id="cal-lbl">6月29日のスケジュール</p>
-  <div class="card">
-    <div style="display:flex;gap:10px;align-items:center">
-      <div style="font-size:14px;font-weight:700;color:#378ADD;min-width:44px">17:00</div>
-      <div>
-        <div style="font-size:14px;font-weight:600">数学　20分演習</div>
-        <div style="font-size:12px;color:#9A9A98">連立方程式の復習</div>
+    <div style="font-size:12px;font-weight:700;color:#9A9A98;margin-bottom:8px" id="cal-lbl">6月29日のスケジュール</div>
+    <div class="box">
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="font-size:14px;font-weight:700;color:#378ADD;min-width:44px">17:00</div>
+        <div><div style="font-size:14px;font-weight:600">数学　20分演習</div><div style="font-size:12px;color:#9A9A98">連立方程式の復習</div></div>
       </div>
     </div>
+    <button class="sbtn">演習を予約する</button>
   </div>
-  <button class="btn-blue">演習を予約する</button>
 </div>
 
-<!-- お知らせ -->
 <div class="page" id="p4">
-  <div style="font-size:18px;font-weight:700;margin-bottom:12px">お知らせ</div>
-  <div class="nc">
-    <div class="nc-head">
-      <span class="ntag tag-e">イベント</span>
-      <div style="font-size:15px;font-weight:700">夏期講習のお知らせ</div>
-    </div>
-    <div class="nc-body">7月21日より夏期講習が始まります。今年はオンライン演習も強化しました。<div style="font-size:12px;color:#9A9A98;margin-top:4px">2026年6月29日</div></div>
-  </div>
-  <div class="nc">
-    <div class="nc-head">
-      <span class="ntag tag-u">アップデート</span>
-      <div style="font-size:15px;font-weight:700">アプリをアップデートしました</div>
-    </div>
-    <div class="nc-body">問題セット選択機能とプリント出力機能を追加しました。<div style="font-size:12px;color:#9A9A98;margin-top:4px">2026年6月25日</div></div>
-  </div>
-  <div class="nc">
-    <div class="nc-head">
-      <span class="ntag tag-i">お知らせ</span>
-      <div style="font-size:15px;font-weight:700">ポイント交換できる景品を追加しました</div>
-    </div>
-    <div class="nc-body">ゲームソフト券（1500pt）を新たに追加しました。<div style="font-size:12px;color:#9A9A98;margin-top:4px">2026年6月20日</div></div>
+  <div class="wrap">
+    <div style="font-size:18px;font-weight:700;margin-bottom:12px">お知らせ</div>
+    <div class="nc"><div class="nth"><span class="ntag te">イベント</span><div style="font-size:15px;font-weight:700">夏期講習のお知らせ</div></div><div class="nb2">7月21日より夏期講習が始まります。<div style="font-size:12px;color:#9A9A98;margin-top:4px">2026年6月29日</div></div></div>
+    <div class="nc"><div class="nth"><span class="ntag tu">アップデート</span><div style="font-size:15px;font-weight:700">アプリをアップデートしました</div></div><div class="nb2">問題セット選択機能を追加しました。<div style="font-size:12px;color:#9A9A98;margin-top:4px">2026年6月25日</div></div></div>
+    <div class="nc"><div class="nth"><span class="ntag ti">お知らせ</span><div style="font-size:15px;font-weight:700">景品を追加しました</div></div><div class="nb2">ゲームソフト券（1500pt）を追加しました。<div style="font-size:12px;color:#9A9A98;margin-top:4px">2026年6月20日</div></div></div>
   </div>
 </div>
 
 <nav>
-  <button class="nb on" id="n0" onclick="goTo(0)">
-    <span class="nb-icon">HM</span>
-    <span class="nb-label">ホーム</span>
-  </button>
-  <button class="nb" id="n1" onclick="goTo(1)">
-    <span class="nb-icon">QZ</span>
-    <span class="nb-label">問題</span>
-  </button>
-  <button class="nb" id="n2" onclick="goTo(2)">
-    <span class="nb-icon">MY</span>
-    <span class="nb-label">マイページ</span>
-  </button>
-  <button class="nb" id="n3" onclick="goTo(3)">
-    <span class="nb-icon">CA</span>
-    <span class="nb-label">カレンダー</span>
-  </button>
-  <button class="nb" id="n4" onclick="goTo(4)">
-    <span class="nb-icon">IN</span>
-    <span class="nb-label">お知らせ</span>
-  </button>
+  <button class="nb on" id="n0" onclick="goTo(0)"><b>HM</b>ホーム</button>
+  <button class="nb" id="n1" onclick="goTo(1)"><b>QZ</b>問題</button>
+  <button class="nb" id="n2" onclick="goTo(2)"><b>MY</b>マイページ</button>
+  <button class="nb" id="n3" onclick="goTo(3)"><b>CA</b>カレンダー</button>
+  <button class="nb" id="n4" onclick="goTo(4)"><b>IN</b>お知らせ</button>
 </nav>
 
 <script>
@@ -265,10 +196,8 @@ var pt=0,si=0,slv={},pool=[],qi=0,qsc=0,qe=0,qa=false;
 var subs=[],cmap={},CNT={};
 var calY,calM,calSel;
 var DAYS=["日","月","火","水","木","金","土"];
-var cur=0,tx=0;
 
 function goTo(i){
-  cur=i;
   for(var j=0;j<5;j++){
     var p=document.getElementById("p"+j);
     var n=document.getElementById("n"+j);
@@ -277,9 +206,6 @@ function goTo(i){
   }
   window.scrollTo(0,0);
 }
-
-// スワイプは一時無効
-
 function rTabs(){
   var h="";
   for(var i=0;i<subs.length;i++)
@@ -316,10 +242,7 @@ function rSum(){
   document.getElementById("tq").textContent=tot+"問";
   document.getElementById("tp").textContent=tp+"pt";
 }
-function startQuiz(){
-  alert("問題演習機能は準備中です！");
-}
-
+function startQuiz(){alert("問題演習は準備中です！");}
 function initCal(){
   var now=new Date();
   calY=now.getFullYear();calM=now.getMonth();
@@ -338,11 +261,11 @@ function renderCal(){
   var first=new Date(calY,calM,1).getDay();
   var days=new Date(calY,calM+1,0).getDate();
   var today=new Date().toISOString().slice(0,10);
-  var h=DAYS.map(function(d){return '<div class="cal-dow">'+d+'</div>';}).join('');
+  var h=DAYS.map(function(d){return '<div class="cdow">'+d+'</div>';}).join('');
   for(var i=0;i<first;i++)h+='<div></div>';
   for(var d=1;d<=days;d++){
     var ds=calY+"-"+String(calM+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
-    var cls="cal-day"+(ds===today?" today":"")+(ds===calSel?" sel":"");
+    var cls="cday"+(ds===today?" today":"")+(ds===calSel?" sel":"");
     h+='<div class="'+cls+'" onclick="selDay(''+ds+'')">'+d+'</div>';
   }
   document.getElementById("cal-grid").innerHTML=h;
@@ -375,7 +298,6 @@ fetch(SURL+"/rest/v1/questions?is_active=eq.true&order=subject,category,difficul
 .catch(function(e){
   document.getElementById("st").innerHTML='<div class="ng">接続失敗: '+e.message+'</div>';
 });
-
 initCal();
 </script>
 </body>
