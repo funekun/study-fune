@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supabase接続テスト</title>
+<style>
+body{font-family:-apple-system,sans-serif;padding:1rem;background:#f5f5f3;}
+.box{background:#fff;border-radius:12px;padding:1rem;margin-bottom:1rem;border:1px solid #e5e5e3;}
+.ok{color:#3B6D11;background:#EAF3DE;padding:8px 12px;border-radius:8px;font-size:14px;}
+.ng{color:#A32D2D;background:#FCEBEB;padding:8px 12px;border-radius:8px;font-size:14px;}
+.log{font-size:12px;color:#666;word-break:break-all;margin-top:8px;}
+h2{font-size:16px;margin-bottom:8px;}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>Supabase接続テスト</h2>
+  <div id="result">テスト中...</div>
+  <div class="log" id="log"></div>
+</div>
+<div class="box">
+  <h2>取得した問題</h2>
+  <div id="questions">待機中...</div>
+</div>
+
+<script>
+var URL = "https://nheriakfknzgfmhuncbj.supabase.co";
+var KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZXJpYWtma256Z2ZtaHVuY2JqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MjM1NDQsImV4cCI6MjA5ODA5OTU0NH0.lVaGt3sK1rD2AZQuj568h-NCsZQ4tEb_Ff5QFbHEZQU";
+
+document.getElementById("log").textContent = "URL: " + URL;
+
+fetch(URL + "/rest/v1/questions?limit=3", {
+  headers: {
+    "apikey": KEY,
+    "Authorization": "Bearer " + KEY
+  }
+})
+.then(function(r) {
+  document.getElementById("log").textContent += " | Status: " + r.status;
+  return r.json();
+})
+.then(function(data) {
+  if (Array.isArray(data)) {
+    document.getElementById("result").innerHTML = '<div class="ok">✓ 接続成功！ ' + data.length + '問取得できました</div>';
+    var h = "";
+    for (var i = 0; i < data.length; i++) {
+      h += "<p style='font-size:13px;padding:4px 0;border-bottom:1px solid #eee'>" + data[i].subject + " / " + data[i].category + " : " + data[i].text.slice(0,30) + "...</p>";
+    }
+    document.getElementById("questions").innerHTML = h;
+  } else {
+    document.getElementById("result").innerHTML = '<div class="ng">✗ エラー: ' + JSON.stringify(data) + '</div>';
+    document.getElementById("questions").textContent = "取得失敗";
+  }
+})
+.catch(function(e) {
+  document.getElementById("result").innerHTML = '<div class="ng">✗ 接続失敗: ' + e.message + '</div>';
+  document.getElementById("questions").textContent = "接続できませんでした";
+});
+</script>
+</body>
+</html>
