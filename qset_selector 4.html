@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>問題セット選択</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css">
+<style>
+:root{
+  --bg:#F5F5F3;--surface:#fff;--sub:#F0F0EE;
+  --border:#E5E5E3;--borders:#CCCCCA;
+  --text:#1A1A18;--muted:#9A9A98;--sec:#666664;
+  --accent:#185FA5;--accent-bg:#E6F1FB;--accent-mid:#378ADD;
+  --success:#3B6D11;--success-bg:#EAF3DE;
+  --warn:#BA7517;--warn-bg:#FAEEDA;--warn-dark:#633806;--warn-mid:#854F0B;
+  --danger:#A32D2D;--danger-bg:#FCEBEB;
+  --purple-bg:#EEEDFE;--purple:#534AB7;
+  --teal-bg:#E1F5EE;--teal:#0F6E56;
+  --r:8px;--rlg:12px;--nav:56px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;max-width:100%;overflow-x:hidden;font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:var(--bg);color:var(--text);}
+.screen{display:none;max-width:500px;margin:0 auto;padding:1.25rem 1rem calc(var(--nav) + 1.5rem);}
+.screen.active{display:block;}
+.nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav);background:var(--surface);border-top:1px solid var(--border);display:flex;z-index:100;}
+.ntab{flex:1;display:flex;align-items:center;justify-content:center;font-size:22px;color:var(--muted);cursor:pointer;border:none;background:none;}
+.ntab.active{color:var(--accent-mid);}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--accent-bg);color:var(--accent);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pt-pill{display:flex;align-items:center;gap:6px;background:var(--warn-bg);border-radius:20px;padding:6px 14px;flex-shrink:0;}
+.pt-num{font-size:20px;font-weight:600;color:var(--warn-dark);}
+.pt-unit{font-size:12px;color:var(--warn-mid);}
+.slabel{font-size:11px;font-weight:600;color:var(--muted);letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px;}
+.stabs{display:flex;gap:6px;margin-bottom:1.25rem;overflow-x:auto;padding-bottom:2px;}
+.stabs::-webkit-scrollbar{display:none;}
+.stab{padding:7px 16px;border-radius:20px;border:1px solid var(--border);background:var(--surface);font-size:13px;font-weight:600;color:var(--sec);cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.stab.active{background:var(--accent-mid);color:#fff;border-color:var(--accent-mid);}
+.cat-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);padding:12px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;}
+.cat-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.cat-body{flex:1;min-width:0;}
+.cat-name{font-size:14px;font-weight:600;margin-bottom:2px;}
+.cat-meta{font-size:12px;color:var(--muted);}
+.counter{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.cnt-btn{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--surface);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:var(--text);font-family:inherit;}
+.cnt-btn:hover{background:var(--sub);}
+.cnt-val{font-size:16px;font-weight:700;min-width:22px;text-align:center;}
+.diff-row{display:flex;gap:6px;margin-bottom:1.25rem;}
+.diff-btn{flex:1;padding:8px;font-size:13px;font-weight:600;border-radius:20px;border:1px solid var(--border);background:var(--surface);cursor:pointer;color:var(--sec);font-family:inherit;}
+.diff-btn.active{border-color:var(--accent-mid);background:var(--accent-bg);color:var(--accent);}
+.toggle-wrap{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);padding:12px 16px;margin-bottom:1.25rem;display:flex;align-items:center;justify-content:space-between;}
+.toggle-track{width:44px;height:24px;border-radius:99px;background:var(--accent-mid);position:relative;cursor:pointer;flex-shrink:0;transition:background .2s;}
+.toggle-track.off{background:var(--borders);}
+.toggle-thumb{width:20px;height:20px;border-radius:50%;background:#fff;position:absolute;top:2px;right:2px;transition:right .15s;}
+.toggle-track.off .toggle-thumb{right:22px;}
+.summary{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);padding:14px 16px;margin-bottom:1rem;}
+.sum-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;}
+.sum-label{color:var(--sec);}
+.sum-val{font-weight:700;}
+.start-btn{width:100%;padding:13px;font-size:16px;font-weight:700;border-radius:var(--r);border:none;background:var(--accent-mid);color:#fff;cursor:pointer;margin-top:4px;font-family:inherit;}
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:1.25rem;}
+.prog-wrap{flex:1;height:6px;background:var(--sub);border-radius:99px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:99px;background:var(--accent-mid);transition:width .4s;}
+.prog-txt{font-size:12px;color:var(--muted);white-space:nowrap;}
+.q-meta{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap;}
+.q-chance{font-size:12px;color:var(--muted);}
+.q-text{font-size:16px;line-height:1.7;margin-bottom:1.25rem;word-break:break-word;}
+.choices{display:flex;flex-direction:column;gap:8px;}
+.choice{border:1px solid var(--border);border-radius:var(--r);padding:10px 14px;cursor:pointer;font-size:15px;text-align:left;background:var(--surface);display:flex;align-items:center;gap:10px;width:100%;font-family:inherit;color:var(--text);}
+.choice:hover{border-color:var(--borders);background:var(--sub);}
+.choice.selected{border-color:var(--accent-mid);background:var(--accent-bg);color:var(--accent);}
+.choice.correct{border-color:var(--success);background:var(--success-bg);color:var(--success);}
+.choice.wrong{border-color:var(--danger);background:var(--danger-bg);color:var(--danger);}
+.cl{width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;flex-shrink:0;}
+input[type=text]{width:100%;font-size:16px;padding:10px 14px;border-radius:var(--r);border:1px solid var(--border);font-family:inherit;background:var(--surface);color:var(--text);margin-bottom:4px;}
+input[type=text]:focus{outline:none;border-color:var(--accent-mid);}
+input.ci{border-color:var(--success);background:var(--success-bg);}
+input.wi{border-color:var(--danger);background:var(--danger-bg);}
+.fb{border-radius:var(--r);padding:10px 14px;font-size:14px;margin:12px 0;display:none;align-items:center;gap:8px;}
+.fb.ok{background:var(--success-bg);color:var(--success);border:1px solid #C0DD97;display:flex;}
+.fb.ng{background:var(--danger-bg);color:var(--danger);border:1px solid #F7C1C1;display:flex;}
+.btn-row{display:flex;justify-content:flex-end;margin-top:10px;}
+.abtn{font-family:inherit;font-size:14px;padding:8px 18px;border-radius:var(--r);border:1px solid var(--borders);background:var(--surface);color:var(--text);cursor:pointer;}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rlg);padding:1rem 1.25rem;margin-bottom:12px;}
+.result-wrap{text-align:center;padding:2rem 0;}
+.result-icon{width:72px;height:72px;border-radius:50%;background:var(--success-bg);color:var(--success);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 1rem;}
+.result-score{font-size:40px;font-weight:700;}
+.result-sub{font-size:14px;color:var(--sec);margin:4px 0 1.5rem;}
+.earn-box{background:var(--warn-bg);border-radius:var(--rlg);padding:1rem 1.5rem;display:inline-block;margin-bottom:1.5rem;}
+.earn-label{font-size:13px;color:var(--warn-mid);margin-bottom:4px;}
+.earn-val{font-size:32px;font-weight:700;color:var(--warn-dark);}
+</style>
+</head>
+<body>
+<div class="screen active" id="screen-qset">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="avatar">さく</div>
+      <div>
+        <div style="font-size:15px;font-weight:600">問題セットを選ぶ</div>
+        <div style="font-size:12px;color:var(--muted)">ランダム出題</div>
+      </div>
+    </div>
+    <div class="pt-pill">
+      <i class="ti ti-star" style="font-size:16px;color:#BA7517"></i>
+      <span class="pt-num" id="pt-disp">680</span>
+      <span class="pt-unit">pt</span>
+    </div>
+  </div>
+  <p class="slabel">教科を選ぶ</p>
+  <div class="stabs" id="stabs"></div>
+  <p class="slabel">問題の種類と問題数</p>
+  <div id="cat-list"></div>
+  <p class="slabel">難易度</p>
+  <div class="diff-row">
+    <button class="diff-btn active" id="d0" onclick="toggleDiff(0)">やさしい</button>
+    <button class="diff-btn active" id="d1" onclick="toggleDiff(1)">ふつう</button>
+    <button class="diff-btn active" id="d2" onclick="toggleDiff(2)">むずかしい</button>
+  </div>
+  <div class="toggle-wrap">
+    <div>
+      <div style="font-size:14px;font-weight:600">未解答を優先</div>
+      <div style="font-size:12px;color:var(--muted)">まだ解いていない問題を優先出題</div>
+    </div>
+    <div class="toggle-track" id="tog" onclick="toggleUnseen()">
+      <div class="toggle-thumb"></div>
+    </div>
+  </div>
+  <div class="summary">
+    <div class="sum-row"><span class="sum-label">選択した問題数</span><span class="sum-val" id="tot-q">0問</span></div>
+    <div class="sum-row"><span class="sum-label">獲得できるポイント（最大）</span><span class="sum-val" style="color:var(--warn-dark)" id="tot-pt">0pt</span></div>
+    <button class="start-btn" onclick="startQuiz()">この問題セットで始める</button>
+  </div>
+</div>
+
+<div class="screen" id="screen-quiz">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:10px">
+      <div class="avatar">さく</div>
+      <div>
+        <div style="font-size:15px;font-weight:600">田中 さくら</div>
+        <div style="font-size:12px;color:var(--muted)">中2 · 英進塾</div>
+      </div>
+    </div>
+    <div class="pt-pill">
+      <i class="ti ti-star" style="font-size:16px;color:#BA7517"></i>
+      <span class="pt-num" id="quiz-pt">680</span>
+      <span class="pt-unit">pt</span>
+    </div>
+  </div>
+  <div class="prog-row">
+    <div class="prog-wrap"><div class="prog-fill" id="q-prog" style="width:0%"></div></div>
+    <span class="prog-txt" id="q-prog-txt">1 / 1</span>
+  </div>
+  <div id="quiz-area"></div>
+</div>
+
+<nav class="nav">
+  <button class="ntab active" id="nav0" onclick="goTo(0)"><i class="ti ti-pencil"></i></button>
+  <button class="ntab" id="nav1" onclick="goTo(1)"><i class="ti ti-player-play"></i></button>
+</nav>
+
+<script>
+var pt = 680;
+var curSi = 0;
+var diffOn = [true, true, true];
+var unseenOn = true;
+var solved = {};
+var pool = [];
+var qIdx = 0, qScore = 0, qEarned = 0, qAnswered = false;
+
+var S = [
+  {name:"数学", ibg:"#E6F1FB", ic:"#185FA5", icon:"ti-calculator", badge:"math",
+   cats:[
+    {name:"計算問題", qs:[
+      {t:"c",d:0,pts:10,tx:"5×8−12を計算しなさい。",ch:["28","32","48","36"],a:0},
+      {t:"i",d:0,pts:10,tx:"24÷6+3＝",a:"7",h:"整数を入力"},
+      {t:"c",d:1,pts:15,tx:"3x+7=22のとき、xの値は？",ch:["3","5","7","9"],a:1},
+      {t:"c",d:1,pts:15,tx:"2(x−3)=8のとき、xは？",ch:["4","5","7","8"],a:2},
+      {t:"c",d:2,pts:20,tx:"x²−5x+6=0の解は？",ch:["x=1,6","x=2,3","x=-2,-3","x=-1,6"],a:1},
+      {t:"c",d:2,pts:20,tx:"(x+3)(x−2)を展開すると？",ch:["x²+x−6","x²−x−6","x²+x+6","x²+5x−6"],a:0}
+    ]},
+    {name:"文章問題", qs:[
+      {t:"c",d:0,pts:15,tx:"りんご3個入りの袋が4袋。合計は何個？",ch:["7個","10個","12個","14個"],a:2},
+      {t:"i",d:0,pts:15,tx:"80円のお菓子を5個買った。合計は？",a:"400",h:"数字のみ（円）"},
+      {t:"c",d:1,pts:20,tx:"時速60kmで2時間30分走ると何km？",ch:["120km","140km","150km","160km"],a:2},
+      {t:"c",d:2,pts:25,tx:"原価2000円+30%の定価から10%引き。利益は？",ch:["320円","340円","360円","380円"],a:2}
+    ]},
+    {name:"図形問題", qs:[
+      {t:"c",d:0,pts:15,tx:"半径5cmの円の面積は？（π=3.14）",ch:["78.5cm²","31.4cm²","62.8cm²","157cm²"],a:0},
+      {t:"c",d:1,pts:20,tx:"底辺8cm・高さ6cmの三角形の面積は？",ch:["24cm²","48cm²","36cm²","42cm²"],a:0},
+      {t:"c",d:2,pts:25,tx:"直角三角形の2辺が3cm・4cm。斜辺は？",ch:["5cm","6cm","7cm","√7cm"],a:0}
+    ]}
+  ]},
+  {name:"英語", ibg:"#E1F5EE", ic:"#0F6E56", icon:"ti-language", badge:"eng",
+   cats:[
+    {name:"単語・文法", qs:[
+      {t:"c",d:0,pts:10,tx:"「図書館」を英語で言うと？",ch:["library","laboratory","lavatory","literacy"],a:0},
+      {t:"i",d:0,pts:10,tx:"I _____ up at six every morning.",a:"wake",h:"動詞を入力"},
+      {t:"c",d:1,pts:15,tx:"She ( ) to school every day.",ch:["go","goes","going","gone"],a:1},
+      {t:"c",d:2,pts:20,tx:"Tom broke the window.を受動態にすると？",ch:["The window broke by Tom.","The window was broke by Tom.","The window was broken by Tom.","The window is broken by Tom."],a:2}
+    ]},
+    {name:"読解", qs:[
+      {t:"c",d:1,pts:20,tx:"Ken likes soccer better than baseball.\nKenが好きなスポーツは？",ch:["Baseball","Soccer","Basketball","Tennis"],a:1},
+      {t:"c",d:2,pts:25,tx:"If I ( ) you, I would study harder.",ch:["am","was","were","been"],a:2}
+    ]}
+  ]},
+  {name:"国語", ibg:"#EEEDFE", ic:"#534AB7", icon:"ti-book", badge:"jpn",
+   cats:[
+    {name:"漢字・語句", qs:[
+      {t:"c",d:0,pts:10,tx:"「紅葉」の正しい読み方は？",ch:["こうよう","もみじ","どちらも正しい","どちらも間違い"],a:2},
+      {t:"i",d:0,pts:10,tx:"「河川」の読み方は？",a:"かせん",h:"ひらがなで入力"},
+      {t:"c",d:1,pts:15,tx:"「七転び（　）起き」に入る漢数字は？",ch:["六","七","八","九"],a:2},
+      {t:"c",d:2,pts:20,tx:"「以心伝心」の意味は？",ch:["心から感謝すること","言葉なしで気持ちが通じること","一心不乱に努力すること","心が通い合う友人"],a:1}
+    ]},
+    {name:"読解", qs:[
+      {t:"c",d:1,pts:20,tx:"「春はあけぼの」の作者は？",ch:["紫式部","清少納言","与謝野晶子","樋口一葉"],a:1},
+      {t:"c",d:2,pts:25,tx:"「君は星のように輝いている」の表現技法は？",ch:["擬人法","隠喩","直喩","体言止め"],a:2}
+    ]}
+  ]},
+  {name:"理科", ibg:"#FAEEDA", ic:"#854F0B", icon:"ti-flask", badge:"sci",
+   cats:[
+    {name:"物理・化学", qs:[
+      {t:"c",d:0,pts:15,tx:"水の化学式は？",ch:["CO₂","H₂O","NaCl","O₂"],a:1},
+      {t:"c",d:0,pts:15,tx:"光合成に必要なものは？",ch:["光・水・CO₂","光・空気・塩分","水・O₂・光","光・土・水"],a:0},
+      {t:"c",d:1,pts:20,tx:"質量2kg・重力加速度10N/kgのとき重力は？",ch:["5N","10N","20N","12N"],a:2},
+      {t:"i",d:1,pts:20,tx:"食塩の化学式を答えなさい。",a:"NaCl",h:"化学式を入力"},
+      {t:"c",d:2,pts:25,tx:"炭酸水素ナトリウムを加熱すると発生する気体は？",ch:["水素","酸素","二酸化炭素","窒素"],a:2},
+      {t:"c",d:2,pts:25,tx:"抵抗10Ω・電圧5Vのとき電流は？",ch:["0.2A","0.5A","2A","50A"],a:1}
+    ]}
+  ]},
+  {name:"社会", ibg:"#EAF3DE", ic:"#3B6D11", icon:"ti-world", badge:"soc",
+   cats:[
+    {name:"歴史", qs:[
+      {t:"c",d:0,pts:15,tx:"江戸幕府を開いたのは？",ch:["豊臣秀吉","織田信長","徳川家康","徳川吉宗"],a:2},
+      {t:"c",d:1,pts:20,tx:"1868年に始まった新政府の改革は？",ch:["大化の改新","明治維新","大政奉還","文明開化"],a:1},
+      {t:"c",d:2,pts:25,tx:"ポーツマス条約で日本が得た権益は？",ch:["朝鮮半島の独立","南満洲の鉄道権益","台湾の割譲","北方四島の取得"],a:1}
+    ]},
+    {name:"地理", qs:[
+      {t:"c",d:0,pts:15,tx:"日本で最も長い川は？",ch:["利根川","信濃川","石狩川","最上川"],a:1},
+      {t:"c",d:1,pts:20,tx:"赤道が通る大陸は？",ch:["ユーラシア大陸","北アメリカ大陸","アフリカ大陸","オーストラリア大陸"],a:2}
+    ]}
+  ]}
+];
+
+var counts = [];
+for (var i = 0; i < S.length; i++) {
+  counts.push([]);
+  for (var j = 0; j < S[i].cats.length; j++) counts[i].push(0);
+}
+
+var SCREENS = ["qset","quiz"];
+function goTo(idx) {
+  for (var i = 0; i < SCREENS.length; i++) {
+    document.getElementById("screen-"+SCREENS[i]).classList[i===idx?"add":"remove"]("active");
+    document.getElementById("nav"+i).classList[i===idx?"add":"remove"]("active");
+  }
+  window.scrollTo(0,0);
+}
+
+function renderTabs() {
+  var h = "";
+  for (var i = 0; i < S.length; i++)
+    h += '<button class="stab'+(i===curSi?" active":"")+'" onclick="selSubj('+i+')">'+S[i].name+'</button>';
+  document.getElementById("stabs").innerHTML = h;
+  document.getElementById("pt-disp").textContent = pt;
+}
+
+function selSubj(i) { curSi=i; renderTabs(); renderCats(); }
+
+function renderCats() {
+  var s = S[curSi], h = "";
+  for (var j = 0; j < s.cats.length; j++) {
+    var cat = s.cats[j];
+    var avail = 0;
+    for (var k = 0; k < cat.qs.length; k++) if (diffOn[cat.qs[k].d]) avail++;
+    h += '<div class="cat-row">'+
+      '<div class="cat-icon" style="background:'+s.ibg+';color:'+s.ic+'"><i class="ti '+s.icon+'"></i></div>'+
+      '<div class="cat-body"><div class="cat-name">'+cat.name+'</div><div class="cat-meta">'+avail+'問ストック</div></div>'+
+      '<div class="counter">'+
+        '<button class="cnt-btn" onclick="chg('+curSi+','+j+',-1)">−</button>'+
+        '<span class="cnt-val" id="c'+curSi+'x'+j+'">'+counts[curSi][j]+'</span>'+
+        '<button class="cnt-btn" onclick="chg('+curSi+','+j+',1)">＋</button>'+
+      '</div></div>';
+  }
+  document.getElementById("cat-list").innerHTML = h;
+}
+
+function chg(si,ci,d) {
+  var cat = S[si].cats[ci];
+  var avail = 0;
+  for (var k = 0; k < cat.qs.length; k++) if (diffOn[cat.qs[k].d]) avail++;
+  counts[si][ci] = Math.max(0, Math.min(avail, counts[si][ci]+d));
+  var el = document.getElementById("c"+si+"x"+ci);
+  if (el) el.textContent = counts[si][ci];
+  updateSum();
+}
+
+function toggleDiff(di) {
+  diffOn[di] = !diffOn[di];
+  document.getElementById("d"+di).classList[diffOn[di]?"add":"remove"]("active");
+  renderCats(); updateSum();
+}
+
+function toggleUnseen() {
+  unseenOn = !unseenOn;
+  document.getElementById("tog").classList[unseenOn?"remove":"add"]("off");
+}
+
+function updateSum() {
+  var total=0, totalPt=0;
+  for (var i=0;i<S.length;i++) for (var j=0;j<S[i].cats.length;j++) {
+    var cnt=counts[i][j]; total+=cnt;
+    var qs=S[i].cats[j].qs.filter(function(q){return diffOn[q.d];});
+    var avg=qs.length?qs.reduce(function(a,q){return a+q.pts;},0)/qs.length:0;
+    totalPt+=Math.round(avg*cnt);
+  }
+  document.getElementById("tot-q").textContent=total+"問";
+  document.getElementById("tot-pt").textContent=totalPt+"pt";
+}
+
+function startQuiz() {
+  pool=[];
+  for (var i=0;i<S.length;i++) for (var j=0;j<S[i].cats.length;j++) {
+    var cnt=counts[i][j]; if(!cnt) continue;
+    var s=S[i], cat=s.cats[j];
+    var qs=[];
+    for (var k=0;k<cat.qs.length;k++) {
+      if (!diffOn[cat.qs[k].d]) continue;
+      var id=i+"_"+j+"_"+k;
+      qs.push({t:cat.qs[k].t,d:cat.qs[k].d,pts:cat.qs[k].pts,tx:cat.qs[k].tx,
+               ch:cat.qs[k].ch,a:cat.qs[k].a,h:cat.qs[k].h,
+               badge:s.badge,subj:s.name,ibg:s.ibg,ic:s.ic,id:id});
+    }
+    if (unseenOn) {
+      var unseen=qs.filter(function(q){return !solved[q.id];});
+      if (unseen.length>=cnt) qs=unseen;
+    }
+    qs.sort(function(){return Math.random()-.5;});
+    for (var k=0;k<Math.min(cnt,qs.length);k++) pool.push(qs[k]);
+  }
+  if (!pool.length) { alert("問題が選択されていません。\n各カテゴリの「＋」で問題数を追加してください。"); return; }
+  pool.sort(function(){return Math.random()-.5;});
+  qIdx=0; qScore=0; qEarned=0; qAnswered=false;
+  renderQ();
+  goTo(1);
+}
+
+function renderQ() {
+  if (qIdx>=pool.length) { renderResult(); return; }
+  var q=pool[qIdx];
+  document.getElementById("q-prog").style.width=Math.round(qIdx/pool.length*100)+"%";
+  document.getElementById("q-prog-txt").textContent=(qIdx+1)+" / "+pool.length;
+  var bc="background:"+q.ibg+";color:"+q.ic;
+  var h='<div class="card"><div class="q-meta"><span style="font-size:11px;padding:2px 9px;border-radius:20px;font-weight:600;'+bc+'">'+q.subj+'</span>'+
+    '<span class="q-chance">'+q.pts+'pt 獲得チャンス</span></div>'+
+    '<p class="q-text">'+q.tx.replace(/\n/g,"<br>")+'</p>';
+  if (q.t==="c") {
+    h+='<div class="choices">';
+    var L=["A","B","C","D"];
+    for (var i=0;i<q.ch.length;i++)
+      h+='<button class="choice" id="ch'+i+'" onclick="pick('+i+')"><span class="cl">'+L[i]+'</span>'+q.ch[i]+'</button>';
+    h+='</div>';
+  } else {
+    h+='<input type="text" id="txt" placeholder="'+(q.h||"")+'">';
+  }
+  h+='<div class="fb" id="fb"></div><div class="btn-row"><button class="abtn" id="sbtn" onclick="submitQ()">答えを確認</button></div></div>';
+  document.getElementById("quiz-area").innerHTML=h;
+  qAnswered=false;
+}
+
+function pick(i) {
+  if (qAnswered) return;
+  document.querySelectorAll(".choice").forEach(function(b){b.classList.remove("selected");});
+  document.getElementById("ch"+i).classList.add("selected");
+}
+
+function submitQ() {
+  if (qAnswered) { qIdx++; renderQ(); return; }
+  var q=pool[qIdx]; qAnswered=true; var correct=false;
+  if (q.t==="c") {
+    var sel=-1;
+    document.querySelectorAll(".choice").forEach(function(b,i){if(b.classList.contains("selected"))sel=i;});
+    if (sel<0) return;
+    correct=(sel===q.a);
+    document.querySelectorAll(".choice").forEach(function(b,i){
+      if(i===q.a)b.classList.add("correct");
+      else if(b.classList.contains("selected"))b.classList.add("wrong");
+    });
+  } else {
+    var inp=document.getElementById("txt");
+    correct=inp.value.trim().toLowerCase()===q.a.toLowerCase();
+    inp.className=correct?"ci":"wi"; inp.disabled=true;
+  }
+  solved[q.id]=true;
+  var fb=document.getElementById("fb");
+  if (correct) {
+    qScore++; qEarned+=q.pts; pt+=q.pts;
+    document.getElementById("quiz-pt").textContent=pt;
+    document.getElementById("pt-disp").textContent=pt;
+    fb.className="fb ok";
+    fb.innerHTML='<i class="ti ti-circle-check" style="font-size:18px"></i>正解！ +'+q.pts+'pt';
+  } else {
+    fb.className="fb ng";
+    var ans=q.t==="c"?q.ch[q.a]:q.a;
+    fb.innerHTML='<i class="ti ti-circle-x" style="font-size:18px"></i>正解は「'+ans+'」';
+  }
+  document.getElementById("sbtn").textContent="次の問題へ";
+}
+
+function renderResult() {
+  document.getElementById("q-prog").style.width="100%";
+  document.getElementById("q-prog-txt").textContent=pool.length+" / "+pool.length;
+  var pct=Math.round(qScore/pool.length*100);
+  document.getElementById("quiz-area").innerHTML=
+    '<div class="result-wrap">'+
+    '<div class="result-icon"><i class="ti ti-trophy" style="font-size:32px"></i></div>'+
+    '<div class="result-score">'+qScore+' / '+pool.length+' 問正解</div>'+
+    '<div class="result-sub">正答率 '+pct+'%</div>'+
+    '<div class="earn-box"><div class="earn-label">今回獲得したポイント</div><div class="earn-val">+'+qEarned+' pt</div></div><br>'+
+    '<button class="abtn" onclick="goTo(0)">問題セット選択に戻る</button>'+
+    '</div>';
+}
+
+window.onload = function() {
+  renderTabs();
+  renderCats();
+  updateSum();
+};
+</script>
+</body>
+</html>
