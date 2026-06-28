@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>study-fune</title>
 <style>
-body{font-family:-apple-system,sans-serif;padding:1rem;background:#f5f5f3;margin:0 0 60px;}
+body{font-family:-apple-system,sans-serif;background:#f5f5f3;margin:0;padding:1rem 0 60px;}
+.wrap{max-width:500px;margin:0 auto;padding:0 1rem;}
 .box{background:#fff;border-radius:12px;padding:1rem;margin-bottom:1rem;border:1px solid #e5e5e3;}
 .ok{color:#3B6D11;background:#EAF3DE;padding:8px 12px;border-radius:8px;font-size:14px;}
 .ng{color:#A32D2D;background:#FCEBEB;padding:8px 12px;border-radius:8px;font-size:14px;}
@@ -19,10 +20,12 @@ h2{font-size:15px;margin:0 0 8px;}
 .cbtn{width:28px;height:28px;border-radius:50%;border:1px solid #ddd;background:#fff;font-size:16px;cursor:pointer;font-family:inherit;}
 .cval{font-size:15px;font-weight:700;min-width:18px;text-align:center;}
 .sbtn{width:100%;padding:12px;font-size:15px;font-weight:700;border:none;background:#378ADD;color:#fff;border-radius:8px;cursor:pointer;margin-top:8px;font-family:inherit;}
+.gbtn{width:100%;padding:12px;font-size:15px;font-weight:700;border:none;background:#3B6D11;color:#fff;border-radius:8px;cursor:pointer;margin-top:8px;font-family:inherit;}
+.bbtn{width:100%;padding:12px;font-size:15px;font-weight:700;border:1px solid #ddd;background:#fff;color:#333;border-radius:8px;cursor:pointer;margin-top:8px;font-family:inherit;}
 .ptbadge{float:right;background:#FAEEDA;border-radius:20px;padding:4px 12px;font-size:14px;font-weight:700;color:#633806;}
 .page{display:none;}.page.on{display:block;}
 nav{position:fixed;bottom:0;left:0;right:0;height:50px;background:#fff;border-top:1px solid #eee;display:flex;}
-.nb{flex:1;font-size:13px;border:none;background:none;cursor:pointer;font-family:inherit;color:#999;}
+.nb{flex:1;font-size:12px;border:none;background:none;cursor:pointer;font-family:inherit;color:#999;padding:0;}
 .nb.on{color:#378ADD;font-weight:700;}
 .prog-wrap{height:6px;background:#eee;border-radius:99px;overflow:hidden;margin-bottom:10px;}
 .prog-fill{height:100%;background:#378ADD;border-radius:99px;}
@@ -41,9 +44,24 @@ input.ng3{border-color:#A32D2D;background:#FCEBEB;}
 .fb.ng{background:#FCEBEB;color:#A32D2D;display:block;}
 .abtn{font-size:13px;padding:7px 16px;border-radius:8px;border:1px solid #ccc;background:#fff;cursor:pointer;font-family:inherit;}
 .earn{background:#FAEEDA;border-radius:10px;padding:1rem;display:inline-block;margin:1rem 0;}
+.pp{background:#fff;padding:10mm;font-family:serif;margin-top:1rem;}
+.ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:16px;}
+.pt2{font-size:18px;font-weight:bold;}
+.pm{font-size:12px;text-align:right;line-height:1.8;}
+.sc{border:1px solid #000;padding:4px 12px;font-size:13px;display:inline-block;margin-top:4px;}
+.pq{margin-bottom:20px;}
+.pqn{font-size:13px;font-weight:bold;margin-bottom:4px;}
+.pqt{font-size:14px;line-height:1.9;margin-bottom:6px;}
+.al{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.alb{flex:1;border-bottom:1px solid #333;min-height:24px;}
+@media print {
+  nav,.page{display:none!important;}
+  .pp{display:block!important;}
+}
 </style>
 </head>
 <body>
+<div class="wrap">
 
 <div class="page on" id="p0">
   <div class="box">
@@ -79,9 +97,55 @@ input.ng3{border-color:#A32D2D;background:#FCEBEB;}
   <div id="qarea"></div>
 </div>
 
+<div class="page" id="p2">
+  <div class="box">
+    <h2 style="display:inline">プリント作成</h2>
+    <div style="margin-top:8px" id="st2"></div>
+  </div>
+  <div class="box">
+    <h2>教科</h2>
+    <div class="tabs" id="ptabs"><span style="color:#999;font-size:13px">読み込み中...</span></div>
+    <h2>カテゴリと問題数</h2>
+    <div id="pcats"><p style="color:#999;font-size:13px">読み込み中...</p></div>
+  </div>
+  <div class="box">
+    <div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px">
+      <span>選択問題数</span><strong id="ptq2">0問</strong>
+    </div>
+    <label style="display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:4px;cursor:pointer">
+      <input type="checkbox" id="show-ans"> 答えあり（先生用）
+    </label>
+    <button class="gbtn" onclick="genPrint()">プリントを作成する</button>
+  </div>
+</div>
+
+<div class="page" id="p3">
+  <div class="box">
+    <button class="gbtn" onclick="window.print()">印刷する / PDFで保存</button>
+    <button class="bbtn" onclick="sw(2)">戻る</button>
+  </div>
+  <div class="pp" id="pp">
+    <div class="ph">
+      <div>
+        <div class="pt2" id="ptitle">プリント</div>
+        <div style="font-size:12px;margin-top:4px">study-fune</div>
+      </div>
+      <div class="pm">
+        <div>名前：<span style="display:inline-block;border-bottom:1px solid #000;width:100px">&nbsp;</span></div>
+        <div>日付：<span style="display:inline-block;border-bottom:1px solid #000;width:80px">&nbsp;</span></div>
+        <div class="sc">点数：&nbsp;&nbsp;/ <span id="ptotal">0</span>点</div>
+      </div>
+    </div>
+    <div id="pqs"></div>
+  </div>
+</div>
+
+</div>
+
 <nav>
-  <button class="nb on" id="n0" onclick="sw(0)">✏ 選択</button>
-  <button class="nb" id="n1" onclick="sw(1)">▶ 演習</button>
+  <button class="nb on" id="n0" onclick="sw(0)">選択</button>
+  <button class="nb" id="n1" onclick="sw(1)">演習</button>
+  <button class="nb" id="n2" onclick="sw(2)">プリント</button>
 </nav>
 
 <script>
@@ -90,42 +154,46 @@ var SKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI
 
 var pt=0, si=0, slv={}, pool=[], qi=0, qsc=0, qe=0, qa=false;
 var subs=[], cmap={}, CNT={};
+var psi=0, pcmap={}, pCNT={};
 
 function sw(i) {
-  document.getElementById("p0").classList[i===0?"add":"remove"]("on");
-  document.getElementById("p1").classList[i===1?"add":"remove"]("on");
-  document.getElementById("n0").classList[i===0?"add":"remove"]("on");
-  document.getElementById("n1").classList[i===1?"add":"remove"]("on");
+  for(var j=0;j<4;j++){
+    var p=document.getElementById("p"+j);
+    var n=document.getElementById("n"+j);
+    if(p) p.classList[i===j?"add":"remove"]("on");
+    if(n) n.classList[i===j?"add":"remove"]("on");
+  }
   window.scrollTo(0,0);
 }
+
 function rTabs() {
   var h="";
-  for (var i=0;i<subs.length;i++)
+  for(var i=0;i<subs.length;i++)
     h+='<button class="tab'+(i===si?" on":"")+'" onclick="selS('+i+')">'+subs[i]+"</button>";
   document.getElementById("tabs").innerHTML=h;
 }
 function selS(i){si=i;rTabs();rCats();}
 function rCats() {
   var h="";
-  for (var k in cmap) {
-    if (cmap[k].subj!==subs[si]) continue;
-    var c=cmap[k], eid="ev"+k.replace(/[^a-z0-9]/gi,"_");
+  for(var k in cmap){
+    if(cmap[k].subj!==subs[si]) continue;
+    var c=cmap[k],eid="ev"+k.replace(/[^a-z0-9]/gi,"_");
     h+='<div class="row"><div><strong>'+c.cat+'</strong><br><span style="font-size:12px;color:#999">'+c.qs.length+'問</span></div>'+
-      '<div class="ctr"><button class="cbtn" onclick="chg(\''+k+'\',-1)">−</button>'+
+      '<div class="ctr"><button class="cbtn" onclick="chg(''+k+'',-1)">-</button>'+
       '<span class="cval" id="'+eid+'">'+(CNT[k]||0)+'</span>'+
-      '<button class="cbtn" onclick="chg(\''+k+'\',1)">+</button></div></div>';
+      '<button class="cbtn" onclick="chg(''+k+'',1)">+</button></div></div>';
   }
   document.getElementById("cats").innerHTML=h||'<p style="color:#999;font-size:13px">なし</p>';
 }
-function chg(k,d) {
+function chg(k,d){
   CNT[k]=Math.max(0,Math.min(cmap[k].qs.length,(CNT[k]||0)+d));
   var el=document.getElementById("ev"+k.replace(/[^a-z0-9]/gi,"_"));
   if(el)el.textContent=CNT[k];
   rSum();
 }
-function rSum() {
+function rSum(){
   var tot=0,tp=0;
-  for (var k in CNT) {
+  for(var k in CNT){
     tot+=CNT[k];
     var avg=cmap[k].qs.reduce(function(a,q){return a+q.points;},0)/Math.max(cmap[k].qs.length,1);
     tp+=Math.round(avg*CNT[k]);
@@ -133,37 +201,38 @@ function rSum() {
   document.getElementById("tq").textContent=tot+"問";
   document.getElementById("tp").textContent=tp+"pt";
 }
-function startQuiz() {
+function startQuiz(){
   pool=[];
-  for (var k in CNT) {
-    var cnt=CNT[k]; if(!cnt) continue;
+  for(var k in CNT){
+    var cnt=CNT[k];if(!cnt)continue;
     var c=cmap[k];
     var arr=c.qs.map(function(q){return{id:q.id,t:q.type,pts:q.points,tx:q.text,ch:q.choices,a:q.answer,h:q.hint,subj:c.subj};});
     var un=arr.filter(function(q){return !slv[q.id];});
-    if(un.length>=cnt) arr=un;
+    if(un.length>=cnt)arr=un;
     arr.sort(function(){return Math.random()-.5;});
-    for(var j=0;j<Math.min(cnt,arr.length);j++) pool.push(arr[j]);
+    for(var j=0;j<Math.min(cnt,arr.length);j++)pool.push(arr[j]);
   }
   if(!pool.length){alert("問題を選んでください");return;}
   pool.sort(function(){return Math.random()-.5;});
   qi=0;qsc=0;qe=0;qa=false;
   rQ();sw(1);
 }
-function rQ() {
+function rQ(){
   if(qi>=pool.length){rRes();return;}
   var q=pool[qi];
   document.getElementById("qprog").style.width=Math.round(qi/pool.length*100)+"%";
   document.getElementById("qnum").textContent=(qi+1)+"/"+pool.length;
   var ch=typeof q.ch==="string"?JSON.parse(q.ch):(q.ch||[]);
   var h='<div class="box"><strong style="font-size:12px;color:#378ADD">'+q.subj+'</strong>'+
-    '<p class="qtext">'+q.tx.replace(/\n/g,"<br>")+'</p>';
+    '<p class="qtext">'+q.tx.replace(/
+/g,"<br>")+'</p>';
   if(q.t==="choice"){
     h+='<div class="choices">';
     ["A","B","C","D"].forEach(function(l,i){
       h+='<button class="ch" id="c'+i+'" onclick="pk('+i+')"><span class="cl">'+l+"</span>"+ch[i]+"</button>";
     });
     h+="</div>";
-  } else {
+  }else{
     h+='<input type="text" id="ti" placeholder="'+(q.h||"")+'">';
   }
   h+='<div class="fb" id="fb"></div>'+
@@ -190,7 +259,7 @@ function subQ(){
       if(String(i)===String(q.a))b.classList.add("ok2");
       else if(b.classList.contains("sel"))b.classList.add("ng2");
     });
-  } else {
+  }else{
     var inp=document.getElementById("ti");
     ok=inp.value.trim().toLowerCase()===q.a.toLowerCase();
     inp.className=ok?"ok3":"ng3";inp.disabled=true;
@@ -201,10 +270,10 @@ function subQ(){
     qsc++;qe+=q.pts;pt+=q.pts;
     document.getElementById("ptd").textContent=pt;
     document.getElementById("ptq").textContent=pt;
-    fb.className="fb ok";fb.textContent="✓ 正解! +"+q.pts+"pt";
-  } else {
+    fb.className="fb ok";fb.textContent="正解! +"+q.pts+"pt";
+  }else{
     fb.className="fb ng";
-    fb.textContent="✗ 正解は「"+(q.t==="choice"?ch[parseInt(q.a)]:q.a)+"」";
+    fb.textContent="正解は「"+(q.t==="choice"?ch[parseInt(q.a)]:q.a)+"」";
   }
   document.getElementById("sb").textContent="次の問題へ";
 }
@@ -221,29 +290,103 @@ function rRes(){
     '<button class="abtn" onclick="sw(0)">選択画面に戻る</button></div>';
 }
 
-fetch(SURL + "/rest/v1/questions?is_active=eq.true&order=subject,category,difficulty", {
-  headers: {"apikey": SKEY, "Authorization": "Bearer " + SKEY}
+/* プリント機能 */
+function rPTabs(){
+  var h="";
+  for(var i=0;i<subs.length;i++)
+    h+='<button class="tab'+(i===psi?" on":"")+'" onclick="selPS('+i+')">'+subs[i]+"</button>";
+  document.getElementById("ptabs").innerHTML=h;
+}
+function selPS(i){psi=i;rPTabs();rPCats();}
+function rPCats(){
+  var h="";
+  for(var k in cmap){
+    if(cmap[k].subj!==subs[psi]) continue;
+    var c=cmap[k],eid="pev"+k.replace(/[^a-z0-9]/gi,"_");
+    h+='<div class="row"><div><strong>'+c.cat+'</strong><br><span style="font-size:12px;color:#999">'+c.qs.length+'問</span></div>'+
+      '<div class="ctr"><button class="cbtn" onclick="pchg(''+k+'',-1)">-</button>'+
+      '<span class="cval" id="'+eid+'">'+(pCNT[k]||0)+'</span>'+
+      '<button class="cbtn" onclick="pchg(''+k+'',1)">+</button></div></div>';
+  }
+  document.getElementById("pcats").innerHTML=h||'<p style="color:#999;font-size:13px">なし</p>';
+}
+function pchg(k,d){
+  pCNT[k]=Math.max(0,Math.min(cmap[k].qs.length,(pCNT[k]||0)+d));
+  var el=document.getElementById("pev"+k.replace(/[^a-z0-9]/gi,"_"));
+  if(el)el.textContent=pCNT[k];
+  pSum();
+}
+function pSum(){
+  var tot=0;
+  for(var k in pCNT)tot+=pCNT[k];
+  document.getElementById("ptq2").textContent=tot+"問";
+}
+function genPrint(){
+  var pool2=[];
+  var showAns=document.getElementById("show-ans").checked;
+  for(var k in pCNT){
+    var cnt=pCNT[k];if(!cnt)continue;
+    var arr=cmap[k].qs.slice();
+    arr.sort(function(){return Math.random()-.5;});
+    for(var j=0;j<Math.min(cnt,arr.length);j++)pool2.push(arr[j]);
+  }
+  if(!pool2.length){alert("問題を選んでください");return;}
+  pool2.sort(function(){return Math.random()-.5;});
+  var subjs=[];
+  for(var i=0;i<pool2.length;i++)if(subjs.indexOf(pool2[i].subject)<0)subjs.push(pool2[i].subject);
+  document.getElementById("ptitle").textContent=subjs.join("・")+" プリント";
+  document.getElementById("ptotal").textContent=pool2.length*10;
+  var h="";
+  var ppq=Math.round(100/pool2.length);
+  for(var i=0;i<pool2.length;i++){
+    var q=pool2[i];
+    var txt=q.text.replace(/
+/g,"<br>");
+    h+='<div class="pq">';
+    h+='<div class="pqn">【'+(i+1)+'】（'+ppq+'点）　'+q.category+'</div>';
+    h+='<div class="pqt">'+txt+'</div>';
+    if(q.type==="choice"&&q.choices){
+      var ch=typeof q.choices==="string"?JSON.parse(q.choices):q.choices;
+      var L=["ア","イ","ウ","エ"];
+      h+='<div style="margin-left:16px;margin-top:4px">';
+      for(var j=0;j<ch.length;j++)h+='<div style="font-size:13px;margin-bottom:4px">'+L[j]+'．'+ch[j]+'</div>';
+      h+='</div>';
+      h+='<div class="al"><span style="font-size:12px;white-space:nowrap">答え：</span><div class="alb">';
+      if(showAns)h+='<span style="color:#c00;font-weight:bold">'+L[parseInt(q.answer)]+'</span>';
+      h+='</div></div>';
+    }else{
+      h+='<div class="al"><span style="font-size:12px;white-space:nowrap">答え：</span><div class="alb">';
+      if(showAns)h+='<span style="color:#c00;font-weight:bold">'+q.answer+'</span>';
+      h+='</div></div>';
+    }
+    h+='</div>';
+  }
+  document.getElementById("pqs").innerHTML=h;
+  sw(3);
+}
+
+fetch(SURL+"/rest/v1/questions?is_active=eq.true&order=subject,category,difficulty",{
+  headers:{"apikey":SKEY,"Authorization":"Bearer "+SKEY}
 })
-.then(function(r) { return r.json(); })
-.then(function(data) {
-  if (!Array.isArray(data)) {
-    document.getElementById("st").innerHTML = '<div class="ng">エラー: '+JSON.stringify(data).slice(0,60)+'</div>';
-    document.getElementById("tabs").innerHTML = '<span style="color:red;font-size:13px">失敗</span>';
+.then(function(r){return r.json();})
+.then(function(data){
+  if(!Array.isArray(data)){
+    document.getElementById("st").innerHTML='<div class="ng">エラー: '+JSON.stringify(data).slice(0,60)+'</div>';
     return;
   }
-  document.getElementById("st").innerHTML = '<div class="ok">✓ Supabase接続成功 · '+data.length+'問取得</div>';
-  for (var i=0; i<data.length; i++) {
+  document.getElementById("st").innerHTML='<div class="ok">接続成功 '+data.length+'問取得</div>';
+  for(var i=0;i<data.length;i++){
     var q=data[i];
-    if (subs.indexOf(q.subject)<0) subs.push(q.subject);
+    if(subs.indexOf(q.subject)<0)subs.push(q.subject);
     var k=q.subject+"__"+q.category;
-    if (!cmap[k]) { cmap[k]={subj:q.subject,cat:q.category,qs:[]}; CNT[k]=0; }
+    if(!cmap[k]){cmap[k]={subj:q.subject,cat:q.category,qs:[]};CNT[k]=0;pCNT[k]=0;}
     cmap[k].qs.push(q);
   }
-  rTabs(); rCats(); rSum();
+  rTabs();rCats();rSum();
+  rPTabs();rPCats();pSum();
 })
-.catch(function(e) {
-  document.getElementById("st").innerHTML = '<div class="ng">接続失敗: '+e.message+'</div>';
-  document.getElementById("tabs").innerHTML = '<span style="color:red;font-size:13px">失敗</span>';
+.catch(function(e){
+  document.getElementById("st").innerHTML='<div class="ng">接続失敗: '+e.message+'</div>';
 });
 </script>
 </body>
