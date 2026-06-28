@@ -86,7 +86,7 @@ nav{position:fixed;bottom:0;left:0;right:0;height:50px;background:#fff;border-to
 <div class="page" id="p1">
   <div class="box" style="display:flex;gap:8px;">
     <button class="pbtn" style="flex:1" onclick="window.print()">印刷する</button>
-    <button class="sbtn" style="flex:1" onclick="sw(0)">← 戻る</button>
+    <button class="sbtn" style="flex:1" onclick="sw(0)">戻る</button>
   </div>
 </div>
 
@@ -111,7 +111,7 @@ nav{position:fixed;bottom:0;left:0;right:0;height:50px;background:#fff;border-to
 </div>
 
 <nav>
-  <button class="nb on" id="n0" onclick="sw(0)">✏ 選択</button>
+  <button class="nb on" id="n0" onclick="sw(0)">選択</button>
   <button class="nb" id="n1" onclick="sw(1)">プレビュー</button>
 </nav>
 
@@ -219,7 +219,7 @@ fetch(SURL + "/rest/v1/questions?is_active=eq.true&order=subject,category,diffic
     document.getElementById("st").innerHTML='<div class="ng">エラー: '+JSON.stringify(data).slice(0,60)+'</div>';
     return;
   }
-  document.getElementById("st").innerHTML='<div class="ok">✓ '+data.length+'問読み込み済み</div>';
+  document.getElementById("st").innerHTML='<div class="ok">'+data.length+'問読み込み済み</div>';
   for(var i=0;i<data.length;i++){
     var q=data[i];
     if(subs.indexOf(q.subject)<0) subs.push(q.subject);
