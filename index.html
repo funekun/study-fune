@@ -278,14 +278,7 @@ function goTo(i){
   window.scrollTo(0,0);
 }
 
-document.body.addEventListener("touchstart",function(e){tx=e.touches[0].clientX;},{passive:true});
-document.body.addEventListener("touchend",function(e){
-  var dx=e.changedTouches[0].clientX-tx;
-  if(Math.abs(dx)>60){
-    if(dx<0&&cur<4)goTo(cur+1);
-    if(dx>0&&cur>0)goTo(cur-1);
-  }
-},{passive:true});
+// スワイプは一時無効
 
 function rTabs(){
   var h="";
