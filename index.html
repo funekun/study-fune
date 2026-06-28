@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>study-fune</title>
 <style>
-body{font-family:-apple-system,sans-serif;background:#f5f5f3;margin:0;padding:1rem 0 60px;}
-.wrap{max-width:500px;margin:0 auto;padding:0 1rem;}
+body{font-family:-apple-system,sans-serif;padding:1rem;background:#f5f5f3;margin:0 0 60px;}
 .box{background:#fff;border-radius:12px;padding:1rem;margin-bottom:1rem;border:1px solid #e5e5e3;}
 .ok{color:#3B6D11;background:#EAF3DE;padding:8px 12px;border-radius:8px;font-size:14px;}
 .ng{color:#A32D2D;background:#FCEBEB;padding:8px 12px;border-radius:8px;font-size:14px;}
@@ -44,24 +43,16 @@ input.ng3{border-color:#A32D2D;background:#FCEBEB;}
 .fb.ng{background:#FCEBEB;color:#A32D2D;display:block;}
 .abtn{font-size:13px;padding:7px 16px;border-radius:8px;border:1px solid #ccc;background:#fff;cursor:pointer;font-family:inherit;}
 .earn{background:#FAEEDA;border-radius:10px;padding:1rem;display:inline-block;margin:1rem 0;}
-.pp{background:#fff;padding:10mm;font-family:serif;margin-top:1rem;}
+.pp{background:#fff;padding:10mm;font-family:serif;margin-top:1rem;border:1px solid #ddd;border-radius:8px;}
 .ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:2px solid #000;padding-bottom:8px;margin-bottom:16px;}
-.pt2{font-size:18px;font-weight:bold;}
-.pm{font-size:12px;text-align:right;line-height:1.8;}
-.sc{border:1px solid #000;padding:4px 12px;font-size:13px;display:inline-block;margin-top:4px;}
-.pq{margin-bottom:20px;}
 .pqn{font-size:13px;font-weight:bold;margin-bottom:4px;}
 .pqt{font-size:14px;line-height:1.9;margin-bottom:6px;}
 .al{display:flex;align-items:center;gap:8px;margin-top:8px;}
 .alb{flex:1;border-bottom:1px solid #333;min-height:24px;}
-@media print {
-  nav,.page{display:none!important;}
-  .pp{display:block!important;}
-}
+@media print{nav,.page{display:none!important;}.pp{display:block!important;border:none;}}
 </style>
 </head>
 <body>
-<div class="wrap">
 
 <div class="page on" id="p0">
   <div class="box">
@@ -99,8 +90,8 @@ input.ng3{border-color:#A32D2D;background:#FCEBEB;}
 
 <div class="page" id="p2">
   <div class="box">
-    <h2 style="display:inline">プリント作成</h2>
-    <div style="margin-top:8px" id="st2"></div>
+    <h2>プリント作成</h2>
+    <div id="st2"></div>
   </div>
   <div class="box">
     <h2>教科</h2>
@@ -127,19 +118,17 @@ input.ng3{border-color:#A32D2D;background:#FCEBEB;}
   <div class="pp" id="pp">
     <div class="ph">
       <div>
-        <div class="pt2" id="ptitle">プリント</div>
+        <div style="font-size:18px;font-weight:bold" id="ptitle">プリント</div>
         <div style="font-size:12px;margin-top:4px">study-fune</div>
       </div>
-      <div class="pm">
+      <div style="font-size:12px;text-align:right;line-height:1.8">
         <div>名前：<span style="display:inline-block;border-bottom:1px solid #000;width:100px">&nbsp;</span></div>
         <div>日付：<span style="display:inline-block;border-bottom:1px solid #000;width:80px">&nbsp;</span></div>
-        <div class="sc">点数：&nbsp;&nbsp;/ <span id="ptotal">0</span>点</div>
+        <div style="border:1px solid #000;padding:4px 12px;font-size:13px;display:inline-block;margin-top:4px">点数：&nbsp;&nbsp;/ <span id="ptotal">0</span>点</div>
       </div>
     </div>
     <div id="pqs"></div>
   </div>
-</div>
-
 </div>
 
 <nav>
@@ -153,8 +142,7 @@ var SURL = "https://nheriakfknzgfmhuncbj.supabase.co";
 var SKEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5oZXJpYWtma256Z2ZtaHVuY2JqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI1MjM1NDQsImV4cCI6MjA5ODA5OTU0NH0.lVaGt3sK1rD2AZQuj568h-NCsZQ4tEb_Ff5QFbHEZQU";
 
 var pt=0, si=0, slv={}, pool=[], qi=0, qsc=0, qe=0, qa=false;
-var subs=[], cmap={}, CNT={};
-var psi=0, pcmap={}, pCNT={};
+var subs=[], cmap={}, CNT={}, psi=0, pCNT={};
 
 function sw(i) {
   for(var j=0;j<4;j++){
@@ -165,15 +153,14 @@ function sw(i) {
   }
   window.scrollTo(0,0);
 }
-
-function rTabs() {
+function rTabs(){
   var h="";
   for(var i=0;i<subs.length;i++)
     h+='<button class="tab'+(i===si?" on":"")+'" onclick="selS('+i+')">'+subs[i]+"</button>";
   document.getElementById("tabs").innerHTML=h;
 }
 function selS(i){si=i;rTabs();rCats();}
-function rCats() {
+function rCats(){
   var h="";
   for(var k in cmap){
     if(cmap[k].subj!==subs[si]) continue;
@@ -289,13 +276,12 @@ function rRes(){
     '<div style="font-size:28px;font-weight:700;color:#633806">+'+qe+' pt</div></div><br>'+
     '<button class="abtn" onclick="sw(0)">選択画面に戻る</button></div>';
 }
-
-/* プリント機能 */
 function rPTabs(){
   var h="";
   for(var i=0;i<subs.length;i++)
     h+='<button class="tab'+(i===psi?" on":"")+'" onclick="selPS('+i+')">'+subs[i]+"</button>";
   document.getElementById("ptabs").innerHTML=h;
+  document.getElementById("st2").innerHTML=document.getElementById("st").innerHTML;
 }
 function selPS(i){psi=i;rPTabs();rPCats();}
 function rPCats(){
@@ -342,7 +328,7 @@ function genPrint(){
     var q=pool2[i];
     var txt=q.text.replace(/
 /g,"<br>");
-    h+='<div class="pq">';
+    h+='<div style="margin-bottom:20px;">';
     h+='<div class="pqn">【'+(i+1)+'】（'+ppq+'点）　'+q.category+'</div>';
     h+='<div class="pqt">'+txt+'</div>';
     if(q.type==="choice"&&q.choices){
