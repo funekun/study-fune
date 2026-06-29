@@ -193,24 +193,6 @@
   .profile-row .p-value{font-size:15px;font-weight:600;}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2C3E50;color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
-  /* Grade tabs */
-  .grade-tabs{display:flex;gap:8px;padding:0 16px 4px;overflow-x:auto;}
-  .grade-tab{flex-shrink:0;padding:8px 20px;border-radius:20px;border:2px solid var(--border);background:#fff;font-size:14px;font-weight:700;color:var(--text-sub);cursor:pointer;}
-  .grade-tab.active{border-color:var(--blue);background:var(--blue);color:#fff;}
-  /* Unit select */
-  .unit-select-all{display:flex;gap:8px;padding:8px 16px;}
-  .unit-all-btn{flex:1;padding:8px;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:13px;font-weight:600;color:var(--text-sub);cursor:pointer;}
-  .unit-list{padding:0 16px 100px;display:flex;flex-direction:column;gap:10px;}
-  .unit-item{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px;cursor:pointer;border:2px solid transparent;}
-  .unit-item.selected{border-color:var(--blue);background:#EEF4FF;}
-  .unit-check{width:24px;height:24px;border-radius:6px;border:2px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px;}
-  .unit-item.selected .unit-check{border-color:var(--blue);background:var(--blue);color:#fff;}
-  .unit-info{flex:1;}
-  .unit-name{font-size:15px;font-weight:700;margin-bottom:2px;}
-  .unit-count{font-size:12px;color:var(--text-sub);}
-  .unit-action-bar{position:fixed;bottom:0;left:0;right:0;padding:16px 20px;background:#fff;border-top:1px solid var(--border);z-index:100;}
-  .unit-start-btn{width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;}
-  .unit-start-btn:disabled{background:var(--text-sub);}
   /* Coming Soon */
   .coming-soon-banner{margin:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:var(--radius);padding:28px 20px;text-align:center;color:#fff;}
   .cs-badge{display:inline-block;background:rgba(255,255,255,0.25);border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;font-size:11px;font-weight:800;letter-spacing:2px;padding:4px 14px;margin-bottom:14px;}
@@ -294,7 +276,6 @@
       <div class="form-group"><label>パスワード</label><input type="password" id="login-password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" autocomplete="current-password"></div>
       <button class="btn-primary" onclick="doLogin()">ログイン</button>
       <button class="guest-btn" onclick="doGuest()">ゲストとして試してみる</button>
-      <button onclick="clearAllData()" style="margin-top:8px;width:100%;padding:10px;background:transparent;border:none;font-size:11px;color:#ccc;cursor:pointer;">🔧 データをリセット（困ったときだけ）</button>
     </div>
     <div id="register-form" style="display:none;">
       <div class="form-group"><label>氏名</label><input type="text" id="reg-name" placeholder="山田 太郎"></div>
@@ -324,35 +305,13 @@
     <button class="mode-btn active" id="mode-btn-quiz" onclick="setMode('quiz')">&#9889; 一問一答</button>
     <button class="mode-btn" id="mode-btn-print" onclick="setMode('print')">&#128196; プリント&amp;AI採点</button>
   </div>
-  <div class="section-title">学年を選ぶ</div>
-  <div class="grade-tabs" id="grade-tabs">
-    <button class="grade-tab active" onclick="setGrade('j1')">中1</button>
-    <button class="grade-tab" onclick="setGrade('j2')">中2</button>
-    <button class="grade-tab" onclick="setGrade('j3')">中3</button>
-    <button class="grade-tab" onclick="setGrade('h1')">高1</button>
-  </div>
   <div class="section-title">教科を選ぶ</div>
-  <div class="subject-grid" id="subject-grid"></div>
-</div>
-
-<!-- 単元選択 -->
-<div id="screen-unit" class="screen">
-  <div class="header">
-    <button class="back-btn" onclick="showScreen('home')">&#8592; 戻る</button>
-    <h1 id="unit-screen-title">数学 単元選択</h1>
-  </div>
-  <div style="padding:16px 16px 8px;">
-    <div style="background:#EEF4FF;border-radius:10px;padding:10px 14px;font-size:13px;color:var(--blue);font-weight:600;">
-      &#128161; 単元を選んで問題に挑戦しよう！複数まとめて選ぶこともできます。
-    </div>
-  </div>
-  <div class="unit-select-all">
-    <button class="unit-all-btn" onclick="selectAllUnits()">すべて選択</button>
-    <button class="unit-all-btn" onclick="clearAllUnits()">すべて解除</button>
-  </div>
-  <div class="unit-list" id="unit-list"></div>
-  <div class="unit-action-bar">
-    <button class="unit-start-btn" id="unit-start-btn" onclick="startFromUnits()">選んだ単元で始める &#8594;</button>
+  <div class="subject-grid">
+    <button class="subject-card math" onclick="onSubjectClick('math')"><div class="s-icon">&#128208;</div><div class="s-name">数学</div><div class="s-count" id="cnt-math">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-math" style="width:0%"></div></div></button>
+    <button class="subject-card english" onclick="onSubjectClick('english')"><div class="s-icon">&#128292;</div><div class="s-name">英語</div><div class="s-count" id="cnt-english">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-english" style="width:0%"></div></div></button>
+    <button class="subject-card japanese" onclick="onSubjectClick('japanese')"><div class="s-icon">&#128214;</div><div class="s-name">国語</div><div class="s-count" id="cnt-japanese">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-japanese" style="width:0%"></div></div></button>
+    <button class="subject-card science" onclick="onSubjectClick('science')"><div class="s-icon">&#128300;</div><div class="s-name">理科</div><div class="s-count" id="cnt-science">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-science" style="width:0%"></div></div></button>
+    <button class="subject-card social" onclick="onSubjectClick('social')" style="grid-column:span 2;"><div class="s-icon">&#127757;</div><div class="s-name">社会</div><div class="s-count" id="cnt-social">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-social" style="width:0%"></div></div></button>
   </div>
 </div>
 
@@ -578,167 +537,17 @@
 <div class="toast" id="toast"></div>
 
 <script>
-// ===== 学年別・単元別問題データ =====
-var GRADE_DATA = {
-  j1: {
-    label: '中1',
-    subjects: {
-      math: {
-        name: '数学', icon: '📐', color: 'math',
-        units: {
-          '正負の数': [
-            {type:'choice',q:'(-3) + (-5) の答えは？',choices:['-8','-2','8','2'],answer:0,exp:'負の数どうしの足し算。-(3+5)=-8'},
-            {type:'choice',q:'(-4) × (-3) の答えは？',choices:['12','-12','7','-7'],answer:0,exp:'負×負=正。4×3=12'},
-            {type:'text',q:'(-6) ÷ 2 を計算しなさい。',answer:'-3',exp:'負÷正=負。6÷2=3 なので -3'}
-          ],
-          '文字式': [
-            {type:'choice',q:'3x + 2x を整理すると？',choices:['5x','6x','5x²','x'],answer:0,exp:'同類項をまとめる。3x+2x=5x'},
-            {type:'choice',q:'2(3a + 1) を展開すると？',choices:['6a+2','6a+1','5a+2','6a'],answer:0,exp:'分配法則。2×3a+2×1=6a+2'},
-            {type:'text',q:'4y - y を整理しなさい。',answer:'3y',exp:'4y-1y=3y'}
-          ],
-          '一次方程式': [
-            {type:'choice',q:'2x + 3 = 9 のとき x は？',choices:['3','6','4','2'],answer:0,exp:'2x=6、x=3'},
-            {type:'choice',q:'5x - 10 = 0 のとき x は？',choices:['2','5','10','0'],answer:0,exp:'5x=10、x=2'},
-            {type:'text',q:'3x + 1 = 10 のとき x を求めなさい。',answer:'3',exp:'3x=9、x=3'}
-          ],
-          '比例・反比例': [
-            {type:'choice',q:'y = 3x で x = 4 のとき y は？',choices:['12','7','1','34'],answer:0,exp:'y=3×4=12'},
-            {type:'choice',q:'y = 6/x で x = 2 のとき y は？',choices:['3','12','4','8'],answer:0,exp:'y=6÷2=3。これが反比例'},
-            {type:'text',q:'y が x に比例し、x=3 のとき y=9。比例定数を求めなさい。',answer:'3',exp:'y=ax に代入。9=3a、a=3'}
-          ],
-          '平面図形': [
-            {type:'choice',q:'半径 5cm の円の面積は？（π使用）',choices:['25π cm²','10π cm²','5π cm²','50π cm²'],answer:0,exp:'面積=πr²=π×5²=25π'},
-            {type:'choice',q:'正三角形の一つの内角は何度？',choices:['60度','90度','120度','45度'],answer:0,exp:'180÷3=60度'},
-            {type:'text',q:'底辺 6cm、高さ 4cm の三角形の面積を求めなさい。',answer:'12cm²',exp:'面積=底辺×高さ÷2=6×4÷2=12'}
-          ],
-          '空間図形': [
-            {type:'choice',q:'立方体の面の数は？',choices:['6','8','12','4'],answer:0,exp:'立方体（正六面体）の面は6つ'},
-            {type:'choice',q:'1辺3cmの立方体の体積は？',choices:['27cm³','9cm³','18cm³','6cm³'],answer:0,exp:'体積=3×3×3=27'},
-            {type:'text',q:'底面積 10cm²、高さ 5cm の角柱の体積を求めなさい。',answer:'50cm³',exp:'体積=底面積×高さ=10×5=50'}
-          ],
-          'データの活用': [
-            {type:'choice',q:'5, 3, 8, 6, 3 の最頻値（モード）は？',choices:['3','5','6','8'],answer:0,exp:'最も多く出る値。3が2回で最頻値'},
-            {type:'choice',q:'2, 4, 6, 8, 10 の平均値は？',choices:['6','5','7','8'],answer:0,exp:'(2+4+6+8+10)÷5=30÷5=6'},
-            {type:'text',q:'1, 3, 5, 7, 9 の中央値（メジアン）を求めなさい。',answer:'5',exp:'5個を並べたとき真ん中の3番目の値は5'}
-          ]
-        }
-      },
-      english: {
-        name: '英語', icon: '🔤', color: 'english',
-        units: {
-          'アルファベット・発音': [
-            {type:'choice',q:'"cat" の発音で母音はどれ？',choices:['a','c','t','ct'],answer:0,exp:'母音はa,e,i,o,u。cat の母音は a'},
-            {type:'choice',q:'アルファベットの母音は何個？',choices:['5個','4個','6個','7個'],answer:0,exp:'a, e, i, o, u の5個'},
-            {type:'text',q:'"apple" を発音する際、最初の文字の前につける冠詞を書きなさい。',answer:'an',exp:'母音で始まる語の前はan'}
-          ],
-          'be動詞': [
-            {type:'choice',q:'"I ( ) a student." に入るbe動詞は？',choices:['am','is','are','be'],answer:0,exp:'Iにはam。I am a student.'},
-            {type:'choice',q:'"She ( ) happy." に入るbe動詞は？',choices:['is','am','are','be'],answer:0,exp:'三人称単数にはis'},
-            {type:'text',q:'"I am a student." を否定文にしなさい。',answer:'I am not a student.',exp:'be動詞の否定はbe動詞+not'}
-          ],
-          '一般動詞': [
-            {type:'choice',q:'"He ( ) soccer." に入る動詞は？（三人称単数現在）',choices:['plays','play','played','playing'],answer:0,exp:'三単現のsをつける。plays'},
-            {type:'choice',q:'"Do you like music?" の答えとして正しいのは？',choices:['Yes, I do.','Yes, I am.','Yes, I like.','Yes, I does.'],answer:0,exp:'Do疑問文の答えはdo/don\'t'},
-            {type:'text',q:'"I play tennis." を三人称単数（He）に変えなさい。',answer:'He plays tennis.',exp:'三単現はplay→plays'}
-          ]
-        }
-      },
-      science: {
-        name: '理科', icon: '🔬', color: 'science',
-        units: {
-          '身のまわりの物質': [
-            {type:'choice',q:'水を加熱し続けると最終的にどうなる？',choices:['水蒸気になる','氷になる','変わらない','消える'],answer:0,exp:'水→水蒸気（気化・沸騰）'},
-            {type:'choice',q:'食塩水は何と何の混合物？',choices:['水と食塩','水と砂糖','水と塩素','水と酸素'],answer:0,exp:'食塩水＝水＋食塩の混合物'},
-            {type:'text',q:'物質が液体から固体に変わる変化を何というか答えなさい。',answer:'凝固',exp:'液体→固体は凝固。固体→液体は融解'}
-          ],
-          '植物のからだ': [
-            {type:'choice',q:'植物が光合成を行う細胞小器官は？',choices:['葉緑体','細胞膜','液胞','核'],answer:0,exp:'光合成は葉緑体で行われる'},
-            {type:'choice',q:'根から吸収した水が葉まで運ばれる管は？',choices:['道管','師管','気孔','維管束'],answer:0,exp:'水・無機物は道管。有機物は師管'},
-            {type:'text',q:'植物が気孔から水蒸気を出す現象を何というか答えなさい。',answer:'蒸散',exp:'蒸散は葉の気孔から水蒸気が出ること'}
-          ]
-        }
-      },
-      social: {
-        name: '社会', icon: '🌍', color: 'social',
-        units: {
-          '地理・世界の姿': [
-            {type:'choice',q:'地球上の陸地と海の割合はどちらが多い？',choices:['海が多い','陸が多い','ほぼ同じ','季節による'],answer:0,exp:'海が約70%、陸が約30%'},
-            {type:'choice',q:'世界最長の川は？',choices:['ナイル川','アマゾン川','長江','ミシシッピ川'],answer:0,exp:'ナイル川（約6650km）が世界最長'},
-            {type:'text',q:'地球を南北に分ける0度の緯線を何というか答えなさい。',answer:'赤道',exp:'赤道は緯度0度。南北を分ける基準線'}
-          ],
-          '歴史・文明のおこり': [
-            {type:'choice',q:'四大文明のうち、エジプト文明が発達した川は？',choices:['ナイル川','チグリス川','インダス川','黄河'],answer:0,exp:'エジプト文明はナイル川流域'},
-            {type:'choice',q:'人類最古の文字とされるのは？',choices:['くさび形文字','甲骨文字','ヒエログリフ','漢字'],answer:0,exp:'メソポタミアのくさび形文字が最古の一つ'},
-            {type:'text',q:'日本最古の人類が使った道具を何というか答えなさい。',answer:'打製石器',exp:'旧石器時代は打製石器。磨製石器は新石器時代'}
-          ]
-        }
-      },
-      japanese: {
-        name: '国語', icon: '📖', color: 'japanese',
-        units: {
-          '漢字・語彙': [
-            {type:'choice',q:'「創造」の読み方は？',choices:['そうぞう','そうさく','そうりつ','そうい'],answer:0,exp:'創造（そうぞう）は新しいものを作り出すこと'},
-            {type:'choice',q:'「友人」の対義語は？',choices:['敵','仲間','他人','知人'],answer:0,exp:'友人の対義語は敵（てき）'},
-            {type:'text',q:'「山」の訓読みを答えなさい。',answer:'やま',exp:'山の訓読みはやま。音読みはサン'}
-          ],
-          '文法・品詞': [
-            {type:'choice',q:'「走る」の品詞は？',choices:['動詞','形容詞','副詞','名詞'],answer:0,exp:'動きを表す語は動詞'},
-            {type:'choice',q:'「とても速い」の「とても」の品詞は？',choices:['副詞','形容詞','助詞','接続詞'],answer:0,exp:'用言を修飾するのが副詞'},
-            {type:'text',q:'「美しい」の品詞を答えなさい。',answer:'形容詞',exp:'「〜い」で終わり状態・性質を表す語は形容詞'}
-          ]
-        }
-      }
-    }
-  },
-  j2: { label:'中2', subjects:{
-    math:{name:'数学',icon:'📐',color:'math',units:{'式の計算':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    english:{name:'英語',icon:'🔤',color:'english',units:{'過去形':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    science:{name:'理科',icon:'🔬',color:'science',units:{'化学変化':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    social:{name:'社会',icon:'🌍',color:'social',units:{'歴史・近世':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    japanese:{name:'国語',icon:'📖',color:'japanese',units:{'文法':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}}
-  }},
-  j3: { label:'中3', subjects:{
-    math:{name:'数学',icon:'📐',color:'math',units:{'2次方程式':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    english:{name:'英語',icon:'🔤',color:'english',units:{'不定詞・分詞':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    science:{name:'理科',icon:'🔬',color:'science',units:{'イオン':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    social:{name:'社会',icon:'🌍',color:'social',units:{'公民・政治':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    japanese:{name:'国語',icon:'📖',color:'japanese',units:{'古文':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}}
-  }},
-  h1: { label:'高1', subjects:{
-    math:{name:'数学',icon:'📐',color:'math',units:{'数と式':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    english:{name:'英語',icon:'🔤',color:'english',units:{'文型':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    science:{name:'理科',icon:'🔬',color:'science',units:{'力学':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    social:{name:'社会',icon:'🌍',color:'social',units:{'現代社会':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}},
-    japanese:{name:'国語',icon:'📖',color:'japanese',units:{'現代文':[{type:'choice',q:'(準備中)',choices:['近日公開','','',''],answer:0,exp:''}]}}
-  }}
-};
-
-// 旧QUESTIONSは互換性のために残す（j1数学にマッピング）
-var QUESTIONS={
-  math: (function(){var qs=[];Object.values(GRADE_DATA.j1.subjects.math.units).forEach(function(u){qs=qs.concat(u);});return qs;})(),
-  english: (function(){var qs=[];Object.values(GRADE_DATA.j1.subjects.english.units).forEach(function(u){qs=qs.concat(u);});return qs;})(),
-  japanese: (function(){var qs=[];Object.values(GRADE_DATA.j1.subjects.japanese.units).forEach(function(u){qs=qs.concat(u);});return qs;})(),
-  science: (function(){var qs=[];Object.values(GRADE_DATA.j1.subjects.science.units).forEach(function(u){qs=qs.concat(u);});return qs;})(),
-  social: (function(){var qs=[];Object.values(GRADE_DATA.j1.subjects.social.units).forEach(function(u){qs=qs.concat(u);});return qs;})()
-};
+var QUESTIONS={math:[{type:'choice',q:'3x + 6 = 18 のとき、x の値は？',choices:['x = 4','x = 3','x = 6','x = 2'],answer:0,exp:'3x = 12、x = 4',category:'計算'},{type:'choice',q:'(-3)² の値は？',choices:['9','-9','6','-6'],answer:0,exp:'マイナス×マイナス＝プラス。(-3)²=9',category:'計算'},{type:'choice',q:'√36 の値は？',choices:['6','5','7','4'],answer:0,exp:'6×6=36 なので √36=6',category:'計算'},{type:'choice',q:'4² - 3² の値は？',choices:['7','5','9','1'],answer:0,exp:'16-9=7',category:'計算'},{type:'choice',q:'三角形の内角の和は何度？',choices:['180度','360度','90度','270度'],answer:0,exp:'三角形の内角の和は常に180°',category:'計算'},{type:'text',q:'2x - 5 = 9 のとき、x の値を求めなさい。',answer:'7',exp:'2x=14、x=7',category:'方程式'},{type:'text',q:'連立方程式 x + y = 5、x - y = 1 を解きなさい。',answer:'x=3、y=2',exp:'2式を足すと2x=6、x=3。代入してy=2',category:'方程式'},{type:'text',q:'比例式 3:x = 6:10 のとき、x の値を求めなさい。',answer:'5',exp:'3×10=6x → x=5',category:'方程式'},{type:'text',q:'一次関数 y = 2x + 3 で、x = 4 のときの y を求めなさい。',answer:'11',exp:'y=2×4+3=11',category:'関数'},{type:'text',q:'2(x + 3) = 14 のとき、x の値を求めなさい。',answer:'4',exp:'x+3=7、x=4',category:'方程式'}],english:[{type:'choice',q:'"beautiful" の意味は？',choices:['美しい','強い','速い','悲しい'],answer:0,exp:'beautiful は「美しい」という形容詞',category:'単語'},{type:'choice',q:'"library" の意味は？',choices:['図書館','書店','病院','学校'],answer:0,exp:'library は図書館。bookstore（書店）と混同しないよう',category:'単語'},{type:'choice',q:'"have" の過去形は？',choices:['had','haved','has','having'],answer:0,exp:'have→had（不規則変化）',category:'単語'},{type:'choice',q:'"difficult" の反対語は？',choices:['easy','hard','soft','simple'],answer:0,exp:'difficult（難しい）の反対はeasy（簡単）',category:'単語'},{type:'choice',q:'"This is ( ) apple." に入る正しい語は？',choices:['an','a','the','不要'],answer:0,exp:'母音で始まる語の前はan',category:'文法'},{type:'text',q:'「私は昨日学校に行きました」を英語にしなさい。',answer:'I went to school yesterday.',exp:'go の過去形は went',category:'英作文'},{type:'text',q:'"He plays soccer." を否定文にしなさい。',answer:"He doesn't play soccer.",exp:'三人称単数現在の否定はdoesn\'t',category:'英作文'},{type:'text',q:'"I like music." を疑問文にしなさい。',answer:'Do you like music?',exp:'一般動詞の疑問文はDoを前に',category:'英作文'},{type:'text',q:'（ ）に適語を入れなさい。 I ( ) TV now.（現在進行形）',answer:'am watching',exp:'now があるので現在進行形。am + watching',category:'文法'},{type:'text',q:'（ ）に適語を入れなさい。 She is ( ) than me.（taller の形）',answer:'taller',exp:'比較級は形容詞+er。tall→taller',category:'文法'}],japanese:[{type:'choice',q:'「快晴」の読み方は？',choices:['かいせい','かっせい','かいき','くもり'],answer:0,exp:'快晴（かいせい）は雲一つない晴れ',category:'漢字'},{type:'choice',q:'「山が高い。」の「が」の品詞は？',choices:['助詞','助動詞','副詞','接続詞'],answer:0,exp:'「が」は格助詞（助詞の一種）',category:'文法'},{type:'choice',q:'「竹取物語」でかぐや姫が帰る場所は？',choices:['月','太陽','星','海'],answer:0,exp:'かぐや姫は月から来て月へ帰ります',category:'文学'},{type:'choice',q:'「起承転結」で「転」の役割は？',choices:['話を展開させる','話を始める','話をまとめる','話を受ける'],answer:0,exp:'転は展開・変化を担います',category:'表現'},{type:'choice',q:'「春はあけぼの」で有名な随筆の作者は？',choices:['清少納言','紫式部','与謝野晶子','松尾芭蕉'],answer:0,exp:'枕草子の作者は清少納言（平安時代）',category:'文学'},{type:'text',q:'「走る」の未然形を答えなさい。',answer:'走ら',exp:'「走らない」の走ら が未然形',category:'文法'},{type:'text',q:'「以心伝心」の意味を答えなさい。',answer:'言葉を使わずに心が通じ合うこと',exp:'いしんでんしん。言葉なく心が通じること',category:'四字熟語'},{type:'text',q:'「拝啓」は手紙のどの部分で使うか答えなさい。',answer:'頭語（冒頭）',exp:'拝啓は頭語。結語は敬具',category:'表現'},{type:'text',q:'「雨が降る」を尊敬語に直しなさい。',answer:'お降りになる',exp:'尊敬語はお〜になる の形が典型',category:'敬語'},{type:'text',q:'「彼女は本を読んでいる。」の主語を答えなさい。',answer:'彼女',exp:'「は」の前の彼女が主語',category:'文法'}],science:[{type:'choice',q:'光合成で植物が吸収するものは？',choices:['二酸化炭素と水','酸素と水','窒素と光','炭素と窒素'],answer:0,exp:'光合成：光・水・CO₂ → 酸素＋デンプン',category:'生物'},{type:'choice',q:'水の沸点は何℃？（1気圧）',choices:['100℃','0℃','212℃','50℃'],answer:0,exp:'1気圧で100℃が沸点。0℃は凝固点',category:'化学'},{type:'choice',q:'電流の単位は？',choices:['A（アンペア）','V（ボルト）','W（ワット）','Ω（オーム）'],answer:0,exp:'電流はA、電圧はV、抵抗はΩ',category:'物理'},{type:'choice',q:'地球の大気中で最も多い気体は？',choices:['窒素','酸素','二酸化炭素','アルゴン'],answer:0,exp:'大気の約78%は窒素',category:'地学'},{type:'choice',q:'塩酸（HCl）の液性は？',choices:['酸性','アルカリ性','中性','両性'],answer:0,exp:'塩酸は強酸性',category:'化学'},{type:'text',q:'ヒトの細胞に含まれる染色体は何本か答えなさい。',answer:'46本',exp:'23対＝46本。生殖細胞は23本',category:'生物'},{type:'text',q:'「作用・反作用の法則」はニュートンの第何法則か答えなさい。',answer:'第3法則',exp:'第1＝慣性、第2＝運動方程式、第3＝作用反作用',category:'物理'},{type:'text',q:'植物の葉で蒸散が行われる主な部分を答えなさい。',answer:'気孔',exp:'気孔は葉の裏側に多く、蒸散を行う',category:'生物'},{type:'text',q:'月が輝いて見える理由を一文で答えなさい。',answer:'太陽の光を反射するから',exp:'月は太陽の光を反射して光って見える',category:'地学'},{type:'text',q:'岩石が熱と圧力で変化したものを何というか答えなさい。',answer:'変成岩',exp:'変成岩は熱・圧力で変化した岩石',category:'地学'}],social:[{type:'choice',q:'世界で最も面積が大きい国は？',choices:['ロシア','カナダ','アメリカ','中国'],answer:0,exp:'ロシア約1710万km²で世界最大',category:'地理'},{type:'choice',q:'日本の国会は何院制？',choices:['二院制','一院制','三院制','四院制'],answer:0,exp:'衆議院と参議院の二院制',category:'公民'},{type:'choice',q:'フランス革命が起きたのは何年？',choices:['1789年','1776年','1848年','1815年'],answer:0,exp:'1789年。バスティーユ牢獄襲撃が象徴',category:'歴史'},{type:'choice',q:'需要が増えると価格はどうなる？',choices:['上がる','下がる','変わらない','ゼロになる'],answer:0,exp:'需要増→希少性上昇→価格上昇',category:'公民'},{type:'choice',q:'日本国憲法の三大原則の組み合わせは？',choices:['国民主権・基本的人権・平和主義','民主主義・議会主義・法治主義','資本主義・自由主義・三権分立','人権・民主・福祉'],answer:0,exp:'①国民主権 ②基本的人権の尊重 ③平和主義',category:'公民'},{type:'text',q:'江戸幕府を開いたのは誰か答えなさい。',answer:'徳川家康',exp:'1603年、徳川家康が征夷大将軍となり江戸幕府開府',category:'歴史'},{type:'text',q:'日本国憲法が施行されたのは何年か答えなさい。',answer:'1947年',exp:'1946年11月3日公布、1947年5月3日施行',category:'歴史'},{type:'text',q:'国連本部はどこにあるか答えなさい。',answer:'ニューヨーク',exp:'アメリカのニューヨーク市',category:'地理'},{type:'text',q:'日本で最も長い川を答えなさい。',answer:'信濃川',exp:'信濃川（367km）が最長。利根川は流域面積最大',category:'地理'},{type:'text',q:'日本の首都を答えなさい。',answer:'東京',exp:'東京都。1869年に江戸から遷都',category:'地理'}]};
 var SUBJECT_NAMES={math:'数学',english:'英語',japanese:'国語',science:'理科',social:'社会'};
 var appMode='quiz';
-var currentGrade='j1';
-var currentSubjectKey=null;
-var selectedUnitKeys=[];
 var state={user:null,currentSubject:null,currentQuestions:[],currentIndex:0,correctCount:0,answered:false};
 var printState={subject:null,selectedTypes:{},counts:{},questions:[],timerSec:0,timerInterval:null,graded:false,results:[]};
 var printLastSetup={subject:null,types:{},counts:{}};
 
-function getUsers(){try{return JSON.parse(localStorage.getItem('soy2_users')||'{}')}catch(e){return{}}}
-function saveUsers(u){localStorage.setItem('soy2_users',JSON.stringify(u))}
-function getCurrentUser(){try{return JSON.parse(localStorage.getItem('soy2_current')||'null')}catch(e){return null}}
-function saveCurrentUser(u){localStorage.setItem('soy2_current',JSON.stringify(u))}
-function clearAllData(){
-  if(!confirm('保存されたデータをすべて削除します。よろしいですか？'))return;
-  localStorage.clear();
-  showToast('データをリセットしました。新規登録できます！');
-}
+function getUsers(){try{return JSON.parse(localStorage.getItem('soy_users')||'{}')}catch(e){return{}}}
+function saveUsers(u){localStorage.setItem('soy_users',JSON.stringify(u))}
+function getCurrentUser(){try{return JSON.parse(localStorage.getItem('soy_current')||'null')}catch(e){return null}}
+function saveCurrentUser(u){localStorage.setItem('soy_current',JSON.stringify(u))}
 
 function switchLoginTab(t){
   var b=document.querySelectorAll('.tab-btn');
@@ -761,8 +570,8 @@ function doRegister(){
   users[u]=nu;saveUsers(users);state.user=nu;saveCurrentUser(nu);enterApp();
 }
 function doGuest(){state.user={name:'ゲスト',username:'guest',grade:'',points:0,totalAnswered:0,totalCorrect:0,history:{}};enterApp();}
-function doLogout(){if(!confirm('ログアウトしますか？'))return;state.user=null;localStorage.removeItem('soy2_current');showScreen('login');}
-function enterApp(){updateHomeStats();updateProfile();buildRanking();buildSubjectGrid();showScreen('home');document.getElementById('bottom-nav').style.display='flex';}
+function doLogout(){if(!confirm('ログアウトしますか？'))return;state.user=null;localStorage.removeItem('soy_current');showScreen('login');}
+function enterApp(){updateHomeStats();updateProfile();buildRanking();showScreen('home');document.getElementById('bottom-nav').style.display='flex';}
 
 function showScreen(n){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
@@ -771,7 +580,7 @@ function showScreen(n){
   document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});
   if(nm[n]){var el=document.getElementById(nm[n]);if(el)el.classList.add('active');}
   if(n==='gift'){var gp=document.getElementById('gift-points');if(gp)gp.textContent=(state.user&&state.user.points)||0;}
-  var hideNav=['login','quiz','print','print-setup','print-result','gift-confirm','gift-voucher','unit'].indexOf(n)!==-1;
+  var hideNav=['login','quiz','print','print-setup','print-result','gift-confirm','gift-voucher'].indexOf(n)!==-1;
   document.getElementById('bottom-nav').style.display=hideNav?'none':'flex';
   if(n!=='print')stopTimer();
 }
@@ -781,133 +590,7 @@ function setMode(m){
   document.getElementById('mode-btn-quiz').classList.toggle('active',m==='quiz');
   document.getElementById('mode-btn-print').classList.toggle('active',m==='print');
 }
-
-function setGrade(g){
-  currentGrade=g;
-  document.querySelectorAll('.grade-tab').forEach(function(b,i){
-    var grades=['j1','j2','j3','h1'];
-    b.classList.toggle('active',grades[i]===g);
-  });
-  buildSubjectGrid();
-}
-
-function buildSubjectGrid(){
-  var grid=document.getElementById('subject-grid');
-  if(!grid)return;
-  var gd=GRADE_DATA[currentGrade];
-  var subjects=gd.subjects;
-  var keys=Object.keys(subjects);
-  grid.innerHTML='';
-  keys.forEach(function(key,idx){
-    var s=subjects[key];
-    var totalQ=0;
-    Object.values(s.units).forEach(function(u){totalQ+=u.length;});
-    var isLast=idx===keys.length-1&&keys.length%2!==0;
-    var btn=document.createElement('button');
-    btn.className='subject-card '+s.color;
-    if(isLast)btn.style.gridColumn='span 2';
-    btn.innerHTML='<div class="s-icon">'+s.icon+'</div>'
-      +'<div class="s-name">'+s.name+'</div>'
-      +'<div class="s-count">'+totalQ+'問</div>'
-      +'<div class="s-progress"><div class="s-progress-bar" style="width:0%"></div></div>';
-    btn.onclick=(function(k){return function(){onSubjectClick(k);};})(key);
-    grid.appendChild(btn);
-  });
-}
-
-function onSubjectClick(subjectKey){
-  currentSubjectKey=subjectKey;
-  var gd=GRADE_DATA[currentGrade];
-  var s=gd.subjects[subjectKey];
-  document.getElementById('unit-screen-title').textContent=gd.label+' '+s.name+' 単元選択';
-  selectedUnitKeys=[];
-  var list=document.getElementById('unit-list');
-  list.innerHTML='';
-  Object.keys(s.units).forEach(function(unitName){
-    var qs=s.units[unitName];
-    var item=document.createElement('div');
-    item.className='unit-item';
-    item.id='unit-'+unitName;
-    item.innerHTML='<div class="unit-check">&#10003;</div>'
-      +'<div class="unit-info"><div class="unit-name">'+unitName+'</div>'
-      +'<div class="unit-count">'+qs.length+'問</div></div>';
-    item.onclick=(function(n){return function(){toggleUnit(n);};})(unitName);
-    list.appendChild(item);
-  });
-  updateUnitStartBtn();
-  showScreen('unit');
-}
-
-function toggleUnit(name){
-  var item=document.getElementById('unit-'+name);
-  var idx=selectedUnitKeys.indexOf(name);
-  if(idx===-1){selectedUnitKeys.push(name);item.classList.add('selected');}
-  else{selectedUnitKeys.splice(idx,1);item.classList.remove('selected');}
-  updateUnitStartBtn();
-}
-
-function selectAllUnits(){
-  var s=GRADE_DATA[currentGrade].subjects[currentSubjectKey];
-  selectedUnitKeys=Object.keys(s.units);
-  selectedUnitKeys.forEach(function(n){var el=document.getElementById('unit-'+n);if(el)el.classList.add('selected');});
-  updateUnitStartBtn();
-}
-
-function clearAllUnits(){
-  selectedUnitKeys=[];
-  document.querySelectorAll('.unit-item').forEach(function(el){el.classList.remove('selected');});
-  updateUnitStartBtn();
-}
-
-function updateUnitStartBtn(){
-  var btn=document.getElementById('unit-start-btn');
-  if(!btn)return;
-  var n=selectedUnitKeys.length;
-  btn.disabled=n===0;
-  btn.textContent=n===0?'単元を選んでください':n+'単元を選択中 → 始める ➜';
-}
-
-function startFromUnits(){
-  if(selectedUnitKeys.length===0){showToast('単元を1つ以上選んでください');return;}
-  var s=GRADE_DATA[currentGrade].subjects[currentSubjectKey];
-  var qs=[];
-  selectedUnitKeys.forEach(function(n){
-    if(s.units[n])qs=qs.concat(s.units[n].map(function(q){return Object.assign({},q,{category:n});}));
-  });
-  qs=qs.filter(function(q){return q.q!=='(準備中)';});
-  if(qs.length===0){showToast('この単元はまだ準備中です');return;}
-  if(appMode==='quiz'){
-    state.currentSubject=currentSubjectKey;
-    state.currentQuestions=shuffle(qs);
-    state.currentIndex=0;state.correctCount=0;state.answered=false;
-    document.getElementById('quiz-subject-title').textContent=
-      GRADE_DATA[currentGrade].label+' '+s.name;
-    showScreen('quiz');renderQuestion();
-  } else {
-    printState.subject=currentSubjectKey;
-    var cats={};
-    qs.forEach(function(q){if(!cats[q.category])cats[q.category]=[];cats[q.category].push(q);});
-    printState.selectedTypes={};printState.counts={};
-    Object.keys(cats).forEach(function(c){printState.selectedTypes[c]=true;printState.counts[c]=cats[c].length;});
-    document.getElementById('print-setup-title').textContent=
-      GRADE_DATA[currentGrade].label+' '+s.name+' プリント設定';
-    var tg=document.getElementById('type-grid'),cr=document.getElementById('count-rows');
-    tg.innerHTML='';cr.innerHTML='';
-    Object.keys(cats).forEach(function(cat,i){
-      var item=document.createElement('div');item.className='type-item selected';item.id='ti-'+i;
-      item.innerHTML='<input type="checkbox" id="chk-'+i+'" checked onchange="toggleType(\''+cat+'\','+i+')">'
-        +'<label for="chk-'+i+'">'+cat+'（'+cats[cat].length+'問）</label>';
-      tg.appendChild(item);
-      var row=document.createElement('div');row.className='count-row';row.id='cr-'+cat;
-      row.innerHTML='<span class="ct-label">'+cat+'</span><div class="count-stepper">'
-        +'<button onclick="chgCnt(\''+cat+'\',-1)">－</button>'
-        +'<span id="cv-'+cat+'">'+printState.counts[cat]+'</span>'
-        +'<button onclick="chgCnt(\''+cat+'\',1,'+cats[cat].length+')">＋</button></div>';
-      cr.appendChild(row);
-    });
-    showScreen('print-setup');
-  }
-}
+function onSubjectClick(s){if(appMode==='quiz')startSubject(s);else openPrintSetup(s);}
 
 function updateHomeStats(){
   var u=state.user;
@@ -1316,12 +999,7 @@ function showVoucher(g,record,now,code){
   showScreen('gift-voucher');
 }
 
-(function init(){
-  // 旧キーの残骸を削除
-  localStorage.removeItem('soy_users');
-  localStorage.removeItem('soy_current');
-  var s=getCurrentUser();if(s){state.user=s;enterApp();}
-})();
+(function init(){var s=getCurrentUser();if(s){state.user=s;enterApp();}})();
 </script>
 </body>
 </html>
