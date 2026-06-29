@@ -5,273 +5,199 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Study on You</title>
 <style>
-  :root {
-    --blue: #4A90E2;
-    --blue-dark: #2C6FC7;
-    --green: #27AE60;
-    --red: #E74C3C;
-    --yellow: #F39C12;
-    --purple: #8E44AD;
-    --orange: #E67E22;
-    --bg: #F5F7FA;
-    --card: #FFFFFF;
-    --text: #2C3E50;
-    --text-sub: #7F8C8D;
-    --border: #E0E6ED;
-    --radius: 14px;
-    --shadow: 0 2px 12px rgba(0,0,0,0.08);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body { font-family: -apple-system, 'Hiragino Sans', 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
-  /* ===== 画面共通 ===== */
-  .screen { display: none; min-height: 100vh; padding-bottom: 80px; }
-  .screen.active { display: block; }
-
-  /* ===== ヘッダー ===== */
-  .header {
-    background: var(--blue);
-    color: #fff;
-    padding: 16px 20px 14px;
-    position: sticky; top: 0; z-index: 100;
-    display: flex; align-items: center; gap: 12px;
-  }
-  .header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.5px; flex: 1; }
-  .header .back-btn {
-    background: rgba(255,255,255,0.2);
-    border: none; border-radius: 8px;
-    color: #fff; font-size: 14px;
-    padding: 6px 12px; cursor: pointer;
-  }
-  .header .user-badge {
-    background: rgba(255,255,255,0.25);
-    border-radius: 20px; padding: 4px 12px;
-    font-size: 13px; font-weight: 600;
-  }
-
-  /* ===== ボトムナビ ===== */
-  .bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: #fff;
-    border-top: 1px solid var(--border);
-    display: flex;
-    z-index: 200;
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-  .nav-item {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 10px 4px 8px;
-    cursor: pointer;
-    border: none; background: none;
-    color: var(--text-sub); font-size: 10px; gap: 4px;
-    text-decoration: none;
-  }
-  .nav-item.active { color: var(--blue); }
-  .nav-item svg { width: 24px; height: 24px; }
-
-  /* ===== ログイン画面 ===== */
-  #screen-login {
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    min-height: 100vh; padding: 40px 24px;
-  }
-  .login-logo {
-    font-size: 32px; font-weight: 800;
-    color: var(--blue); margin-bottom: 6px;
-    letter-spacing: -0.5px;
-  }
-  .login-sub { color: var(--text-sub); font-size: 14px; margin-bottom: 40px; }
-  .login-card {
-    background: var(--card); border-radius: var(--radius);
-    padding: 28px 24px; width: 100%; max-width: 360px;
-    box-shadow: var(--shadow);
-  }
-  .login-card h2 { font-size: 18px; margin-bottom: 20px; }
-  .form-group { margin-bottom: 16px; }
-  .form-group label { font-size: 13px; color: var(--text-sub); display: block; margin-bottom: 6px; }
-  .form-group input {
-    width: 100%; padding: 12px 14px;
-    border: 1.5px solid var(--border); border-radius: 10px;
-    font-size: 15px; outline: none;
-    -webkit-appearance: none;
-    transition: border 0.2s;
-  }
-  .form-group input:focus { border-color: var(--blue); }
-  .btn-primary {
-    width: 100%; padding: 14px;
-    background: var(--blue); color: #fff;
-    border: none; border-radius: 10px;
-    font-size: 16px; font-weight: 700;
-    cursor: pointer; margin-top: 8px;
-  }
-  .btn-primary:active { background: var(--blue-dark); }
-  .login-switch { text-align: center; margin-top: 16px; font-size: 14px; color: var(--text-sub); }
-  .login-switch span { color: var(--blue); font-weight: 600; cursor: pointer; }
-  .guest-btn {
-    margin-top: 16px; width: 100%; padding: 12px;
-    background: transparent; border: 1.5px solid var(--border);
-    border-radius: 10px; font-size: 14px; color: var(--text-sub);
-    cursor: pointer;
-  }
-  .tab-btns { display: flex; margin-bottom: 20px; border-radius: 10px; overflow: hidden; border: 1.5px solid var(--border); }
-  .tab-btn { flex: 1; padding: 10px; border: none; background: #fff; font-size: 14px; cursor: pointer; font-weight: 600; color: var(--text-sub); }
-  .tab-btn.active { background: var(--blue); color: #fff; }
-
-  /* ===== ホーム画面 ===== */
-  .home-hero {
-    background: linear-gradient(135deg, var(--blue) 0%, #6C63FF 100%);
-    padding: 24px 20px 32px; color: #fff;
-  }
-  .home-hero .greeting { font-size: 14px; opacity: 0.85; margin-bottom: 4px; }
-  .home-hero .name { font-size: 24px; font-weight: 800; margin-bottom: 16px; }
-  .stats-row { display: flex; gap: 10px; }
-  .stat-chip {
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px; padding: 10px 14px; flex: 1; text-align: center;
-  }
-  .stat-chip .val { font-size: 22px; font-weight: 800; }
-  .stat-chip .lbl { font-size: 11px; opacity: 0.85; margin-top: 2px; }
-
-  .section-title { font-size: 16px; font-weight: 700; padding: 20px 20px 10px; }
-  .subject-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 0 16px; }
-  .subject-card {
-    background: var(--card); border-radius: var(--radius);
-    padding: 18px 16px; box-shadow: var(--shadow);
-    cursor: pointer; border: none; text-align: left;
-    position: relative; overflow: hidden;
-  }
-  .subject-card::before {
-    content: ''; position: absolute; top: 0; left: 0; right: 0;
-    height: 4px;
-  }
-  .subject-card.math::before { background: var(--blue); }
-  .subject-card.english::before { background: var(--green); }
-  .subject-card.japanese::before { background: var(--red); }
-  .subject-card.science::before { background: var(--orange); }
-  .subject-card.social::before { background: var(--purple); }
-  .subject-card .s-icon { font-size: 28px; margin-bottom: 8px; }
-  .subject-card .s-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .subject-card .s-count { font-size: 12px; color: var(--text-sub); }
-  .subject-card .s-progress {
-    margin-top: 10px; height: 4px; background: var(--border);
-    border-radius: 2px; overflow: hidden;
-  }
-  .subject-card .s-progress-bar { height: 100%; border-radius: 2px; }
-  .subject-card.math .s-progress-bar { background: var(--blue); }
-  .subject-card.english .s-progress-bar { background: var(--green); }
-  .subject-card.japanese .s-progress-bar { background: var(--red); }
-  .subject-card.science .s-progress-bar { background: var(--orange); }
-  .subject-card.social .s-progress-bar { background: var(--purple); }
-
-  /* ===== 問題画面 ===== */
-  .quiz-progress-bar { height: 4px; background: var(--border); }
-  .quiz-progress-fill { height: 100%; background: var(--blue); transition: width 0.3s; }
-  .quiz-meta { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; font-size: 13px; color: var(--text-sub); }
-  .quiz-body { padding: 20px; }
-  .quiz-question { font-size: 18px; font-weight: 600; line-height: 1.6; margin-bottom: 24px; }
-  .choice-list { display: flex; flex-direction: column; gap: 12px; }
-  .choice-btn {
-    width: 100%; padding: 16px;
-    background: var(--card); border: 2px solid var(--border);
-    border-radius: var(--radius); font-size: 15px;
-    text-align: left; cursor: pointer; font-family: inherit;
-    transition: all 0.15s; line-height: 1.5;
-  }
-  .choice-btn:active { transform: scale(0.98); }
-  .choice-btn.correct { border-color: var(--green); background: #E8F8EF; color: #1A7A3F; }
-  .choice-btn.wrong { border-color: var(--red); background: #FEF0EF; color: #C0392B; }
-  .choice-btn.disabled { cursor: default; }
-  .explanation-box {
-    margin-top: 20px; padding: 16px;
-    background: #EEF4FF; border-radius: var(--radius);
-    border-left: 4px solid var(--blue);
-    font-size: 14px; line-height: 1.6; color: var(--text);
-  }
-  .explanation-box .ex-label { font-weight: 700; color: var(--blue); margin-bottom: 6px; font-size: 13px; }
-  .next-btn {
-    width: calc(100% - 40px); margin: 20px 20px 0;
-    padding: 16px; background: var(--blue); color: #fff;
-    border: none; border-radius: var(--radius);
-    font-size: 16px; font-weight: 700; cursor: pointer;
-  }
-
-  /* ===== 結果画面 ===== */
-  .result-body { padding: 30px 20px; text-align: center; }
-  .result-emoji { font-size: 72px; margin-bottom: 16px; }
-  .result-score { font-size: 48px; font-weight: 800; color: var(--blue); }
-  .result-label { font-size: 16px; color: var(--text-sub); margin-bottom: 24px; }
-  .result-msg { font-size: 18px; font-weight: 600; margin-bottom: 32px; line-height: 1.5; }
-  .result-actions { display: flex; flex-direction: column; gap: 12px; }
-  .btn-secondary {
-    padding: 14px; border: 2px solid var(--blue);
-    border-radius: var(--radius); background: #fff;
-    color: var(--blue); font-size: 15px; font-weight: 700; cursor: pointer;
-  }
-
-  /* ===== ランキング画面 ===== */
-  .rank-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .rank-item {
-    background: var(--card); border-radius: var(--radius);
-    padding: 14px 16px; display: flex; align-items: center;
-    gap: 14px; box-shadow: var(--shadow);
-  }
-  .rank-num { font-size: 20px; font-weight: 800; width: 30px; text-align: center; }
-  .rank-num.gold { color: #F1C40F; }
-  .rank-num.silver { color: #BDC3C7; }
-  .rank-num.bronze { color: #CA6F1E; }
-  .rank-avatar {
-    width: 44px; height: 44px; border-radius: 50%;
-    background: var(--blue); color: #fff;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; font-weight: 700;
-  }
-  .rank-info { flex: 1; }
-  .rank-name { font-size: 15px; font-weight: 700; }
-  .rank-detail { font-size: 12px; color: var(--text-sub); margin-top: 2px; }
-  .rank-pt { font-size: 18px; font-weight: 800; color: var(--blue); }
-
-  /* ===== プロフィール画面 ===== */
-  .profile-hero {
-    background: linear-gradient(135deg, var(--blue) 0%, #6C63FF 100%);
-    padding: 30px 20px; text-align: center; color: #fff;
-  }
-  .profile-avatar {
-    width: 72px; height: 72px; border-radius: 50%;
-    background: rgba(255,255,255,0.3);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 30px; font-weight: 800; margin: 0 auto 12px;
-    color: #fff;
-  }
-  .profile-name { font-size: 20px; font-weight: 800; }
-  .profile-grade { font-size: 14px; opacity: 0.85; margin-top: 4px; }
-  .profile-stats { display: flex; justify-content: center; gap: 0; margin-top: 20px; }
-  .p-stat { flex: 1; text-align: center; border-right: 1px solid rgba(255,255,255,0.3); }
-  .p-stat:last-child { border-right: none; }
-  .p-stat .val { font-size: 22px; font-weight: 800; }
-  .p-stat .lbl { font-size: 11px; opacity: 0.8; margin-top: 2px; }
-  .profile-section { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-  .profile-row {
-    background: var(--card); border-radius: var(--radius);
-    padding: 16px; display: flex; align-items: center;
-    justify-content: space-between; box-shadow: var(--shadow);
-  }
-  .profile-row .p-label { font-size: 14px; color: var(--text-sub); }
-  .profile-row .p-value { font-size: 15px; font-weight: 600; }
-
-  /* ===== エラー/トースト ===== */
-  .toast {
-    position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
-    background: #2C3E50; color: #fff; padding: 12px 20px;
-    border-radius: 30px; font-size: 14px; font-weight: 600;
-    opacity: 0; transition: opacity 0.3s; z-index: 999; white-space: nowrap;
-  }
-  .toast.show { opacity: 1; }
+  :root{--blue:#4A90E2;--blue-dark:#2C6FC7;--green:#27AE60;--red:#E74C3C;--yellow:#F39C12;--purple:#8E44AD;--orange:#E67E22;--bg:#F5F7FA;--card:#FFFFFF;--text:#2C3E50;--text-sub:#7F8C8D;--border:#E0E6ED;--radius:14px;--shadow:0 2px 12px rgba(0,0,0,0.08);}
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{font-family:-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
+  .screen{display:none;min-height:100vh;padding-bottom:80px;}
+  .screen.active{display:block;}
+  .header{background:var(--blue);color:#fff;padding:16px 20px 14px;position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:12px;}
+  .header h1{font-size:18px;font-weight:700;flex:1;}
+  .back-btn{background:rgba(255,255,255,0.2);border:none;border-radius:8px;color:#fff;font-size:14px;padding:6px 12px;cursor:pointer;}
+  .bottom-nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--border);display:flex;z-index:200;padding-bottom:env(safe-area-inset-bottom);}
+  .nav-item{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 4px 8px;cursor:pointer;border:none;background:none;color:var(--text-sub);font-size:10px;gap:4px;}
+  .nav-item.active{color:var(--blue);}
+  .nav-item svg{width:24px;height:24px;}
+  /* Login */
+  #screen-login{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:40px 24px;}
+  .login-logo{font-size:32px;font-weight:800;color:var(--blue);margin-bottom:6px;}
+  .login-sub{color:var(--text-sub);font-size:14px;margin-bottom:40px;}
+  .login-card{background:var(--card);border-radius:var(--radius);padding:28px 24px;width:100%;max-width:360px;box-shadow:var(--shadow);}
+  .form-group{margin-bottom:16px;}
+  .form-group label{font-size:13px;color:var(--text-sub);display:block;margin-bottom:6px;}
+  .form-group input,.form-group select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;outline:none;-webkit-appearance:none;background:#fff;}
+  .form-group input:focus{border-color:var(--blue);}
+  .btn-primary{width:100%;padding:14px;background:var(--blue);color:#fff;border:none;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;}
+  .btn-secondary{padding:14px;border:2px solid var(--blue);border-radius:var(--radius);background:#fff;color:var(--blue);font-size:15px;font-weight:700;cursor:pointer;width:100%;}
+  .guest-btn{margin-top:16px;width:100%;padding:12px;background:transparent;border:1.5px solid var(--border);border-radius:10px;font-size:14px;color:var(--text-sub);cursor:pointer;}
+  .tab-btns{display:flex;margin-bottom:20px;border-radius:10px;overflow:hidden;border:1.5px solid var(--border);}
+  .tab-btn{flex:1;padding:10px;border:none;background:#fff;font-size:14px;cursor:pointer;font-weight:600;color:var(--text-sub);}
+  .tab-btn.active{background:var(--blue);color:#fff;}
+  /* Home */
+  .home-hero{background:linear-gradient(135deg,var(--blue) 0%,#6C63FF 100%);padding:24px 20px 32px;color:#fff;}
+  .home-hero .greeting{font-size:14px;opacity:.85;margin-bottom:4px;}
+  .home-hero .name{font-size:24px;font-weight:800;margin-bottom:16px;}
+  .stats-row{display:flex;gap:10px;}
+  .stat-chip{background:rgba(255,255,255,0.2);border-radius:10px;padding:10px 14px;flex:1;text-align:center;}
+  .stat-chip .val{font-size:22px;font-weight:800;}
+  .stat-chip .lbl{font-size:11px;opacity:.85;margin-top:2px;}
+  .section-title{font-size:16px;font-weight:700;padding:20px 20px 10px;}
+  .mode-toggle{display:flex;gap:8px;padding:0 16px 16px;}
+  .mode-btn{flex:1;padding:10px;border-radius:10px;border:2px solid var(--border);background:#fff;font-size:13px;font-weight:700;color:var(--text-sub);cursor:pointer;text-align:center;}
+  .mode-btn.active{border-color:var(--blue);background:#EEF4FF;color:var(--blue);}
+  .subject-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:0 16px;}
+  .subject-card{background:var(--card);border-radius:var(--radius);padding:18px 16px;box-shadow:var(--shadow);cursor:pointer;border:none;text-align:left;position:relative;overflow:hidden;}
+  .subject-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;}
+  .subject-card.math::before{background:var(--blue);}
+  .subject-card.english::before{background:var(--green);}
+  .subject-card.japanese::before{background:var(--red);}
+  .subject-card.science::before{background:var(--orange);}
+  .subject-card.social::before{background:var(--purple);}
+  .subject-card .s-icon{font-size:28px;margin-bottom:8px;}
+  .subject-card .s-name{font-size:15px;font-weight:700;margin-bottom:4px;}
+  .subject-card .s-count{font-size:12px;color:var(--text-sub);}
+  .subject-card .s-progress{margin-top:10px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+  .subject-card .s-progress-bar{height:100%;border-radius:2px;}
+  .subject-card.math .s-progress-bar{background:var(--blue);}
+  .subject-card.english .s-progress-bar{background:var(--green);}
+  .subject-card.japanese .s-progress-bar{background:var(--red);}
+  .subject-card.science .s-progress-bar{background:var(--orange);}
+  .subject-card.social .s-progress-bar{background:var(--purple);}
+  /* Quiz */
+  .quiz-progress-bar{height:4px;background:var(--border);}
+  .quiz-progress-fill{height:100%;background:var(--blue);transition:width 0.3s;}
+  .quiz-meta{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;font-size:13px;color:var(--text-sub);}
+  .quiz-body{padding:20px;}
+  .quiz-question{font-size:18px;font-weight:600;line-height:1.6;margin-bottom:24px;}
+  .choice-list{display:flex;flex-direction:column;gap:12px;}
+  .choice-btn{width:100%;padding:16px;background:var(--card);border:2px solid var(--border);border-radius:var(--radius);font-size:15px;text-align:left;cursor:pointer;font-family:inherit;line-height:1.5;}
+  .choice-btn.correct{border-color:var(--green);background:#E8F8EF;color:#1A7A3F;}
+  .choice-btn.wrong{border-color:var(--red);background:#FEF0EF;color:#C0392B;}
+  .choice-btn.disabled{cursor:default;}
+  .explanation-box{margin-top:20px;padding:16px;background:#EEF4FF;border-radius:var(--radius);border-left:4px solid var(--blue);font-size:14px;line-height:1.6;}
+  .explanation-box .ex-label{font-weight:700;color:var(--blue);margin-bottom:6px;font-size:13px;}
+  .next-btn{width:calc(100% - 40px);margin:20px 20px 0;padding:16px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;}
+  /* Quiz Result */
+  .result-body{padding:30px 20px;text-align:center;}
+  .result-emoji{font-size:72px;margin-bottom:16px;}
+  .result-score{font-size:48px;font-weight:800;color:var(--blue);}
+  .result-label{font-size:16px;color:var(--text-sub);margin-bottom:8px;}
+  .result-pt-badge{background:#FFF8E1;border:2px solid var(--yellow);border-radius:12px;padding:12px 20px;margin-bottom:20px;font-size:15px;color:#856404;font-weight:700;}
+  .result-msg{font-size:18px;font-weight:600;margin-bottom:32px;line-height:1.5;}
+  .result-actions{display:flex;flex-direction:column;gap:12px;}
+  /* Print Setup */
+  .print-setup{padding:20px;}
+  .setup-card{background:var(--card);border-radius:var(--radius);padding:20px;margin-bottom:16px;box-shadow:var(--shadow);}
+  .setup-card h3{font-size:15px;font-weight:700;margin-bottom:14px;}
+  .type-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+  .type-item{display:flex;align-items:center;gap:8px;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;background:#fff;}
+  .type-item.selected{border-color:var(--blue);background:#EEF4FF;}
+  .type-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--blue);cursor:pointer;}
+  .type-item label{font-size:13px;font-weight:600;cursor:pointer;}
+  .count-row{display:flex;align-items:center;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);}
+  .count-row:last-child{border-bottom:none;}
+  .count-row .ct-label{font-size:14px;flex:1;}
+  .count-stepper{display:flex;align-items:center;gap:12px;}
+  .count-stepper button{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  .count-stepper span{font-size:16px;font-weight:700;min-width:24px;text-align:center;}
+  .start-print-btn{width:100%;padding:16px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;margin-top:8px;}
+  /* Print Sheet */
+  .print-header-bar{background:var(--blue);color:#fff;padding:14px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;}
+  .print-header-bar h1{font-size:17px;font-weight:700;flex:1;}
+  .print-timer{font-size:20px;font-weight:800;font-variant-numeric:tabular-nums;}
+  .print-sheet{background:#fff;margin:16px;border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;}
+  .print-sheet-header{background:#f8f9fa;padding:16px 20px;border-bottom:2px solid var(--border);}
+  .print-sheet-header h2{font-size:18px;font-weight:800;}
+  .sheet-meta{font-size:12px;color:var(--text-sub);margin-top:4px;}
+  .print-name-row{display:flex;align-items:center;gap:12px;margin-top:12px;}
+  .print-name-row label{font-size:13px;color:var(--text-sub);white-space:nowrap;}
+  .name-line{flex:1;border:none;border-bottom:1.5px solid var(--text);padding:4px 0;font-size:14px;outline:none;background:transparent;}
+  .score-box{border:2px solid var(--border);border-radius:8px;padding:8px 16px;text-align:center;min-width:80px;}
+  .score-box .score-label{font-size:10px;color:var(--text-sub);}
+  .score-box .score-val{font-size:20px;font-weight:800;color:var(--blue);}
+  .section-block{padding:16px 20px;border-bottom:1px solid var(--border);}
+  .section-block:last-child{border-bottom:none;}
+  .section-label{font-size:13px;font-weight:700;color:var(--text-sub);letter-spacing:.5px;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--border);}
+  .print-q-item{margin-bottom:20px;}
+  .print-q-item:last-child{margin-bottom:0;}
+  .print-q-num{font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px;}
+  .print-q-text{font-size:15px;line-height:1.6;font-weight:500;margin-bottom:10px;}
+  .print-choices{display:grid;grid-template-columns:1fr 1fr;gap:6px;}
+  .print-choice{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1.5px solid var(--border);border-radius:8px;cursor:pointer;background:#fff;}
+  .print-choice.selected{border-color:var(--blue);background:#EEF4FF;}
+  .print-choice.graded-correct{border-color:var(--green);background:#E8F8EF;}
+  .print-choice.graded-wrong{border-color:var(--red);background:#FEF0EF;}
+  .print-choice-mark{width:22px;height:22px;border-radius:50%;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;background:#fff;}
+  .print-choice.selected .print-choice-mark{border-color:var(--blue);background:var(--blue);color:#fff;}
+  .print-choice.graded-correct .print-choice-mark{border-color:var(--green);background:var(--green);color:#fff;}
+  .print-choice.graded-wrong .print-choice-mark{border-color:var(--red);background:var(--red);color:#fff;}
+  .print-choice-text{font-size:13px;line-height:1.4;}
+  .print-answer-input{width:100%;border:none;border-bottom:2px solid var(--border);padding:8px 4px;font-size:16px;background:transparent;outline:none;font-family:inherit;resize:none;min-height:44px;color:var(--text);}
+  .print-answer-input:focus{border-bottom-color:var(--blue);}
+  .print-answer-input.graded-correct{border-bottom-color:var(--green);background:#E8F8EF;padding:8px;border-radius:6px;border:1.5px solid var(--green);}
+  .print-answer-input.graded-wrong{border-bottom-color:var(--red);background:#FEF0EF;padding:8px;border-radius:6px;border:1.5px solid var(--red);}
+  .grade-feedback{margin-top:8px;padding:8px 12px;border-radius:8px;font-size:13px;line-height:1.5;}
+  .grade-feedback.correct{background:#E8F8EF;color:#1A7A3F;}
+  .grade-feedback.wrong{background:#FEF0EF;color:#C0392B;}
+  .grade-feedback .fb-label{font-weight:700;margin-bottom:2px;}
+  .print-action-bar{padding:16px 20px;background:#fff;border-top:1px solid var(--border);display:flex;gap:10px;}
+  .submit-btn{flex:1;padding:14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:700;cursor:pointer;}
+  .submit-btn:disabled{background:var(--text-sub);cursor:default;}
+  .pdf-btn{padding:14px 16px;background:var(--card);border:1.5px solid var(--border);border-radius:var(--radius);font-size:13px;font-weight:700;color:var(--text-sub);cursor:pointer;}
+  .grading-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:flex;align-items:center;justify-content:center;}
+  .grading-card{background:#fff;border-radius:20px;padding:32px 28px;text-align:center;max-width:280px;}
+  .spinner{width:48px;height:48px;border:4px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .grading-card h3{font-size:17px;font-weight:700;margin-bottom:8px;}
+  .grading-card p{font-size:13px;color:var(--text-sub);line-height:1.5;}
+  /* Print Result */
+  .print-result-hero{background:linear-gradient(135deg,var(--blue) 0%,#6C63FF 100%);padding:30px 20px;text-align:center;color:#fff;}
+  .print-result-score{font-size:56px;font-weight:800;}
+  .print-result-max{font-size:20px;opacity:.75;}
+  .print-result-pct{font-size:18px;margin-top:4px;opacity:.9;}
+  .print-result-msg{font-size:16px;margin-top:8px;}
+  .pt-earned{background:rgba(255,255,255,0.2);border-radius:12px;padding:10px 20px;display:inline-block;margin-top:12px;font-size:15px;font-weight:700;}
+  .review-list{padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .review-item{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border-left:4px solid var(--border);}
+  .review-item.correct-item{border-left-color:var(--green);}
+  .review-item.wrong-item{border-left-color:var(--red);}
+  .ri-status{font-size:12px;font-weight:700;margin-bottom:6px;}
+  .correct-item .ri-status{color:var(--green);}
+  .wrong-item .ri-status{color:var(--red);}
+  .ri-q{font-size:14px;font-weight:600;margin-bottom:6px;line-height:1.5;}
+  .ri-your{font-size:13px;color:var(--text-sub);margin-bottom:4px;}
+  .ri-correct{font-size:13px;color:var(--green);font-weight:600;}
+  .ri-exp{font-size:12px;color:var(--text-sub);margin-top:6px;line-height:1.5;}
+  /* Ranking/Profile */
+  .rank-list{padding:16px;display:flex;flex-direction:column;gap:10px;}
+  .rank-item{background:var(--card);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow);}
+  .rank-num{font-size:20px;font-weight:800;width:30px;text-align:center;}
+  .rank-num.gold{color:#F1C40F;}.rank-num.silver{color:#BDC3C7;}.rank-num.bronze{color:#CA6F1E;}
+  .rank-avatar{width:44px;height:44px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;}
+  .rank-info{flex:1;}
+  .rank-name{font-size:15px;font-weight:700;}
+  .rank-detail{font-size:12px;color:var(--text-sub);margin-top:2px;}
+  .rank-pt{font-size:18px;font-weight:800;color:var(--blue);}
+  .profile-hero{background:linear-gradient(135deg,var(--blue) 0%,#6C63FF 100%);padding:30px 20px;text-align:center;color:#fff;}
+  .profile-avatar{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,0.3);display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:800;margin:0 auto 12px;color:#fff;}
+  .profile-name{font-size:20px;font-weight:800;}
+  .profile-grade{font-size:14px;opacity:.85;margin-top:4px;}
+  .profile-stats{display:flex;justify-content:center;margin-top:20px;}
+  .p-stat{flex:1;text-align:center;border-right:1px solid rgba(255,255,255,0.3);}
+  .p-stat:last-child{border-right:none;}
+  .p-stat .val{font-size:22px;font-weight:800;}
+  .p-stat .lbl{font-size:11px;opacity:.8;margin-top:2px;}
+  .profile-section{padding:16px;display:flex;flex-direction:column;gap:10px;}
+  .profile-row{background:var(--card);border-radius:var(--radius);padding:16px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow);}
+  .profile-row .p-label{font-size:14px;color:var(--text-sub);}
+  .profile-row .p-value{font-size:15px;font-weight:600;}
+  .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2C3E50;color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
+  .toast.show{opacity:1;}
+  @media print{.bottom-nav,.print-header-bar,.print-action-bar,.back-btn{display:none!important;}.print-sheet{margin:0;box-shadow:none;border-radius:0;}body{background:#fff;}}
 </style>
 </head>
 <body>
 
-<!-- ===== ログイン画面 ===== -->
+<!-- LOGIN -->
 <div id="screen-login" class="screen active">
   <div class="login-logo">Study on You</div>
   <p class="login-sub">あなたに合った勉強を</p>
@@ -280,136 +206,71 @@
       <button class="tab-btn active" onclick="switchLoginTab('login')">ログイン</button>
       <button class="tab-btn" onclick="switchLoginTab('register')">新規登録</button>
     </div>
-
-    <!-- ログインフォーム -->
     <div id="login-form">
-      <div class="form-group">
-        <label>ユーザーネーム</label>
-        <input type="text" id="login-username" placeholder="username" autocomplete="username">
-      </div>
-      <div class="form-group">
-        <label>パスワード</label>
-        <input type="password" id="login-password" placeholder="••••••••" autocomplete="current-password">
-      </div>
+      <div class="form-group"><label>ユーザーネーム</label><input type="text" id="login-username" placeholder="username" autocomplete="username"></div>
+      <div class="form-group"><label>パスワード</label><input type="password" id="login-password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" autocomplete="current-password"></div>
       <button class="btn-primary" onclick="doLogin()">ログイン</button>
       <button class="guest-btn" onclick="doGuest()">ゲストとして試してみる</button>
     </div>
-
-    <!-- 登録フォーム -->
     <div id="register-form" style="display:none;">
-      <div class="form-group">
-        <label>氏名</label>
-        <input type="text" id="reg-name" placeholder="山田 太郎">
-      </div>
-      <div class="form-group">
-        <label>ユーザーネーム</label>
-        <input type="text" id="reg-username" placeholder="yamada_taro">
-      </div>
-      <div class="form-group">
-        <label>パスワード（8文字以上）</label>
-        <input type="password" id="reg-password" placeholder="••••••••" autocomplete="new-password">
-      </div>
-      <div class="form-group">
-        <label>学年</label>
-        <select id="reg-grade" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;background:#fff;-webkit-appearance:none;">
-          <option value="">選択してください</option>
-          <option>中学1年</option>
-          <option>中学2年</option>
-          <option>中学3年</option>
-          <option>高校1年</option>
-          <option>高校2年</option>
-          <option>高校3年</option>
-        </select>
+      <div class="form-group"><label>氏名</label><input type="text" id="reg-name" placeholder="山田 太郎"></div>
+      <div class="form-group"><label>ユーザーネーム</label><input type="text" id="reg-username" placeholder="yamada_taro"></div>
+      <div class="form-group"><label>パスワード（8文字以上）</label><input type="password" id="reg-password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" autocomplete="new-password"></div>
+      <div class="form-group"><label>学年</label>
+        <select id="reg-grade"><option value="">選択してください</option><option>中学1年</option><option>中学2年</option><option>中学3年</option><option>高校1年</option><option>高校2年</option><option>高校3年</option></select>
       </div>
       <button class="btn-primary" onclick="doRegister()">アカウントを作成</button>
     </div>
   </div>
 </div>
 
-<!-- ===== ホーム画面 ===== -->
+<!-- HOME -->
 <div id="screen-home" class="screen">
   <div class="home-hero">
-    <div class="greeting">おかえり👋</div>
+    <div class="greeting">おかえり&#x1F44B;</div>
     <div class="name" id="home-username">ゲスト さん</div>
     <div class="stats-row">
-      <div class="stat-chip">
-        <div class="val" id="home-total">0</div>
-        <div class="lbl">解いた問題</div>
-      </div>
-      <div class="stat-chip">
-        <div class="val" id="home-correct-rate">--%</div>
-        <div class="lbl">正答率</div>
-      </div>
-      <div class="stat-chip">
-        <div class="val" id="home-points">0</div>
-        <div class="lbl">ポイント</div>
-      </div>
+      <div class="stat-chip"><div class="val" id="home-total">0</div><div class="lbl">解いた問題</div></div>
+      <div class="stat-chip"><div class="val" id="home-correct-rate">--%</div><div class="lbl">正答率</div></div>
+      <div class="stat-chip"><div class="val" id="home-points">0</div><div class="lbl">ポイント</div></div>
     </div>
+  </div>
+  <div class="section-title">モードを選ぶ</div>
+  <div class="mode-toggle">
+    <button class="mode-btn active" id="mode-btn-quiz" onclick="setMode('quiz')">&#9889; 一問一答</button>
+    <button class="mode-btn" id="mode-btn-print" onclick="setMode('print')">&#128196; プリント&amp;AI採点</button>
   </div>
   <div class="section-title">教科を選ぶ</div>
   <div class="subject-grid">
-    <button class="subject-card math" onclick="startSubject('math')">
-      <div class="s-icon">📐</div>
-      <div class="s-name">数学</div>
-      <div class="s-count" id="cnt-math">10問</div>
-      <div class="s-progress"><div class="s-progress-bar" id="prog-math" style="width:0%"></div></div>
-    </button>
-    <button class="subject-card english" onclick="startSubject('english')">
-      <div class="s-icon">🔤</div>
-      <div class="s-name">英語</div>
-      <div class="s-count" id="cnt-english">10問</div>
-      <div class="s-progress"><div class="s-progress-bar" id="prog-english" style="width:0%"></div></div>
-    </button>
-    <button class="subject-card japanese" onclick="startSubject('japanese')">
-      <div class="s-icon">📖</div>
-      <div class="s-name">国語</div>
-      <div class="s-count" id="cnt-japanese">10問</div>
-      <div class="s-progress"><div class="s-progress-bar" id="prog-japanese" style="width:0%"></div></div>
-    </button>
-    <button class="subject-card science" onclick="startSubject('science')">
-      <div class="s-icon">🔬</div>
-      <div class="s-name">理科</div>
-      <div class="s-count" id="cnt-science">10問</div>
-      <div class="s-progress"><div class="s-progress-bar" id="prog-science" style="width:0%"></div></div>
-    </button>
-    <button class="subject-card social" onclick="startSubject('social')" style="grid-column: span 2;">
-      <div class="s-icon">🌍</div>
-      <div class="s-name">社会</div>
-      <div class="s-count" id="cnt-social">10問</div>
-      <div class="s-progress"><div class="s-progress-bar" id="prog-social" style="width:0%"></div></div>
-    </button>
+    <button class="subject-card math" onclick="onSubjectClick('math')"><div class="s-icon">&#128208;</div><div class="s-name">数学</div><div class="s-count" id="cnt-math">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-math" style="width:0%"></div></div></button>
+    <button class="subject-card english" onclick="onSubjectClick('english')"><div class="s-icon">&#128292;</div><div class="s-name">英語</div><div class="s-count" id="cnt-english">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-english" style="width:0%"></div></div></button>
+    <button class="subject-card japanese" onclick="onSubjectClick('japanese')"><div class="s-icon">&#128214;</div><div class="s-name">国語</div><div class="s-count" id="cnt-japanese">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-japanese" style="width:0%"></div></div></button>
+    <button class="subject-card science" onclick="onSubjectClick('science')"><div class="s-icon">&#128300;</div><div class="s-name">理科</div><div class="s-count" id="cnt-science">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-science" style="width:0%"></div></div></button>
+    <button class="subject-card social" onclick="onSubjectClick('social')" style="grid-column:span 2;"><div class="s-icon">&#127757;</div><div class="s-name">社会</div><div class="s-count" id="cnt-social">10問</div><div class="s-progress"><div class="s-progress-bar" id="prog-social" style="width:0%"></div></div></button>
   </div>
 </div>
 
-<!-- ===== 問題画面 ===== -->
+<!-- QUIZ -->
 <div id="screen-quiz" class="screen">
-  <div class="header">
-    <button class="back-btn" onclick="goBack()">← 戻る</button>
-    <h1 id="quiz-subject-title">数学</h1>
-  </div>
+  <div class="header"><button class="back-btn" onclick="showScreen('home')">&#8592; 戻る</button><h1 id="quiz-subject-title">数学</h1></div>
   <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quiz-progress-fill"></div></div>
-  <div class="quiz-meta">
-    <span id="quiz-meta-num">1 / 10</span>
-    <span id="quiz-meta-score">正解: 0問</span>
-  </div>
+  <div class="quiz-meta"><span id="quiz-meta-num">1 / 10</span><span id="quiz-meta-score">正解: 0問</span></div>
   <div class="quiz-body">
     <div class="quiz-question" id="quiz-question"></div>
     <div class="choice-list" id="choice-list"></div>
-    <div class="explanation-box" id="explanation-box" style="display:none;">
-      <div class="ex-label">💡 解説</div>
-      <div id="explanation-text"></div>
-    </div>
+    <div class="explanation-box" id="explanation-box" style="display:none;"><div class="ex-label">&#128161; 解説</div><div id="explanation-text"></div></div>
   </div>
-  <button class="next-btn" id="next-btn" style="display:none;" onclick="nextQuestion()">次の問題へ →</button>
+  <button class="next-btn" id="next-btn" style="display:none;" onclick="nextQuestion()">次の問題へ &#8594;</button>
 </div>
 
-<!-- ===== 結果画面 ===== -->
+<!-- QUIZ RESULT -->
 <div id="screen-result" class="screen">
   <div class="header"><h1>結果</h1></div>
   <div class="result-body">
-    <div class="result-emoji" id="result-emoji">🎉</div>
+    <div class="result-emoji" id="result-emoji">&#127881;</div>
     <div class="result-score" id="result-score">8 / 10</div>
     <div class="result-label">正解数</div>
+    <div class="result-pt-badge" id="result-pt-badge" style="display:none;"></div>
     <div class="result-msg" id="result-msg">すばらしい！</div>
     <div class="result-actions">
       <button class="btn-primary" onclick="retryQuiz()">もう一度挑戦する</button>
@@ -418,477 +279,486 @@
   </div>
 </div>
 
-<!-- ===== ランキング画面 ===== -->
+<!-- PRINT SETUP -->
+<div id="screen-print-setup" class="screen">
+  <div class="header"><button class="back-btn" onclick="showScreen('home')">&#8592; 戻る</button><h1 id="print-setup-title">数学 プリント設定</h1></div>
+  <div class="print-setup">
+    <div class="setup-card"><h3>&#128221; 問題の種類を選ぶ</h3><div class="type-grid" id="type-grid"></div></div>
+    <div class="setup-card"><h3>&#128290; 問題数を設定する</h3><div id="count-rows"></div></div>
+    <button class="start-print-btn" onclick="startPrint()">プリントを作成する &#8594;</button>
+  </div>
+</div>
+
+<!-- PRINT SHEET -->
+<div id="screen-print" class="screen">
+  <div class="print-header-bar">
+    <button class="back-btn" onclick="showScreen('home')">&#8592; 終了</button>
+    <h1 id="print-title">数学プリント</h1>
+    <div class="print-timer" id="print-timer">00:00</div>
+  </div>
+  <div class="print-sheet" id="print-sheet">
+    <div class="print-sheet-header">
+      <h2 id="sheet-title">数学 テスト</h2>
+      <div class="sheet-meta" id="sheet-meta">全10問</div>
+      <div class="print-name-row">
+        <label>名前：</label>
+        <input class="name-line" type="text" placeholder="　　　　　　" id="print-name-input">
+        <div class="score-box"><div class="score-label">得点</div><div class="score-val" id="sheet-score">&#12540;</div></div>
+      </div>
+    </div>
+    <div id="print-sections"></div>
+  </div>
+  <div class="print-action-bar">
+    <button class="pdf-btn" onclick="doPrint()">&#128424; 印刷</button>
+    <button class="submit-btn" id="submit-btn" onclick="doGrade()">&#10024; AI採点する</button>
+  </div>
+</div>
+
+<!-- PRINT RESULT -->
+<div id="screen-print-result" class="screen">
+  <div class="header"><button class="back-btn" onclick="showScreen('home')">&#8592; ホーム</button><h1>採点結果</h1></div>
+  <div class="print-result-hero">
+    <div class="print-result-score" id="pr-score">8</div>
+    <div class="print-result-max" id="pr-max">/ 10点</div>
+    <div class="print-result-pct" id="pr-pct">正答率 80%</div>
+    <div class="print-result-msg" id="pr-msg">よくできました！</div>
+    <div class="pt-earned" id="pr-pt">＋80 ポイント獲得！</div>
+  </div>
+  <div class="section-title">問題の見直し</div>
+  <div class="review-list" id="review-list"></div>
+  <div style="padding:16px;display:flex;flex-direction:column;gap:10px;">
+    <button class="btn-primary" onclick="showScreen('home')">ホームに戻る</button>
+    <button class="btn-secondary" onclick="retryPrint()">同じ設定でもう一度</button>
+  </div>
+</div>
+
+<!-- RANKING -->
 <div id="screen-ranking" class="screen">
   <div class="header"><h1>ランキング</h1></div>
   <div class="rank-list" id="rank-list"></div>
 </div>
 
-<!-- ===== プロフィール画面 ===== -->
+<!-- PROFILE -->
 <div id="screen-profile" class="screen">
   <div class="profile-hero">
     <div class="profile-avatar" id="profile-avatar">G</div>
     <div class="profile-name" id="profile-name">ゲスト</div>
     <div class="profile-grade" id="profile-grade">学年未設定</div>
     <div class="profile-stats">
-      <div class="p-stat">
-        <div class="val" id="p-total">0</div>
-        <div class="lbl">解いた問題</div>
-      </div>
-      <div class="p-stat">
-        <div class="val" id="p-rate">--%</div>
-        <div class="lbl">正答率</div>
-      </div>
-      <div class="p-stat">
-        <div class="val" id="p-points">0</div>
-        <div class="lbl">ポイント</div>
-      </div>
+      <div class="p-stat"><div class="val" id="p-total">0</div><div class="lbl">解いた問題</div></div>
+      <div class="p-stat"><div class="val" id="p-rate">--%</div><div class="lbl">正答率</div></div>
+      <div class="p-stat"><div class="val" id="p-points">0</div><div class="lbl">ポイント</div></div>
     </div>
   </div>
   <div class="profile-section">
-    <div class="profile-row">
-      <span class="p-label">ユーザーネーム</span>
-      <span class="p-value" id="p-username">guest</span>
-    </div>
-    <div class="profile-row">
-      <span class="p-label">学年</span>
-      <span class="p-value" id="p-grade-row">未設定</span>
-    </div>
-    <div class="profile-row" style="cursor:pointer;" onclick="doLogout()">
-      <span class="p-label" style="color:var(--red);">ログアウト</span>
-      <span style="color:var(--text-sub);">→</span>
-    </div>
+    <div class="profile-row"><span class="p-label">ユーザーネーム</span><span class="p-value" id="p-username">guest</span></div>
+    <div class="profile-row"><span class="p-label">学年</span><span class="p-value" id="p-grade-row">未設定</span></div>
+    <div class="profile-row" style="cursor:pointer;" onclick="doLogout()"><span class="p-label" style="color:var(--red);">ログアウト</span><span style="color:var(--text-sub);">&#8594;</span></div>
   </div>
 </div>
 
-<!-- ===== ボトムナビ ===== -->
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottom-nav" style="display:none;">
   <button class="nav-item active" id="nav-home" onclick="showScreen('home')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9L12 2l9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
-    ホーム
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9L12 2l9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>ホーム
   </button>
   <button class="nav-item" id="nav-ranking" onclick="showScreen('ranking')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>
-    ランキング
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>ランキング
   </button>
   <button class="nav-item" id="nav-profile" onclick="showScreen('profile')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-    プロフィール
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>プロフィール
   </button>
 </nav>
-
 <div class="toast" id="toast"></div>
 
 <script>
-// ===================================================
-// 問題データ（fetch不使用・Safari対応）
-// ===================================================
-var QUESTIONS = {
-  math: [
-    { q:"3x + 6 = 18 のとき、x の値は？", choices:["x = 4","x = 3","x = 6","x = 2"], answer:0, exp:"3x = 18 - 6 = 12、x = 12 ÷ 3 = 4" },
-    { q:"(-3)² の値は？", choices:["9","-9","6","-6"], answer:0, exp:"(-3)² = (-3) × (-3) = 9。マイナス×マイナスはプラスになります。" },
-    { q:"2x - 5 = 9 のとき、x の値は？", choices:["x = 7","x = 5","x = 4","x = 2"], answer:0, exp:"2x = 9 + 5 = 14、x = 14 ÷ 2 = 7" },
-    { q:"連立方程式 x + y = 5、x - y = 1 の解は？", choices:["x=3, y=2","x=2, y=3","x=4, y=1","x=1, y=4"], answer:0, exp:"2式を足すと 2x = 6、x = 3。x + y = 5 に代入して y = 2。" },
-    { q:"√36 の値は？", choices:["6","5","7","4"], answer:0, exp:"6 × 6 = 36 なので √36 = 6 です。" },
-    { q:"一次関数 y = 2x + 3 で、x = 4 のとき y は？", choices:["11","9","10","8"], answer:0, exp:"y = 2 × 4 + 3 = 8 + 3 = 11" },
-    { q:"三角形の内角の和は何度？", choices:["180度","360度","90度","270度"], answer:0, exp:"三角形の内角の和は常に 180° です。" },
-    { q:"4² - 3² の値は？", choices:["7","5","9","1"], answer:0, exp:"4² = 16、3² = 9、16 - 9 = 7" },
-    { q:"比例式 3 : x = 6 : 10 のとき、x の値は？", choices:["5","4","6","3"], answer:0, exp:"外項の積 = 内項の積 → 3 × 10 = 6 × x → x = 30 ÷ 6 = 5" },
-    { q:"2(x + 3) = 14 のとき、x の値は？", choices:["x = 4","x = 5","x = 3","x = 7"], answer:0, exp:"x + 3 = 7、x = 4" }
-  ],
-  english: [
-    { q:"「私は昨日学校に行きました」を英語にすると？", choices:["I went to school yesterday.","I go to school yesterday.","I gone to school yesterday.","I was go to school yesterday."], answer:0, exp:"「行った」は go の過去形 went を使います。" },
-    { q:"「beautiful」の意味は？", choices:["美しい","強い","速い","悲しい"], answer:0, exp:"beautiful は「美しい、きれいな」という意味の形容詞です。" },
-    { q:"（　）の中に入る適切な語は？ I （　）TV now.", choices:["am watching","watch","watched","watches"], answer:0, exp:"now（今）があるので現在進行形。be動詞 + -ing を使います。" },
-    { q:"「He plays soccer.」を否定文にすると？", choices:["He doesn't play soccer.","He don't play soccer.","He not play soccer.","He isn't play soccer."], answer:0, exp:"三人称単数現在の否定は doesn't を使います。" },
-    { q:"「library」の意味は？", choices:["図書館","書店","病院","学校"], answer:0, exp:"library は「図書館」です。bookstore（書店）と混同しないようにしましょう。" },
-    { q:"（　）に入る正しい語は？ She is （　）than me.", choices:["taller","tall","tallest","more tall"], answer:0, exp:"比較級は形容詞 + er。tall → taller" },
-    { q:"「have」の過去形は？", choices:["had","haved","has","having"], answer:0, exp:"have の過去形は had です。不規則変化動詞です。" },
-    { q:"「I like music.」の疑問文は？", choices:["Do you like music?","Are you like music?","Does you like music?","Did you like music?"], answer:0, exp:"一般動詞の疑問文は Do/Does を主語の前に置きます。" },
-    { q:"「difficult」の反対語は？", choices:["easy","hard","soft","simple"], answer:0, exp:"difficult（難しい）の反対は easy（簡単な）です。" },
-    { q:"「This is （　） apple.」に入る正しい語は？", choices:["an","a","the","×(不要)"], answer:0, exp:"apple は母音（a）で始まるので、冠詞は「an」を使います。" }
-  ],
-  japanese: [
-    { q:"「快晴」の読み方は？", choices:["かいせい","かっせい","かいき","くもり"], answer:0, exp:"快晴（かいせい）は、雲一つなく晴れ渡っていることを表します。" },
-    { q:"「走る」の未然形は？", choices:["走ら","走り","走っ","走れ"], answer:0, exp:"未然形は「〜ない」につながる形。「走らない」の「走ら」が未然形です。" },
-    { q:"「山が高い。」の「が」の品詞は？", choices:["助詞","助動詞","副詞","接続詞"], answer:0, exp:"「が」は主語を示す格助詞です。助詞は付属語で自立しません。" },
-    { q:"「竹取物語」の作者は不明だが、かぐや姫はどこに帰る？", choices:["月","太陽","星","海"], answer:0, exp:"かぐや姫は月から来た存在で、最後は月に帰ります。" },
-    { q:"「以心伝心」の意味は？", choices:["言葉なく心が通じる","心を込めて伝える","遠くに心を伝える","心を一つにする"], answer:0, exp:"以心伝心（いしんでんしん）は言葉や文字を使わず、心から心へ通じ合うこと。" },
-    { q:"「彼女は本を読んでいる。」の主語は？", choices:["彼女","本","読んでいる","は"], answer:0, exp:"「は」の前にある「彼女」が主語です。" },
-    { q:"「起承転結」で「転」の役割は？", choices:["話を展開させる","話を始める","話をまとめる","話を受ける"], answer:0, exp:"起（始まり）→承（受ける）→転（展開・変化）→結（まとめ）の構成です。" },
-    { q:"「雨が降る」を敬語（尊敬語）にすると？", choices:["お降りになる","降られる","降ります","お降りします"], answer:0, exp:"尊敬語は相手の行為を高める表現。「お〜になる」の形が典型です。" },
-    { q:"「拝啓」は手紙のどの部分で使う？", choices:["頭語","結語","前文","末文"], answer:0, exp:"「拝啓」は手紙の冒頭（頭語）に使います。結語は「敬具」です。" },
-    { q:"「春はあけぼの」で有名な随筆の作者は？", choices:["清少納言","紫式部","与謝野晶子","松尾芭蕉"], answer:0, exp:"「枕草子」の冒頭。平安時代の清少納言が書きました。" }
-  ],
-  science: [
-    { q:"光合成で植物が吸収するものは？", choices:["二酸化炭素と水","酸素と水","窒素と光","炭素と窒素"], answer:0, exp:"光合成では光・水・二酸化炭素を使い、酸素とデンプンを作ります。" },
-    { q:"水の沸点は何℃？（1気圧）", choices:["100℃","0℃","212℃","50℃"], answer:0, exp:"1気圧のとき水は100℃で沸騰します。0℃は凝固点（融点）です。" },
-    { q:"電流の単位は？", choices:["A（アンペア）","V（ボルト）","W（ワット）","Ω（オーム）"], answer:0, exp:"電流はA（アンペア）、電圧はV（ボルト）、抵抗はΩ（オーム）で表します。" },
-    { q:"ヒトの細胞に含まれる染色体は何本？", choices:["46本","23本","48本","44本"], answer:0, exp:"ヒトの細胞には23対＝46本の染色体があります。生殖細胞は23本。" },
-    { q:"地球の大気中で最も多い気体は？", choices:["窒素","酸素","二酸化炭素","アルゴン"], answer:0, exp:"大気の約78%は窒素、約21%は酸素です。" },
-    { q:"塩酸（HCl）の液性は？", choices:["酸性","アルカリ性","中性","両性"], answer:0, exp:"塩酸は強酸性です。リトマス紙を赤く変えます。" },
-    { q:"月が自ら光を出さずに輝いて見える理由は？", choices:["太陽の光を反射するから","地球の光を受けるから","自ら発光するから","星の光を反射するから"], answer:0, exp:"月は太陽の光を反射して光って見えます。惑星も同様です。" },
-    { q:"「作用・反作用の法則」はニュートンの第何法則？", choices:["第3法則","第1法則","第2法則","第4法則"], answer:0, exp:"第1法則＝慣性の法則、第2法則＝運動方程式、第3法則＝作用反作用。" },
-    { q:"植物の葉で蒸散が行われる主な部分は？", choices:["気孔","葉脈","葉緑体","表皮"], answer:0, exp:"気孔は葉の裏側に多くあり、水蒸気の放出（蒸散）を行います。" },
-    { q:"岩石が熱と圧力で変化したものを何という？", choices:["変成岩","火成岩","堆積岩","溶岩"], answer:0, exp:"変成岩は既存の岩石が熱・圧力で変化したもの。大理石・片岩など。" }
-  ],
-  social: [
-    { q:"日本の首都は？", choices:["東京","大阪","京都","名古屋"], answer:0, exp:"日本の首都は東京都。1869年に江戸から東京へ遷都されました。" },
-    { q:"日本国憲法が施行されたのは何年？", choices:["1947年","1945年","1952年","1950年"], answer:0, exp:"日本国憲法は1946年11月3日に公布、1947年5月3日に施行されました。" },
-    { q:"世界で最も面積が大きい国は？", choices:["ロシア","カナダ","アメリカ","中国"], answer:0, exp:"ロシア連邦の面積は約1,710万km²で世界最大です。" },
-    { q:"江戸幕府を開いたのは誰？", choices:["徳川家康","織田信長","豊臣秀吉","徳川秀忠"], answer:0, exp:"1603年、徳川家康が征夷大将軍となり江戸幕府を開きました。" },
-    { q:"国連本部はどこにある？", choices:["ニューヨーク","ジュネーブ","ロンドン","パリ"], answer:0, exp:"国連本部はアメリカのニューヨーク市にあります。" },
-    { q:"日本の国会は何院制？", choices:["二院制","一院制","三院制","四院制"], answer:0, exp:"衆議院と参議院の二院制（両院制）です。" },
-    { q:"フランス革命が起きたのは何年？", choices:["1789年","1776年","1848年","1815年"], answer:0, exp:"フランス革命は1789年。バスティーユ牢獄襲撃が象徴的事件です。" },
-    { q:"日本で最も長い川は？", choices:["信濃川","利根川","阿賀野川","石狩川"], answer:0, exp:"信濃川（367km）が日本最長の川です。利根川は流域面積最大。" },
-    { q:"需要と供給について、需要が増えると価格はどうなる？", choices:["上がる","下がる","変わらない","ゼロになる"], answer:0, exp:"需要が増えると希少性が上がり、価格は上昇する傾向があります。" },
-    { q:"「基本的人権の尊重」「国民主権」ともう一つ、日本国憲法の三大原則は？", choices:["平和主義","民主主義","資本主義","議会主義"], answer:0, exp:"日本国憲法の三大原則は①国民主権 ②基本的人権の尊重 ③平和主義です。" }
-  ]
-};
+var QUESTIONS={math:[{type:'choice',q:'3x + 6 = 18 のとき、x の値は？',choices:['x = 4','x = 3','x = 6','x = 2'],answer:0,exp:'3x = 12、x = 4',category:'計算'},{type:'choice',q:'(-3)² の値は？',choices:['9','-9','6','-6'],answer:0,exp:'マイナス×マイナス＝プラス。(-3)²=9',category:'計算'},{type:'choice',q:'√36 の値は？',choices:['6','5','7','4'],answer:0,exp:'6×6=36 なので √36=6',category:'計算'},{type:'choice',q:'4² - 3² の値は？',choices:['7','5','9','1'],answer:0,exp:'16-9=7',category:'計算'},{type:'choice',q:'三角形の内角の和は何度？',choices:['180度','360度','90度','270度'],answer:0,exp:'三角形の内角の和は常に180°',category:'計算'},{type:'text',q:'2x - 5 = 9 のとき、x の値を求めなさい。',answer:'7',exp:'2x=14、x=7',category:'方程式'},{type:'text',q:'連立方程式 x + y = 5、x - y = 1 を解きなさい。',answer:'x=3、y=2',exp:'2式を足すと2x=6、x=3。代入してy=2',category:'方程式'},{type:'text',q:'比例式 3:x = 6:10 のとき、x の値を求めなさい。',answer:'5',exp:'3×10=6x → x=5',category:'方程式'},{type:'text',q:'一次関数 y = 2x + 3 で、x = 4 のときの y を求めなさい。',answer:'11',exp:'y=2×4+3=11',category:'関数'},{type:'text',q:'2(x + 3) = 14 のとき、x の値を求めなさい。',answer:'4',exp:'x+3=7、x=4',category:'方程式'}],english:[{type:'choice',q:'"beautiful" の意味は？',choices:['美しい','強い','速い','悲しい'],answer:0,exp:'beautiful は「美しい」という形容詞',category:'単語'},{type:'choice',q:'"library" の意味は？',choices:['図書館','書店','病院','学校'],answer:0,exp:'library は図書館。bookstore（書店）と混同しないよう',category:'単語'},{type:'choice',q:'"have" の過去形は？',choices:['had','haved','has','having'],answer:0,exp:'have→had（不規則変化）',category:'単語'},{type:'choice',q:'"difficult" の反対語は？',choices:['easy','hard','soft','simple'],answer:0,exp:'difficult（難しい）の反対はeasy（簡単）',category:'単語'},{type:'choice',q:'"This is ( ) apple." に入る正しい語は？',choices:['an','a','the','不要'],answer:0,exp:'母音で始まる語の前はan',category:'文法'},{type:'text',q:'「私は昨日学校に行きました」を英語にしなさい。',answer:'I went to school yesterday.',exp:'go の過去形は went',category:'英作文'},{type:'text',q:'"He plays soccer." を否定文にしなさい。',answer:"He doesn't play soccer.",exp:'三人称単数現在の否定はdoesn\'t',category:'英作文'},{type:'text',q:'"I like music." を疑問文にしなさい。',answer:'Do you like music?',exp:'一般動詞の疑問文はDoを前に',category:'英作文'},{type:'text',q:'（ ）に適語を入れなさい。 I ( ) TV now.（現在進行形）',answer:'am watching',exp:'now があるので現在進行形。am + watching',category:'文法'},{type:'text',q:'（ ）に適語を入れなさい。 She is ( ) than me.（taller の形）',answer:'taller',exp:'比較級は形容詞+er。tall→taller',category:'文法'}],japanese:[{type:'choice',q:'「快晴」の読み方は？',choices:['かいせい','かっせい','かいき','くもり'],answer:0,exp:'快晴（かいせい）は雲一つない晴れ',category:'漢字'},{type:'choice',q:'「山が高い。」の「が」の品詞は？',choices:['助詞','助動詞','副詞','接続詞'],answer:0,exp:'「が」は格助詞（助詞の一種）',category:'文法'},{type:'choice',q:'「竹取物語」でかぐや姫が帰る場所は？',choices:['月','太陽','星','海'],answer:0,exp:'かぐや姫は月から来て月へ帰ります',category:'文学'},{type:'choice',q:'「起承転結」で「転」の役割は？',choices:['話を展開させる','話を始める','話をまとめる','話を受ける'],answer:0,exp:'転は展開・変化を担います',category:'表現'},{type:'choice',q:'「春はあけぼの」で有名な随筆の作者は？',choices:['清少納言','紫式部','与謝野晶子','松尾芭蕉'],answer:0,exp:'枕草子の作者は清少納言（平安時代）',category:'文学'},{type:'text',q:'「走る」の未然形を答えなさい。',answer:'走ら',exp:'「走らない」の走ら が未然形',category:'文法'},{type:'text',q:'「以心伝心」の意味を答えなさい。',answer:'言葉を使わずに心が通じ合うこと',exp:'いしんでんしん。言葉なく心が通じること',category:'四字熟語'},{type:'text',q:'「拝啓」は手紙のどの部分で使うか答えなさい。',answer:'頭語（冒頭）',exp:'拝啓は頭語。結語は敬具',category:'表現'},{type:'text',q:'「雨が降る」を尊敬語に直しなさい。',answer:'お降りになる',exp:'尊敬語はお〜になる の形が典型',category:'敬語'},{type:'text',q:'「彼女は本を読んでいる。」の主語を答えなさい。',answer:'彼女',exp:'「は」の前の彼女が主語',category:'文法'}],science:[{type:'choice',q:'光合成で植物が吸収するものは？',choices:['二酸化炭素と水','酸素と水','窒素と光','炭素と窒素'],answer:0,exp:'光合成：光・水・CO₂ → 酸素＋デンプン',category:'生物'},{type:'choice',q:'水の沸点は何℃？（1気圧）',choices:['100℃','0℃','212℃','50℃'],answer:0,exp:'1気圧で100℃が沸点。0℃は凝固点',category:'化学'},{type:'choice',q:'電流の単位は？',choices:['A（アンペア）','V（ボルト）','W（ワット）','Ω（オーム）'],answer:0,exp:'電流はA、電圧はV、抵抗はΩ',category:'物理'},{type:'choice',q:'地球の大気中で最も多い気体は？',choices:['窒素','酸素','二酸化炭素','アルゴン'],answer:0,exp:'大気の約78%は窒素',category:'地学'},{type:'choice',q:'塩酸（HCl）の液性は？',choices:['酸性','アルカリ性','中性','両性'],answer:0,exp:'塩酸は強酸性',category:'化学'},{type:'text',q:'ヒトの細胞に含まれる染色体は何本か答えなさい。',answer:'46本',exp:'23対＝46本。生殖細胞は23本',category:'生物'},{type:'text',q:'「作用・反作用の法則」はニュートンの第何法則か答えなさい。',answer:'第3法則',exp:'第1＝慣性、第2＝運動方程式、第3＝作用反作用',category:'物理'},{type:'text',q:'植物の葉で蒸散が行われる主な部分を答えなさい。',answer:'気孔',exp:'気孔は葉の裏側に多く、蒸散を行う',category:'生物'},{type:'text',q:'月が輝いて見える理由を一文で答えなさい。',answer:'太陽の光を反射するから',exp:'月は太陽の光を反射して光って見える',category:'地学'},{type:'text',q:'岩石が熱と圧力で変化したものを何というか答えなさい。',answer:'変成岩',exp:'変成岩は熱・圧力で変化した岩石',category:'地学'}],social:[{type:'choice',q:'世界で最も面積が大きい国は？',choices:['ロシア','カナダ','アメリカ','中国'],answer:0,exp:'ロシア約1710万km²で世界最大',category:'地理'},{type:'choice',q:'日本の国会は何院制？',choices:['二院制','一院制','三院制','四院制'],answer:0,exp:'衆議院と参議院の二院制',category:'公民'},{type:'choice',q:'フランス革命が起きたのは何年？',choices:['1789年','1776年','1848年','1815年'],answer:0,exp:'1789年。バスティーユ牢獄襲撃が象徴',category:'歴史'},{type:'choice',q:'需要が増えると価格はどうなる？',choices:['上がる','下がる','変わらない','ゼロになる'],answer:0,exp:'需要増→希少性上昇→価格上昇',category:'公民'},{type:'choice',q:'日本国憲法の三大原則の組み合わせは？',choices:['国民主権・基本的人権・平和主義','民主主義・議会主義・法治主義','資本主義・自由主義・三権分立','人権・民主・福祉'],answer:0,exp:'①国民主権 ②基本的人権の尊重 ③平和主義',category:'公民'},{type:'text',q:'江戸幕府を開いたのは誰か答えなさい。',answer:'徳川家康',exp:'1603年、徳川家康が征夷大将軍となり江戸幕府開府',category:'歴史'},{type:'text',q:'日本国憲法が施行されたのは何年か答えなさい。',answer:'1947年',exp:'1946年11月3日公布、1947年5月3日施行',category:'歴史'},{type:'text',q:'国連本部はどこにあるか答えなさい。',answer:'ニューヨーク',exp:'アメリカのニューヨーク市',category:'地理'},{type:'text',q:'日本で最も長い川を答えなさい。',answer:'信濃川',exp:'信濃川（367km）が最長。利根川は流域面積最大',category:'地理'},{type:'text',q:'日本の首都を答えなさい。',answer:'東京',exp:'東京都。1869年に江戸から遷都',category:'地理'}]};
+var SUBJECT_NAMES={math:'数学',english:'英語',japanese:'国語',science:'理科',social:'社会'};
+var appMode='quiz';
+var state={user:null,currentSubject:null,currentQuestions:[],currentIndex:0,correctCount:0,answered:false};
+var printState={subject:null,selectedTypes:{},counts:{},questions:[],timerSec:0,timerInterval:null,graded:false,results:[]};
+var printLastSetup={subject:null,types:{},counts:{}};
 
-var SUBJECT_NAMES = { math:"数学", english:"英語", japanese:"国語", science:"理科", social:"社会" };
+function getUsers(){try{return JSON.parse(localStorage.getItem('soy_users')||'{}')}catch(e){return{}}}
+function saveUsers(u){localStorage.setItem('soy_users',JSON.stringify(u))}
+function getCurrentUser(){try{return JSON.parse(localStorage.getItem('soy_current')||'null')}catch(e){return null}}
+function saveCurrentUser(u){localStorage.setItem('soy_current',JSON.stringify(u))}
 
-// ===================================================
-// アプリ状態
-// ===================================================
-var state = {
-  user: null,
-  currentSubject: null,
-  currentQuestions: [],
-  currentIndex: 0,
-  correctCount: 0,
-  answered: false
-};
+function switchLoginTab(t){
+  var b=document.querySelectorAll('.tab-btn');
+  if(t==='login'){b[0].classList.add('active');b[1].classList.remove('active');document.getElementById('login-form').style.display='block';document.getElementById('register-form').style.display='none';}
+  else{b[1].classList.add('active');b[0].classList.remove('active');document.getElementById('login-form').style.display='none';document.getElementById('register-form').style.display='block';}
+}
+function doLogin(){
+  var u=document.getElementById('login-username').value.trim(),p=document.getElementById('login-password').value;
+  if(!u||!p){showToast('ユーザーネームとパスワードを入力してください');return;}
+  var users=getUsers();
+  if(!users[u]||users[u].password!==p){showToast('ユーザーネームまたはパスワードが違います');return;}
+  state.user=users[u];saveCurrentUser(state.user);enterApp();
+}
+function doRegister(){
+  var name=document.getElementById('reg-name').value.trim(),u=document.getElementById('reg-username').value.trim(),p=document.getElementById('reg-password').value,g=document.getElementById('reg-grade').value;
+  if(!name||!u||!p||!g){showToast('すべての項目を入力してください');return;}
+  if(p.length<8){showToast('パスワードは8文字以上にしてください');return;}
+  var users=getUsers();if(users[u]){showToast('そのユーザーネームは既に使われています');return;}
+  var nu={name:name,username:u,password:p,grade:g,points:0,totalAnswered:0,totalCorrect:0,history:{}};
+  users[u]=nu;saveUsers(users);state.user=nu;saveCurrentUser(nu);enterApp();
+}
+function doGuest(){state.user={name:'ゲスト',username:'guest',grade:'',points:0,totalAnswered:0,totalCorrect:0,history:{}};enterApp();}
+function doLogout(){if(!confirm('ログアウトしますか？'))return;state.user=null;localStorage.removeItem('soy_current');showScreen('login');}
+function enterApp(){updateHomeStats();updateProfile();buildRanking();showScreen('home');document.getElementById('bottom-nav').style.display='flex';}
 
-// ローカルストレージからユーザー一覧取得
-function getUsers() {
-  try { return JSON.parse(localStorage.getItem('soy_users') || '{}'); } catch(e) { return {}; }
-}
-function saveUsers(users) {
-  localStorage.setItem('soy_users', JSON.stringify(users));
-}
-function getCurrentUser() {
-  try { return JSON.parse(localStorage.getItem('soy_current') || 'null'); } catch(e) { return null; }
-}
-function saveCurrentUser(user) {
-  localStorage.setItem('soy_current', JSON.stringify(user));
+function showScreen(n){
+  document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
+  var s=document.getElementById('screen-'+n);if(s){s.classList.add('active');window.scrollTo(0,0);}
+  var nm={home:'nav-home',ranking:'nav-ranking',profile:'nav-profile'};
+  document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});
+  if(nm[n]){var el=document.getElementById(nm[n]);if(el)el.classList.add('active');}
+  var hideNav=['login','quiz','print','print-setup','print-result'].indexOf(n)!==-1;
+  document.getElementById('bottom-nav').style.display=hideNav?'none':'flex';
+  if(n!=='print')stopTimer();
 }
 
-// ===================================================
-// ログイン・登録
-// ===================================================
-function switchLoginTab(tab) {
-  var btns = document.querySelectorAll('.tab-btn');
-  if (tab === 'login') {
-    btns[0].classList.add('active'); btns[1].classList.remove('active');
-    document.getElementById('login-form').style.display = 'block';
-    document.getElementById('register-form').style.display = 'none';
-  } else {
-    btns[1].classList.add('active'); btns[0].classList.remove('active');
-    document.getElementById('login-form').style.display = 'none';
-    document.getElementById('register-form').style.display = 'block';
-  }
+function setMode(m){
+  appMode=m;
+  document.getElementById('mode-btn-quiz').classList.toggle('active',m==='quiz');
+  document.getElementById('mode-btn-print').classList.toggle('active',m==='print');
 }
+function onSubjectClick(s){if(appMode==='quiz')startSubject(s);else openPrintSetup(s);}
 
-function doLogin() {
-  var username = document.getElementById('login-username').value.trim();
-  var password = document.getElementById('login-password').value;
-  if (!username || !password) { showToast('ユーザーネームとパスワードを入力してください'); return; }
-  var users = getUsers();
-  if (!users[username] || users[username].password !== password) {
-    showToast('ユーザーネームまたはパスワードが違います'); return;
-  }
-  state.user = users[username];
-  saveCurrentUser(state.user);
-  enterApp();
-}
-
-function doRegister() {
-  var name = document.getElementById('reg-name').value.trim();
-  var username = document.getElementById('reg-username').value.trim();
-  var password = document.getElementById('reg-password').value;
-  var grade = document.getElementById('reg-grade').value;
-  if (!name || !username || !password || !grade) { showToast('すべての項目を入力してください'); return; }
-  if (password.length < 8) { showToast('パスワードは8文字以上にしてください'); return; }
-  var users = getUsers();
-  if (users[username]) { showToast('そのユーザーネームは既に使われています'); return; }
-  var newUser = { name, username, password, grade, points: 0, totalAnswered: 0, totalCorrect: 0, history: {} };
-  users[username] = newUser;
-  saveUsers(users);
-  state.user = newUser;
-  saveCurrentUser(state.user);
-  enterApp();
-}
-
-function doGuest() {
-  state.user = { name:'ゲスト', username:'guest', grade:'', points:0, totalAnswered:0, totalCorrect:0, history:{} };
-  enterApp();
-}
-
-function doLogout() {
-  if (!confirm('ログアウトしますか？')) return;
-  state.user = null;
-  localStorage.removeItem('soy_current');
-  showScreen('login');
-}
-
-function enterApp() {
-  updateHomeStats();
-  updateProfile();
-  buildRanking();
-  showScreen('home');
-  document.getElementById('bottom-nav').style.display = 'flex';
-}
-
-// ===================================================
-// 画面遷移
-// ===================================================
-function showScreen(name) {
-  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
-  var s = document.getElementById('screen-' + name);
-  if (s) { s.classList.add('active'); s.scrollTop = 0; window.scrollTo(0,0); }
-
-  var navMap = { home:'nav-home', ranking:'nav-ranking', profile:'nav-profile' };
-  document.querySelectorAll('.nav-item').forEach(function(n){ n.classList.remove('active'); });
-  if (navMap[name]) {
-    var el = document.getElementById(navMap[name]);
-    if (el) el.classList.add('active');
-  }
-
-  if (name === 'login') {
-    document.getElementById('bottom-nav').style.display = 'none';
-  } else {
-    document.getElementById('bottom-nav').style.display = 'flex';
-  }
-}
-
-function goBack() {
-  showScreen('home');
-}
-
-// ===================================================
-// ホーム統計更新
-// ===================================================
-function updateHomeStats() {
-  var u = state.user;
-  document.getElementById('home-username').textContent = (u.name || u.username) + ' さん';
-  document.getElementById('home-total').textContent = u.totalAnswered || 0;
-  var rate = u.totalAnswered > 0 ? Math.round(u.totalCorrect / u.totalAnswered * 100) : '--';
-  document.getElementById('home-correct-rate').textContent = (rate === '--') ? '--%' : rate + '%';
-  document.getElementById('home-points').textContent = u.points || 0;
-
-  var subjects = ['math','english','japanese','science','social'];
-  subjects.forEach(function(s){
-    var h = (u.history && u.history[s]) || { answered: 0, correct: 0 };
-    var total = QUESTIONS[s].length;
-    var pct = total > 0 ? Math.round(h.answered / total * 100) : 0;
-    document.getElementById('prog-' + s).style.width = pct + '%';
-    document.getElementById('cnt-' + s).textContent = total + '問';
+function updateHomeStats(){
+  var u=state.user;
+  document.getElementById('home-username').textContent=(u.name||u.username)+' さん';
+  document.getElementById('home-total').textContent=u.totalAnswered||0;
+  var r=u.totalAnswered>0?Math.round(u.totalCorrect/u.totalAnswered*100):'--';
+  document.getElementById('home-correct-rate').textContent=r==='--'?'--%':r+'%';
+  document.getElementById('home-points').textContent=u.points||0;
+  ['math','english','japanese','science','social'].forEach(function(s){
+    var h=(u.history&&u.history[s])||{answered:0};
+    var t=QUESTIONS[s].length;
+    document.getElementById('prog-'+s).style.width=(t>0?Math.round(h.answered/t*100):0)+'%';
+    document.getElementById('cnt-'+s).textContent=t+'問';
   });
 }
 
-// ===================================================
-// 問題開始
-// ===================================================
-function startSubject(subject) {
-  state.currentSubject = subject;
-  state.currentQuestions = shuffle(QUESTIONS[subject].slice());
-  state.currentIndex = 0;
-  state.correctCount = 0;
-  state.answered = false;
-  document.getElementById('quiz-subject-title').textContent = SUBJECT_NAMES[subject];
-  showScreen('quiz');
-  renderQuestion();
+function startSubject(s){
+  state.currentSubject=s;state.currentQuestions=shuffle(QUESTIONS[s].slice());
+  state.currentIndex=0;state.correctCount=0;state.answered=false;
+  document.getElementById('quiz-subject-title').textContent=SUBJECT_NAMES[s];
+  showScreen('quiz');renderQuestion();
 }
-
-function shuffle(arr) {
-  for (var i = arr.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var tmp = arr[i]; arr[i] = arr[j]; arr[j] = tmp;
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function renderQuestion(){
+  var q=state.currentQuestions[state.currentIndex],total=state.currentQuestions.length;
+  document.getElementById('quiz-progress-fill').style.width=(state.currentIndex/total*100)+'%';
+  document.getElementById('quiz-meta-num').textContent=(state.currentIndex+1)+' / '+total;
+  document.getElementById('quiz-meta-score').textContent='正解: '+state.correctCount+'問';
+  document.getElementById('quiz-question').textContent=q.q;
+  var list=document.getElementById('choice-list');list.innerHTML='';
+  if(q.type==='choice'){
+    q.choices.forEach(function(c,i){
+      var btn=document.createElement('button');btn.className='choice-btn';btn.textContent=c;
+      btn.onclick=(function(idx){return function(){if(!state.answered)selectAnswer(idx,q.answer,q.exp);};})(i);
+      list.appendChild(btn);
+    });
+  }else{
+    var inp=document.createElement('input');inp.type='text';inp.placeholder='答えを入力してください';
+    inp.style.cssText='width:100%;padding:14px;border:2px solid var(--border);border-radius:var(--radius);font-size:16px;outline:none;margin-bottom:8px;';
+    inp.id='text-ans';
+    var btn=document.createElement('button');btn.className='choice-btn';
+    btn.style.cssText='background:var(--blue);color:#fff;border-color:var(--blue);';
+    btn.textContent='回答する';
+    btn.onclick=function(){if(!state.answered&&inp.value.trim())submitTextAnswer(inp.value.trim(),q.answer,q.exp);};
+    list.appendChild(inp);list.appendChild(btn);
   }
-  return arr;
+  document.getElementById('explanation-box').style.display='none';
+  document.getElementById('next-btn').style.display='none';
+  state.answered=false;
 }
+function selectAnswer(sel,correct,exp){
+  state.answered=true;
+  document.querySelectorAll('.choice-btn').forEach(function(b,i){b.classList.add('disabled');if(i===correct)b.classList.add('correct');else if(i===sel)b.classList.add('wrong');});
+  if(sel===correct)state.correctCount++;
+  showExp(exp);saveProgressQuiz(sel===correct);
+}
+function submitTextAnswer(ans,correct,exp){
+  state.answered=true;
+  var ok=norm(ans)===norm(correct);
+  if(ok)state.correctCount++;
+  var btns=document.querySelectorAll('.choice-btn');
+  if(btns[0]){btns[0].style.background=ok?'var(--green)':'var(--red)';btns[0].textContent=ok?'⭕ 正解！':'❌ 不正解';btns[0].classList.add('disabled');}
+  showExp(exp);saveProgressQuiz(ok);
+}
+function norm(s){return s.replace(/\s/g,'').replace(/[Ａ-Ｚａ-ｚ０-９]/g,function(c){return String.fromCharCode(c.charCodeAt(0)-0xFEE0);}).toLowerCase();}
+function showExp(exp){
+  document.getElementById('explanation-text').textContent=exp;
+  document.getElementById('explanation-box').style.display='block';
+  var isLast=state.currentIndex>=state.currentQuestions.length-1;
+  var nb=document.getElementById('next-btn');nb.style.display='block';
+  nb.textContent=isLast?'結果を見る':'次の問題へ →';
+}
+function nextQuestion(){state.currentIndex++;if(state.currentIndex>=state.currentQuestions.length)showQuizResult();else{renderQuestion();window.scrollTo(0,0);}}
+function saveProgressQuiz(ok){
+  if(!state.user||state.user.username==='guest')return;
+  var u=state.user;u.totalAnswered=(u.totalAnswered||0)+1;
+  if(ok){u.totalCorrect=(u.totalCorrect||0)+1;u.points=(u.points||0)+10;}
+  if(!u.history)u.history={};if(!u.history[state.currentSubject])u.history[state.currentSubject]={answered:0,correct:0};
+  u.history[state.currentSubject].answered++;if(ok)u.history[state.currentSubject].correct++;
+  var users=getUsers();users[u.username]=u;saveUsers(users);saveCurrentUser(u);
+}
+function showQuizResult(){
+  var c=state.correctCount,t=state.currentQuestions.length,p=Math.round(c/t*100);
+  document.getElementById('result-score').textContent=c+' / '+t;
+  var e,m;
+  if(p>=90){e='🏆';m='完璧！すばらしい結果です！';}else if(p>=70){e='🎉';m='よくできました！';}else if(p>=50){e='📚';m='もう少し！復習して再挑戦しよう！';}else{e='💪';m='もう一度チャレンジ！';}
+  document.getElementById('result-emoji').textContent=e;document.getElementById('result-msg').textContent=m;
+  var earned=c*10,badge=document.getElementById('result-pt-badge');
+  if(state.user&&state.user.username!=='guest'&&earned>0){badge.style.display='block';badge.textContent='＋'+earned+' ポイント獲得！';}else{badge.style.display='none';}
+  updateHomeStats();updateProfile();buildRanking();showScreen('result');
+}
+function retryQuiz(){startSubject(state.currentSubject);}
 
-function renderQuestion() {
-  var q = state.currentQuestions[state.currentIndex];
-  var total = state.currentQuestions.length;
-  var idx = state.currentIndex;
-
-  document.getElementById('quiz-progress-fill').style.width = ((idx / total) * 100) + '%';
-  document.getElementById('quiz-meta-num').textContent = (idx + 1) + ' / ' + total;
-  document.getElementById('quiz-meta-score').textContent = '正解: ' + state.correctCount + '問';
-  document.getElementById('quiz-question').textContent = q.q;
-
-  var list = document.getElementById('choice-list');
-  list.innerHTML = '';
-  q.choices.forEach(function(c, i){
-    var btn = document.createElement('button');
-    btn.className = 'choice-btn';
-    btn.textContent = c;
-    btn.onclick = function(){ if (!state.answered) selectAnswer(i, q.answer, q.exp); };
-    list.appendChild(btn);
+// ===== PRINT =====
+function openPrintSetup(s){
+  printState.subject=s;
+  document.getElementById('print-setup-title').textContent=SUBJECT_NAMES[s]+' プリント設定';
+  var qs=QUESTIONS[s],cats={};
+  qs.forEach(function(q){if(!cats[q.category])cats[q.category]=[];cats[q.category].push(q);});
+  printState.selectedTypes={};printState.counts={};
+  var tg=document.getElementById('type-grid'),cr=document.getElementById('count-rows');
+  tg.innerHTML='';cr.innerHTML='';
+  Object.keys(cats).forEach(function(cat,i){
+    printState.selectedTypes[cat]=true;
+    printState.counts[cat]=Math.min(cats[cat].length,3);
+    var item=document.createElement('div');item.className='type-item selected';item.id='ti-'+i;
+    item.innerHTML='<input type="checkbox" id="chk-'+i+'" checked onchange="toggleType(\''+cat+'\','+i+')">'+'<label for="chk-'+i+'">'+cat+'（'+cats[cat].length+'問）</label>';
+    tg.appendChild(item);
+    var row=document.createElement('div');row.className='count-row';row.id='cr-'+cat;
+    row.innerHTML='<span class="ct-label">'+cat+'</span><div class="count-stepper"><button onclick="chgCnt(\''+cat+'\',-1)">－</button><span id="cv-'+cat+'">'+printState.counts[cat]+'</span><button onclick="chgCnt(\''+cat+'\',1,'+cats[cat].length+')">＋</button></div>';
+    cr.appendChild(row);
   });
-
-  document.getElementById('explanation-box').style.display = 'none';
-  document.getElementById('next-btn').style.display = 'none';
-  state.answered = false;
+  showScreen('print-setup');
 }
-
-function selectAnswer(selected, correct, exp) {
-  state.answered = true;
-  var btns = document.querySelectorAll('.choice-btn');
-  btns.forEach(function(b, i){
-    b.classList.add('disabled');
-    if (i === correct) b.classList.add('correct');
-    else if (i === selected) b.classList.add('wrong');
+function toggleType(cat,idx){
+  printState.selectedTypes[cat]=!printState.selectedTypes[cat];
+  document.getElementById('ti-'+idx).classList.toggle('selected',printState.selectedTypes[cat]);
+  document.getElementById('chk-'+idx).checked=printState.selectedTypes[cat];
+  document.getElementById('cr-'+cat).style.opacity=printState.selectedTypes[cat]?'1':'0.4';
+}
+function chgCnt(cat,d,max){
+  var n=(printState.counts[cat]||0)+d;
+  if(n<0)n=0;if(max&&n>max)n=max;
+  printState.counts[cat]=n;document.getElementById('cv-'+cat).textContent=n;
+}
+function startPrint(){
+  var s=printState.subject,qs=QUESTIONS[s],cats={};
+  qs.forEach(function(q){if(!cats[q.category])cats[q.category]=[];cats[q.category].push(q);});
+  var sel=[];
+  Object.keys(cats).forEach(function(cat){
+    if(printState.selectedTypes[cat]&&printState.counts[cat]>0){
+      sel=sel.concat(shuffle(cats[cat].slice()).slice(0,printState.counts[cat]));
+    }
   });
-
-  var isCorrect = (selected === correct);
-  if (isCorrect) state.correctCount++;
-
-  document.getElementById('explanation-text').textContent = exp;
-  document.getElementById('explanation-box').style.display = 'block';
-
-  var isLast = (state.currentIndex >= state.currentQuestions.length - 1);
-  var nextBtn = document.getElementById('next-btn');
-  nextBtn.style.display = 'block';
-  nextBtn.textContent = isLast ? '結果を見る' : '次の問題へ →';
-
-  saveProgress(isCorrect);
+  if(sel.length===0){showToast('問題を1問以上選んでください');return;}
+  printLastSetup={subject:s,types:JSON.parse(JSON.stringify(printState.selectedTypes)),counts:JSON.parse(JSON.stringify(printState.counts))};
+  printState.questions=sel;printState.graded=false;printState.results=[];
+  buildPrintSheet();showScreen('print');startTimer();
 }
-
-function nextQuestion() {
-  state.currentIndex++;
-  if (state.currentIndex >= state.currentQuestions.length) {
-    showResult();
-  } else {
-    renderQuestion();
-    window.scrollTo(0, 0);
-  }
+function buildPrintSheet(){
+  var s=printState.subject,qs=printState.questions;
+  document.getElementById('print-title').textContent=SUBJECT_NAMES[s]+'プリント';
+  document.getElementById('sheet-title').textContent=SUBJECT_NAMES[s]+' テスト';
+  document.getElementById('sheet-meta').textContent='全'+qs.length+'問';
+  document.getElementById('sheet-score').textContent='－';
+  document.getElementById('print-name-input').value='';
+  var cats={};
+  qs.forEach(function(q,i){if(!cats[q.category])cats[q.category]=[];cats[q.category].push({q:q,i:i});});
+  var sec=document.getElementById('print-sections');sec.innerHTML='';
+  var CL=['ア','イ','ウ','エ'];
+  Object.keys(cats).forEach(function(cat){
+    var blk=document.createElement('div');blk.className='section-block';
+    var lbl=document.createElement('div');lbl.className='section-label';lbl.textContent='【'+cat+'】';blk.appendChild(lbl);
+    cats[cat].forEach(function(item){
+      var q=item.q,gi=item.i;
+      var qi=document.createElement('div');qi.className='print-q-item';
+      qi.innerHTML='<div class="print-q-num">問'+(gi+1)+'</div><div class="print-q-text">'+q.q+'</div>';
+      if(q.type==='choice'){
+        var cd=document.createElement('div');cd.className='print-choices';
+        q.choices.forEach(function(c,ci){
+          var ch=document.createElement('div');ch.className='print-choice';ch.id='ch-'+gi+'-'+ci;
+          ch.innerHTML='<div class="print-choice-mark">'+CL[ci]+'</div><span class="print-choice-text">'+c+'</span>';
+          ch.onclick=(function(a,b,l){return function(){selPC(a,b,l);};})(gi,ci,q.choices.length);
+          cd.appendChild(ch);
+        });
+        qi.appendChild(cd);
+      }else{
+        var ta=document.createElement('textarea');ta.className='print-answer-input';ta.id='pi-'+gi;ta.placeholder='答えを書いてください';ta.rows=2;
+        qi.appendChild(ta);
+      }
+      var fb=document.createElement('div');fb.id='fb-'+gi;qi.appendChild(fb);
+      blk.appendChild(qi);
+    });
+    sec.appendChild(blk);
+  });
+  document.getElementById('submit-btn').disabled=false;
+  document.getElementById('submit-btn').textContent='✨ AI採点する';
 }
-
-function saveProgress(isCorrect) {
-  if (!state.user || state.user.username === 'guest') return;
-  var u = state.user;
-  u.totalAnswered = (u.totalAnswered || 0) + 1;
-  if (isCorrect) {
-    u.totalCorrect = (u.totalCorrect || 0) + 1;
-    u.points = (u.points || 0) + 10;
-  }
-  if (!u.history) u.history = {};
-  if (!u.history[state.currentSubject]) u.history[state.currentSubject] = { answered:0, correct:0 };
-  u.history[state.currentSubject].answered++;
-  if (isCorrect) u.history[state.currentSubject].correct++;
-
-  var users = getUsers();
-  users[u.username] = u;
-  saveUsers(users);
-  saveCurrentUser(u);
+function selPC(qi,ci,total){
+  if(printState.graded)return;
+  for(var i=0;i<total;i++){var el=document.getElementById('ch-'+qi+'-'+i);if(el)el.classList.toggle('selected',i===ci);}
 }
+function getSelPC(qi,total){for(var i=0;i<total;i++){var el=document.getElementById('ch-'+qi+'-'+i);if(el&&el.classList.contains('selected'))return i;}return -1;}
 
-// ===================================================
-// 結果表示
-// ===================================================
-function showResult() {
-  var correct = state.correctCount;
-  var total = state.currentQuestions.length;
-  var pct = Math.round(correct / total * 100);
-
-  document.getElementById('result-score').textContent = correct + ' / ' + total;
-
-  var emoji, msg;
-  if (pct >= 90) { emoji = '🏆'; msg = '完璧！すばらしい結果です！'; }
-  else if (pct >= 70) { emoji = '🎉'; msg = 'よくできました！次も頑張ろう！'; }
-  else if (pct >= 50) { emoji = '📚'; msg = 'もう少し！復習して再挑戦しよう！'; }
-  else { emoji = '💪'; msg = '難しかったね。もう一度チャレンジ！'; }
-
-  document.getElementById('result-emoji').textContent = emoji;
-  document.getElementById('result-msg').textContent = msg;
-
-  if (state.user && state.user.username !== 'guest') {
-    var earned = correct * 10;
-    document.getElementById('result-msg').textContent = msg + '\n+' + earned + ' ポイント獲得！';
-  }
-
-  updateHomeStats();
-  updateProfile();
-  buildRanking();
-  showScreen('result');
+function startTimer(){
+  printState.timerSec=0;
+  printState.timerInterval=setInterval(function(){
+    printState.timerSec++;
+    var m=Math.floor(printState.timerSec/60),s=printState.timerSec%60;
+    document.getElementById('print-timer').textContent=pad(m)+':'+pad(s);
+  },1000);
 }
+function stopTimer(){if(printState.timerInterval){clearInterval(printState.timerInterval);printState.timerInterval=null;}}
+function pad(n){return n<10?'0'+n:''+n;}
+function doPrint(){window.print();}
 
-function retryQuiz() {
-  startSubject(state.currentSubject);
-}
-
-// ===================================================
-// ランキング
-// ===================================================
-function buildRanking() {
-  var users = getUsers();
-  var list = Object.values(users).sort(function(a,b){ return (b.points||0) - (a.points||0); });
-  // ゲストデモ用サンプルを追加
-  var samples = [
-    { name:'田中 さくら', username:'sakura', grade:'中学2年', points:680, totalAnswered:42, totalCorrect:37 },
-    { name:'鈴木 けんた', username:'kenta', grade:'中学1年', points:520, totalAnswered:33, totalCorrect:26 },
-    { name:'山田 あおい', username:'aoi', grade:'中学3年', points:910, totalAnswered:61, totalCorrect:55 }
-  ];
-  var combined = samples.concat(list).sort(function(a,b){ return (b.points||0) - (a.points||0); });
-
-  var container = document.getElementById('rank-list');
-  container.innerHTML = '';
-  combined.slice(0,10).forEach(function(u, i){
-    var numClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
-    var initials = (u.name || u.username).charAt(0).toUpperCase();
-    var rate = u.totalAnswered > 0 ? Math.round((u.totalCorrect||0) / u.totalAnswered * 100) : 0;
-    var isMe = state.user && state.user.username === u.username;
-    container.innerHTML += '<div class="rank-item" style="' + (isMe ? 'border:2px solid var(--blue);' : '') + '">'
-      + '<div class="rank-num ' + numClass + '">' + (i+1) + '</div>'
-      + '<div class="rank-avatar">' + initials + '</div>'
-      + '<div class="rank-info"><div class="rank-name">' + (u.name||u.username) + (isMe ? ' 👈 あなた' : '') + '</div>'
-      + '<div class="rank-detail">' + (u.grade||'') + ' · 正答率 ' + rate + '%</div></div>'
-      + '<div class="rank-pt">' + (u.points||0) + '<span style="font-size:12px;font-weight:400;color:var(--text-sub)"> pt</span></div>'
-      + '</div>';
+function doGrade(){
+  var qs=printState.questions,ans=[],allOk=true;
+  qs.forEach(function(q,i){
+    if(q.type==='choice'){var s=getSelPC(i,q.choices.length);if(s===-1)allOk=false;ans.push({type:'choice',selected:s,correct:q.answer});}
+    else{var v=document.getElementById('pi-'+i);var t=v?v.value.trim():'';if(!t)allOk=false;ans.push({type:'text',userAnswer:t,correctAnswer:q.answer});}
+  });
+  if(!allOk&&!confirm('未回答の問題があります。このまま採点しますか？'))return;
+  var ov=document.createElement('div');ov.className='grading-overlay';
+  ov.innerHTML='<div class="grading-card"><div class="spinner"></div><h3>AI採点中...</h3><p>記述問題を意味で理解して<br>採点しています。</p></div>';
+  document.body.appendChild(ov);
+  document.getElementById('submit-btn').disabled=true;
+  stopTimer();
+  gradeWithAI(qs,ans,function(results){
+    document.body.removeChild(ov);
+    printState.graded=true;printState.results=results;
+    applyGradeUI(qs,ans,results);
+    showPrintResult(qs,ans,results);
   });
 }
 
-// ===================================================
-// プロフィール
-// ===================================================
-function updateProfile() {
-  var u = state.user;
-  if (!u) return;
-  var initial = (u.name || u.username).charAt(0).toUpperCase();
-  document.getElementById('profile-avatar').textContent = initial;
-  document.getElementById('profile-name').textContent = u.name || u.username;
-  document.getElementById('profile-grade').textContent = u.grade || '学年未設定';
-  document.getElementById('p-username').textContent = u.username;
-  document.getElementById('p-grade-row').textContent = u.grade || '未設定';
-  document.getElementById('p-total').textContent = u.totalAnswered || 0;
-  var rate = u.totalAnswered > 0 ? Math.round((u.totalCorrect||0) / u.totalAnswered * 100) : '--';
-  document.getElementById('p-rate').textContent = (rate === '--') ? '--%' : rate + '%';
-  document.getElementById('p-points').textContent = u.points || 0;
+function gradeWithAI(qs,ans,cb){
+  var cRes={};
+  qs.forEach(function(q,i){
+    if(q.type==='choice'){var a=ans[i];cRes[i]={correct:a.selected===a.correct,score:a.selected===a.correct?1:0,feedback:a.selected===a.correct?'正解です！':'正解は「'+q.choices[a.correct]+'」です。',maxScore:1};}
+  });
+  var tqs=[];qs.forEach(function(q,i){if(q.type==='text')tqs.push({i:i,q:q,ans:ans[i]});});
+  if(tqs.length===0){var r=qs.map(function(q,i){return cRes[i];});cb(r);return;}
+  var prompt='中学生の答案を採点してください。各問題について正誤を判定しJSONで返してください。\n\n';
+  tqs.forEach(function(item,idx){
+    prompt+='問'+(idx+1)+':\n問題: '+item.q.q+'\n正解例: '+item.q.answer+'\n生徒の回答: '+(item.ans.userAnswer||'（未回答）')+'\n\n';
+  });
+  prompt+='採点基準：意味が正しければ表現が多少違っても正解。空欄は不正解。部分的に正しい場合は正解として扱う。\n\n';
+  prompt+='以下のJSON配列のみで返答（前後の説明不要）:\n[{"correct":true,"feedback":"正解です！"},{"correct":false,"feedback":"正解は〇〇です。"},...]\n';
+  prompt+='要素数は'+tqs.length+'個にしてください。';
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,messages:[{role:'user',content:prompt}]})
+  }).then(function(r){return r.json();}).then(function(d){
+    try{
+      var txt=d.content.map(function(c){return c.text||'';}).join('');
+      txt=txt.replace(/```json|```/g,'').trim();
+      var air=JSON.parse(txt);
+      var fin=[],ai=0;
+      qs.forEach(function(q,i){if(q.type==='choice'){fin.push(cRes[i]);}else{var r=air[ai++]||{correct:false,feedback:'採点エラー'};r.score=r.correct?1:0;r.maxScore=1;fin.push(r);}});
+      cb(fin);
+    }catch(e){cb(fallback(qs,ans,cRes));}
+  }).catch(function(){cb(fallback(qs,ans,cRes));});
 }
-
-// ===================================================
-// トースト
-// ===================================================
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+function fallback(qs,ans,cRes){
+  return qs.map(function(q,i){
+    if(q.type==='choice')return cRes[i];
+    var ua=ans[i].userAnswer||'';var ok=norm(ua)===norm(q.answer);
+    return{correct:ok,score:ok?1:0,feedback:ok?'正解です！':'正解は「'+q.answer+'」です。',maxScore:1};
+  });
 }
-
-// ===================================================
-// 起動時チェック
-// ===================================================
-(function init(){
-  var saved = getCurrentUser();
-  if (saved) {
-    state.user = saved;
-    enterApp();
+function applyGradeUI(qs,ans,results){
+  qs.forEach(function(q,i){
+    var r=results[i],fb=document.getElementById('fb-'+i);
+    if(q.type==='choice'){
+      for(var ci=0;ci<q.choices.length;ci++){var el=document.getElementById('ch-'+i+'-'+ci);if(!el)continue;el.onclick=null;if(ci===q.answer)el.classList.add('graded-correct');else if(ci===ans[i].selected)el.classList.add('graded-wrong');}
+    }else{var inp=document.getElementById('pi-'+i);if(inp){inp.disabled=true;inp.classList.add(r.correct?'graded-correct':'graded-wrong');}}
+    if(fb){fb.className='grade-feedback '+(r.correct?'correct':'wrong');fb.innerHTML='<div class="fb-label">'+(r.correct?'⭕ 正解':'❌ 不正解')+'</div>'+r.feedback;}
+  });
+}
+function showPrintResult(qs,ans,results){
+  var ts=results.reduce(function(s,r){return s+(r.score||0);},0),mx=qs.length,pct=Math.round(ts/mx*100);
+  document.getElementById('pr-score').textContent=ts;
+  document.getElementById('pr-max').textContent='/ '+mx+'点';
+  document.getElementById('pr-pct').textContent='正答率 '+pct+'%';
+  var msg;
+  if(pct>=90)msg='🏆 完璧！すばらしい！';else if(pct>=70)msg='🎉 よくできました！';else if(pct>=50)msg='📚 もう少し！復習しよう！';else msg='💪 もう一度チャレンジ！';
+  document.getElementById('pr-msg').textContent=msg;
+  var earned=ts*10;document.getElementById('pr-pt').textContent='＋'+earned+' ポイント獲得！';
+  if(state.user&&state.user.username!=='guest'){
+    var u=state.user;u.totalAnswered=(u.totalAnswered||0)+mx;u.totalCorrect=(u.totalCorrect||0)+ts;u.points=(u.points||0)+earned;
+    if(!u.history)u.history={};if(!u.history[printState.subject])u.history[printState.subject]={answered:0,correct:0};
+    u.history[printState.subject].answered+=mx;u.history[printState.subject].correct+=ts;
+    var users=getUsers();users[u.username]=u;saveUsers(users);saveCurrentUser(u);
   }
-})();
+  document.getElementById('sheet-score').textContent=ts+'/'+mx;
+  var rl=document.getElementById('review-list');rl.innerHTML='';
+  qs.forEach(function(q,i){
+    var r=results[i];
+    var ua=q.type==='choice'?(ans[i].selected>=0?q.choices[ans[i].selected]:'未回答'):(ans[i].userAnswer||'未回答');
+    var item=document.createElement('div');item.className='review-item '+(r.correct?'correct-item':'wrong-item');
+    item.innerHTML='<div class="ri-status">'+(r.correct?'⭕ 正解':'❌ 不正解')+'</div>'
+      +'<div class="ri-q">'+q.q+'</div>'
+      +(!r.correct?'<div class="ri-your">あなたの回答: '+ua+'</div>':'')
+      +(!r.correct?'<div class="ri-correct">正解: '+q.answer+'</div>':'')
+      +'<div class="ri-exp">'+q.exp+'</div>';
+    rl.appendChild(item);
+  });
+  updateHomeStats();updateProfile();buildRanking();showScreen('print-result');
+}
+function retryPrint(){
+  printState.subject=printLastSetup.subject;
+  printState.selectedTypes=JSON.parse(JSON.stringify(printLastSetup.types));
+  printState.counts=JSON.parse(JSON.stringify(printLastSetup.counts));
+  startPrint();
+}
+
+function buildRanking(){
+  var users=getUsers();
+  var list=Object.values(users).sort(function(a,b){return(b.points||0)-(a.points||0);});
+  var samples=[{name:'山田 あおい',username:'aoi',grade:'中学3年',points:910,totalAnswered:61,totalCorrect:55},{name:'田中 さくら',username:'sakura',grade:'中学2年',points:680,totalAnswered:42,totalCorrect:37},{name:'鈴木 けんた',username:'kenta',grade:'中学1年',points:520,totalAnswered:33,totalCorrect:26}];
+  var combined=samples.concat(list).sort(function(a,b){return(b.points||0)-(a.points||0);});
+  var c=document.getElementById('rank-list');c.innerHTML='';
+  combined.slice(0,10).forEach(function(u,i){
+    var nc=i===0?'gold':i===1?'silver':i===2?'bronze':'';
+    var ini=(u.name||u.username).charAt(0).toUpperCase();
+    var rate=u.totalAnswered>0?Math.round((u.totalCorrect||0)/u.totalAnswered*100):0;
+    var isMe=state.user&&state.user.username===u.username;
+    c.innerHTML+='<div class="rank-item" style="'+(isMe?'border:2px solid var(--blue);':'')+'">'
+      +'<div class="rank-num '+nc+'">'+(i+1)+'</div>'
+      +'<div class="rank-avatar">'+ini+'</div>'
+      +'<div class="rank-info"><div class="rank-name">'+(u.name||u.username)+(isMe?' 👈 あなた':'')+'</div>'
+      +'<div class="rank-detail">'+(u.grade||'')+' · 正答率 '+rate+'%</div></div>'
+      +'<div class="rank-pt">'+(u.points||0)+'<span style="font-size:12px;font-weight:400;color:var(--text-sub)"> pt</span></div>'
+      +'</div>';
+  });
+}
+function updateProfile(){
+  var u=state.user;if(!u)return;
+  var ini=(u.name||u.username).charAt(0).toUpperCase();
+  document.getElementById('profile-avatar').textContent=ini;
+  document.getElementById('profile-name').textContent=u.name||u.username;
+  document.getElementById('profile-grade').textContent=u.grade||'学年未設定';
+  document.getElementById('p-username').textContent=u.username;
+  document.getElementById('p-grade-row').textContent=u.grade||'未設定';
+  document.getElementById('p-total').textContent=u.totalAnswered||0;
+  var r=u.totalAnswered>0?Math.round((u.totalCorrect||0)/u.totalAnswered*100):'--';
+  document.getElementById('p-rate').textContent=r==='--'?'--%':r+'%';
+  document.getElementById('p-points').textContent=u.points||0;
+}
+function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+
+(function init(){var s=getCurrentUser();if(s){state.user=s;enterApp();}})();
 </script>
 </body>
 </html>
