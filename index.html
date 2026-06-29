@@ -294,6 +294,7 @@
       <div class="form-group"><label>パスワード</label><input type="password" id="login-password" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;" autocomplete="current-password"></div>
       <button class="btn-primary" onclick="doLogin()">ログイン</button>
       <button class="guest-btn" onclick="doGuest()">ゲストとして試してみる</button>
+      <button onclick="clearAllData()" style="margin-top:8px;width:100%;padding:10px;background:transparent;border:none;font-size:11px;color:#ccc;cursor:pointer;">🔧 データをリセット（困ったときだけ）</button>
     </div>
     <div id="register-form" style="display:none;">
       <div class="form-group"><label>氏名</label><input type="text" id="reg-name" placeholder="山田 太郎"></div>
@@ -733,6 +734,11 @@ function getUsers(){try{return JSON.parse(localStorage.getItem('soy2_users')||'{
 function saveUsers(u){localStorage.setItem('soy2_users',JSON.stringify(u))}
 function getCurrentUser(){try{return JSON.parse(localStorage.getItem('soy2_current')||'null')}catch(e){return null}}
 function saveCurrentUser(u){localStorage.setItem('soy2_current',JSON.stringify(u))}
+function clearAllData(){
+  if(!confirm('保存されたデータをすべて削除します。よろしいですか？'))return;
+  localStorage.clear();
+  showToast('データをリセットしました。新規登録できます！');
+}
 
 function switchLoginTab(t){
   var b=document.querySelectorAll('.tab-btn');
