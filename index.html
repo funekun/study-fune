@@ -193,8 +193,22 @@
   .profile-row .p-value{font-size:15px;font-weight:600;}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2C3E50;color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
-  /* Gift */
-  .gift-hero{background:linear-gradient(135deg,#F39C12 0%,#E67E22 100%);padding:24px 20px;text-align:center;color:#fff;}
+  /* Coming Soon */
+  .coming-soon-banner{margin:16px;background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);border-radius:var(--radius);padding:28px 20px;text-align:center;color:#fff;}
+  .cs-badge{display:inline-block;background:rgba(255,255,255,0.25);border:1.5px solid rgba(255,255,255,0.5);border-radius:20px;font-size:11px;font-weight:800;letter-spacing:2px;padding:4px 14px;margin-bottom:14px;}
+  .cs-title{font-size:20px;font-weight:800;line-height:1.4;margin-bottom:12px;}
+  .cs-desc{font-size:13px;opacity:.85;line-height:1.6;margin-bottom:20px;}
+  .cs-gifts{display:flex;justify-content:center;gap:12px;}
+  .cs-gift-item{background:rgba(255,255,255,0.15);border-radius:12px;padding:10px 14px;text-align:center;font-size:24px;}
+  .cs-gift-item div{font-size:10px;margin-top:4px;opacity:.9;}
+  /* How to */
+  .how-to-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .how-to-item{background:var(--card);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;gap:12px;box-shadow:var(--shadow);}
+  .ht-icon{font-size:24px;width:36px;text-align:center;flex-shrink:0;}
+  .ht-body{flex:1;}
+  .ht-title{font-size:14px;font-weight:700;margin-bottom:2px;}
+  .ht-desc{font-size:12px;color:var(--text-sub);}
+  .ht-pt{font-size:15px;font-weight:800;color:var(--orange);white-space:nowrap;}
   .gift-hero-label{font-size:13px;opacity:.85;margin-bottom:4px;}
   .gift-hero-pt{font-size:48px;font-weight:800;line-height:1;}
   .gift-pt-unit{font-size:20px;font-weight:600;}
@@ -412,12 +426,45 @@
 <div id="screen-gift" class="screen">
   <div class="header"><h1>&#127873; 景品交換</h1></div>
   <div class="gift-hero">
-    <div class="gift-hero-label">交換できるポイント</div>
+    <div class="gift-hero-label">貯まったポイント</div>
     <div class="gift-hero-pt"><span id="gift-points">0</span><span class="gift-pt-unit"> pt</span></div>
-    <div class="gift-hero-sub">問題を解いてポイントを貯めよう！</div>
+    <div class="gift-hero-sub">今のうちにポイントを貯めておこう！</div>
   </div>
-  <div class="section-title">景品一覧</div>
-  <div class="gift-list" id="gift-list"></div>
+  <!-- Coming Soon バナー -->
+  <div class="coming-soon-banner">
+    <div class="cs-badge">COMING SOON</div>
+    <div class="cs-title">景品引き換えシステム<br>まもなく実装予定！</div>
+    <div class="cs-desc">Amazonギフト券・iTunesカードなど豪華景品をポイントで交換できるようになります。今のうちにポイントを貯めておこう🎁</div>
+    <div class="cs-gifts">
+      <div class="cs-gift-item">🛒<div>Amazonギフト券</div></div>
+      <div class="cs-gift-item">🎵<div>iTunesカード</div></div>
+      <div class="cs-gift-item">🎮<div>Google Play</div></div>
+      <div class="cs-gift-item">☕<div>スタバ券</div></div>
+    </div>
+  </div>
+  <div class="section-title">ポイントの貯め方</div>
+  <div class="how-to-list">
+    <div class="how-to-item">
+      <div class="ht-icon">⚡</div>
+      <div class="ht-body"><div class="ht-title">一問一答で正解する</div><div class="ht-desc">1問正解につき 10pt 獲得</div></div>
+      <div class="ht-pt">+10pt</div>
+    </div>
+    <div class="how-to-item">
+      <div class="ht-icon">📄</div>
+      <div class="ht-body"><div class="ht-title">プリントをAI採点する</div><div class="ht-desc">1問正解につき 10pt 獲得</div></div>
+      <div class="ht-pt">+10pt</div>
+    </div>
+    <div class="how-to-item" style="opacity:0.5;">
+      <div class="ht-icon">🔥</div>
+      <div class="ht-body"><div class="ht-title">満点ボーナス <span style="font-size:11px;background:#FFF3E0;color:var(--orange);padding:2px 6px;border-radius:4px;font-weight:700;">近日実装</span></div><div class="ht-desc">プリントで満点を取るとボーナスpt</div></div>
+      <div class="ht-pt">+50pt</div>
+    </div>
+    <div class="how-to-item" style="opacity:0.5;">
+      <div class="ht-icon">📅</div>
+      <div class="ht-body"><div class="ht-title">連続ログインボーナス <span style="font-size:11px;background:#FFF3E0;color:var(--orange);padding:2px 6px;border-radius:4px;font-weight:700;">近日実装</span></div><div class="ht-desc">毎日ログインでボーナスpt</div></div>
+      <div class="ht-pt">+5pt</div>
+    </div>
+  </div>
 </div>
 
 <!-- GIFT CONFIRM -->
@@ -532,7 +579,7 @@ function showScreen(n){
   var nm={home:'nav-home',gift:'nav-gift',ranking:'nav-ranking',profile:'nav-profile'};
   document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});
   if(nm[n]){var el=document.getElementById(nm[n]);if(el)el.classList.add('active');}
-  if(n==='gift')buildGiftList();
+  if(n==='gift'){var gp=document.getElementById('gift-points');if(gp)gp.textContent=(state.user&&state.user.points)||0;}
   var hideNav=['login','quiz','print','print-setup','print-result','gift-confirm','gift-voucher'].indexOf(n)!==-1;
   document.getElementById('bottom-nav').style.display=hideNav?'none':'flex';
   if(n!=='print')stopTimer();
