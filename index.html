@@ -761,7 +761,7 @@ function doRegister(){
   users[u]=nu;saveUsers(users);state.user=nu;saveCurrentUser(nu);enterApp();
 }
 function doGuest(){state.user={name:'ゲスト',username:'guest',grade:'',points:0,totalAnswered:0,totalCorrect:0,history:{}};enterApp();}
-function doLogout(){if(!confirm('ログアウトしますか？'))return;state.user=null;localStorage.removeItem('soy_current');showScreen('login');}
+function doLogout(){if(!confirm('ログアウトしますか？'))return;state.user=null;localStorage.removeItem('soy2_current');showScreen('login');}
 function enterApp(){updateHomeStats();updateProfile();buildRanking();buildSubjectGrid();showScreen('home');document.getElementById('bottom-nav').style.display='flex';}
 
 function showScreen(n){
@@ -1316,7 +1316,12 @@ function showVoucher(g,record,now,code){
   showScreen('gift-voucher');
 }
 
-(function init(){var s=getCurrentUser();if(s){state.user=s;enterApp();}})();
+(function init(){
+  // 旧キーの残骸を削除
+  localStorage.removeItem('soy_users');
+  localStorage.removeItem('soy_current');
+  var s=getCurrentUser();if(s){state.user=s;enterApp();}
+})();
 </script>
 </body>
 </html>
