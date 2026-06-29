@@ -193,6 +193,56 @@
   .profile-row .p-value{font-size:15px;font-weight:600;}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2C3E50;color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
+  /* Gift */
+  .gift-hero{background:linear-gradient(135deg,#F39C12 0%,#E67E22 100%);padding:24px 20px;text-align:center;color:#fff;}
+  .gift-hero-label{font-size:13px;opacity:.85;margin-bottom:4px;}
+  .gift-hero-pt{font-size:48px;font-weight:800;line-height:1;}
+  .gift-pt-unit{font-size:20px;font-weight:600;}
+  .gift-hero-sub{font-size:13px;opacity:.8;margin-top:8px;}
+  .gift-list{padding:16px;display:flex;flex-direction:column;gap:12px;}
+  .gift-item{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;display:flex;align-items:stretch;}
+  .gift-item-color{width:6px;flex-shrink:0;}
+  .gift-item-body{flex:1;padding:16px;}
+  .gift-item-top{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+  .gift-item-icon{font-size:32px;}
+  .gift-item-info{flex:1;}
+  .gift-item-name{font-size:15px;font-weight:700;margin-bottom:2px;}
+  .gift-item-desc{font-size:12px;color:var(--text-sub);line-height:1.4;}
+  .gift-item-bottom{display:flex;align-items:center;justify-content:space-between;}
+  .gift-item-pt{font-size:18px;font-weight:800;color:var(--orange);}
+  .gift-item-pt span{font-size:12px;font-weight:400;color:var(--text-sub);}
+  .gift-item-btn{padding:8px 18px;border-radius:20px;border:none;font-size:13px;font-weight:700;cursor:pointer;}
+  .gift-item-btn.can{background:var(--orange);color:#fff;}
+  .gift-item-btn.cant{background:var(--border);color:var(--text-sub);cursor:default;}
+  /* Confirm */
+  .gift-confirm-body{padding:20px;}
+  .gift-confirm-card{background:var(--card);border-radius:var(--radius);padding:24px;text-align:center;box-shadow:var(--shadow);margin-bottom:16px;}
+  .gift-confirm-icon{font-size:56px;margin-bottom:12px;}
+  .gift-confirm-name{font-size:18px;font-weight:800;margin-bottom:8px;}
+  .gift-confirm-pt{font-size:24px;font-weight:800;color:var(--orange);}
+  .gift-confirm-info{background:var(--card);border-radius:var(--radius);padding:4px 16px;box-shadow:var(--shadow);margin-bottom:16px;}
+  .gift-info-row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);}
+  .gift-info-row:last-child{border-bottom:none;}
+  .gift-info-label{font-size:14px;color:var(--text-sub);}
+  .gift-info-val{font-size:15px;font-weight:700;}
+  .after-pt{color:var(--orange);}
+  .gift-confirm-note{background:#FFF8E1;border:1px solid #FFE082;border-radius:10px;padding:12px 14px;font-size:13px;color:#856404;line-height:1.6;margin-bottom:20px;}
+  .gift-exchange-btn{width:100%;padding:16px;background:var(--orange);color:#fff;border:none;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;}
+  /* Voucher */
+  .voucher-body{padding:20px;}
+  .voucher-card{background:var(--card);border-radius:20px;padding:28px 24px;box-shadow:0 4px 24px rgba(0,0,0,0.12);margin-bottom:20px;position:relative;overflow:hidden;}
+  .voucher-card::before{content:'';position:absolute;top:0;left:0;right:0;height:6px;background:linear-gradient(90deg,var(--blue),var(--purple));}
+  .voucher-logo{font-size:13px;font-weight:800;color:var(--blue);letter-spacing:.5px;margin-bottom:4px;}
+  .voucher-title{font-size:11px;color:var(--text-sub);margin-bottom:20px;letter-spacing:1px;text-transform:uppercase;}
+  .voucher-icon{font-size:48px;text-align:center;margin-bottom:8px;}
+  .voucher-gift-name{font-size:20px;font-weight:800;text-align:center;margin-bottom:20px;}
+  .voucher-divider{height:1px;background:repeating-linear-gradient(90deg,var(--border) 0,var(--border) 6px,transparent 6px,transparent 12px);margin:16px 0;}
+  .voucher-info-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;}
+  .vi-label{font-size:12px;color:var(--text-sub);}
+  .vi-val{font-size:14px;font-weight:600;}
+  .voucher-code{font-family:monospace;font-size:16px;color:var(--blue);letter-spacing:2px;}
+  .voucher-note{text-align:center;font-size:13px;color:var(--text-sub);margin-top:8px;}
+  .voucher-stamp{position:absolute;bottom:20px;right:20px;width:64px;height:64px;border-radius:50%;border:3px solid var(--green);color:var(--green);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center;transform:rotate(-15deg);background:rgba(39,174,96,0.08);}
   @media print{.bottom-nav,.print-header-bar,.print-action-bar,.back-btn{display:none!important;}.print-sheet{margin:0;box-shadow:none;border-radius:0;}body{background:#fff;}}
 </style>
 </head>
@@ -358,10 +408,77 @@
   </div>
 </div>
 
+<!-- GIFT SCREEN -->
+<div id="screen-gift" class="screen">
+  <div class="header"><h1>&#127873; 景品交換</h1></div>
+  <div class="gift-hero">
+    <div class="gift-hero-label">交換できるポイント</div>
+    <div class="gift-hero-pt"><span id="gift-points">0</span><span class="gift-pt-unit"> pt</span></div>
+    <div class="gift-hero-sub">問題を解いてポイントを貯めよう！</div>
+  </div>
+  <div class="section-title">景品一覧</div>
+  <div class="gift-list" id="gift-list"></div>
+</div>
+
+<!-- GIFT CONFIRM -->
+<div id="screen-gift-confirm" class="screen">
+  <div class="header">
+    <button class="back-btn" onclick="showScreen('gift')">&#8592; 戻る</button>
+    <h1>交換確認</h1>
+  </div>
+  <div class="gift-confirm-body">
+    <div class="gift-confirm-card">
+      <div class="gift-confirm-icon" id="confirm-icon">🎁</div>
+      <div class="gift-confirm-name" id="confirm-name">Amazonギフト券 500円</div>
+      <div class="gift-confirm-pt" id="confirm-pt">500 pt</div>
+    </div>
+    <div class="gift-confirm-info">
+      <div class="gift-info-row">
+        <span class="gift-info-label">現在のポイント</span>
+        <span class="gift-info-val" id="confirm-current-pt">0 pt</span>
+      </div>
+      <div class="gift-info-row">
+        <span class="gift-info-label">交換後のポイント</span>
+        <span class="gift-info-val after-pt" id="confirm-after-pt">0 pt</span>
+      </div>
+    </div>
+    <div class="gift-confirm-note">&#9432; 交換後に表示される引換証を先生に見せてポイントを消費してもらいましょう。</div>
+    <button class="gift-exchange-btn" id="gift-exchange-btn" onclick="doExchange()">この景品と交換する</button>
+  </div>
+</div>
+
+<!-- GIFT VOUCHER（引換証） -->
+<div id="screen-gift-voucher" class="screen">
+  <div class="header"><h1>&#127881; 引換証</h1></div>
+  <div class="voucher-body">
+    <div class="voucher-card" id="voucher-card">
+      <div class="voucher-logo">Study on You</div>
+      <div class="voucher-title">景品引換証</div>
+      <div class="voucher-icon" id="voucher-icon">🎁</div>
+      <div class="voucher-gift-name" id="voucher-gift-name">Amazonギフト券 500円</div>
+      <div class="voucher-divider"></div>
+      <div class="voucher-info-row"><span class="vi-label">お名前</span><span class="vi-val" id="voucher-name">-</span></div>
+      <div class="voucher-info-row"><span class="vi-label">交換日時</span><span class="vi-val" id="voucher-date">-</span></div>
+      <div class="voucher-info-row"><span class="vi-label">使用ポイント</span><span class="vi-val" id="voucher-pt">-</span></div>
+      <div class="voucher-info-row"><span class="vi-label">引換番号</span><span class="vi-val voucher-code" id="voucher-code">-</span></div>
+      <div class="voucher-divider"></div>
+      <div class="voucher-note">この画面を先生に見せてください</div>
+      <div class="voucher-stamp" id="voucher-stamp">未使用</div>
+    </div>
+    <div class="voucher-actions">
+      <button class="btn-primary" onclick="showScreen('home')">ホームに戻る</button>
+      <button class="btn-secondary" style="margin-top:10px;" onclick="showScreen('gift')">景品一覧に戻る</button>
+    </div>
+  </div>
+</div>
+
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottom-nav" style="display:none;">
   <button class="nav-item active" id="nav-home" onclick="showScreen('home')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9L12 2l9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>ホーム
+  </button>
+  <button class="nav-item" id="nav-gift" onclick="showScreen('gift')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,12 20,22 4,22 4,12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>景品
   </button>
   <button class="nav-item" id="nav-ranking" onclick="showScreen('ranking')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23,6 13.5,15.5 8.5,10.5 1,18"/><polyline points="17,6 23,6 23,12"/></svg>ランキング
@@ -412,10 +529,11 @@ function enterApp(){updateHomeStats();updateProfile();buildRanking();showScreen(
 function showScreen(n){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var s=document.getElementById('screen-'+n);if(s){s.classList.add('active');window.scrollTo(0,0);}
-  var nm={home:'nav-home',ranking:'nav-ranking',profile:'nav-profile'};
+  var nm={home:'nav-home',gift:'nav-gift',ranking:'nav-ranking',profile:'nav-profile'};
   document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});
   if(nm[n]){var el=document.getElementById(nm[n]);if(el)el.classList.add('active');}
-  var hideNav=['login','quiz','print','print-setup','print-result'].indexOf(n)!==-1;
+  if(n==='gift')buildGiftList();
+  var hideNav=['login','quiz','print','print-setup','print-result','gift-confirm','gift-voucher'].indexOf(n)!==-1;
   document.getElementById('bottom-nav').style.display=hideNav?'none':'flex';
   if(n!=='print')stopTimer();
 }
@@ -758,6 +876,81 @@ function updateProfile(){
   document.getElementById('p-points').textContent=u.points||0;
 }
 function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+
+// ===== GIFT =====
+var GIFTS=[
+  {id:'amazon500',icon:'🛒',name:'Amazonギフト券 500円',desc:'Amazonで使えるデジタルギフト券。本・文具・ゲームなど何でも買える！',pt:500,color:'#FF9900'},
+  {id:'amazon1000',icon:'🛍️',name:'Amazonギフト券 1,000円',desc:'Amazonで使えるデジタルギフト券。ちょっと豪華に使おう！',pt:1000,color:'#FF9900'},
+  {id:'amazon2000',icon:'👑',name:'Amazonギフト券 2,000円',desc:'Amazonで使えるデジタルギフト券。大きな買い物に！',pt:2000,color:'#FF9900'},
+  {id:'itunes500',icon:'🎵',name:'iTunesギフトカード 500円',desc:'App StoreやApple Musicで使えるギフトカード',pt:500,color:'#FC3C44'},
+  {id:'google500',icon:'🎮',name:'GooglePlayギフトカード 500円',desc:'Google Playストアで使えるギフトカード。アプリやゲームに！',pt:500,color:'#4285F4'},
+  {id:'starbucks',icon:'☕',name:'スタバギフト券 500円',desc:'スターバックスで使える電子ギフト券。勉強の合間にひと息',pt:700,color:'#00704A'},
+  {id:'convenience',icon:'🏪',name:'コンビニクーポン 300円分',desc:'有効期限内にコンビニで使えるクーポン',pt:400,color:'#E74C3C'},
+  {id:'bookcoupon',icon:'📚',name:'図書カード 500円',desc:'全国の書店で使える図書カード。参考書や好きな本に！',pt:600,color:'#8E44AD'},
+];
+var selectedGift=null;
+
+function buildGiftList(){
+  var pts=(state.user&&state.user.points)||0;
+  document.getElementById('gift-points').textContent=pts;
+  var list=document.getElementById('gift-list');list.innerHTML='';
+  GIFTS.forEach(function(g){
+    var canExchange=pts>=g.pt;
+    var item=document.createElement('div');item.className='gift-item';
+    item.innerHTML='<div class="gift-item-color" style="background:'+g.color+'"></div>'
+      +'<div class="gift-item-body">'
+      +'<div class="gift-item-top"><div class="gift-item-icon">'+g.icon+'</div>'
+      +'<div class="gift-item-info"><div class="gift-item-name">'+g.name+'</div>'
+      +'<div class="gift-item-desc">'+g.desc+'</div></div></div>'
+      +'<div class="gift-item-bottom">'
+      +'<div class="gift-item-pt">'+g.pt+'<span> pt</span></div>'
+      +'<button class="gift-item-btn '+(canExchange?'can':'cant')+'" '
+      +(canExchange?'onclick="openGiftConfirm(\''+g.id+'\')">交換する':'disabled>ポイント不足')
+      +'</button></div></div>';
+    list.appendChild(item);
+  });
+}
+
+function openGiftConfirm(id){
+  var g=GIFTS.find(function(x){return x.id===id;});
+  if(!g)return;
+  if(!state.user||state.user.username==='guest'){showToast('ログインが必要です');return;}
+  selectedGift=g;
+  var pts=state.user.points||0;
+  document.getElementById('confirm-icon').textContent=g.icon;
+  document.getElementById('confirm-name').textContent=g.name;
+  document.getElementById('confirm-pt').textContent=g.pt+' pt';
+  document.getElementById('confirm-current-pt').textContent=pts+' pt';
+  document.getElementById('confirm-after-pt').textContent=(pts-g.pt)+' pt';
+  showScreen('gift-confirm');
+}
+
+function doExchange(){
+  if(!selectedGift||!state.user)return;
+  var u=state.user;
+  if((u.points||0)<selectedGift.pt){showToast('ポイントが足りません');return;}
+  u.points=(u.points||0)-selectedGift.pt;
+  if(!u.exchangeHistory)u.exchangeHistory=[];
+  var now=new Date();
+  var code='SOY-'+Math.random().toString(36).substr(2,4).toUpperCase()+'-'+Math.random().toString(36).substr(2,4).toUpperCase();
+  var record={giftId:selectedGift.id,giftName:selectedGift.name,pt:selectedGift.pt,date:now.toISOString(),code:code};
+  u.exchangeHistory.push(record);
+  if(u.username!=='guest'){var users=getUsers();users[u.username]=u;saveUsers(users);}
+  saveCurrentUser(u);
+  showVoucher(selectedGift,record,now,code);
+  updateHomeStats();updateProfile();
+}
+
+function showVoucher(g,record,now,code){
+  document.getElementById('voucher-icon').textContent=g.icon;
+  document.getElementById('voucher-gift-name').textContent=g.name;
+  document.getElementById('voucher-name').textContent=state.user.name||state.user.username;
+  var dateStr=now.getFullYear()+'/'+(now.getMonth()+1)+'/'+now.getDate()+' '+pad(now.getHours())+':'+pad(now.getMinutes());
+  document.getElementById('voucher-date').textContent=dateStr;
+  document.getElementById('voucher-pt').textContent=g.pt+' pt';
+  document.getElementById('voucher-code').textContent=code;
+  showScreen('gift-voucher');
+}
 
 (function init(){var s=getCurrentUser();if(s){state.user=s;enterApp();}})();
 </script>
