@@ -729,10 +729,10 @@ var state={user:null,currentSubject:null,currentQuestions:[],currentIndex:0,corr
 var printState={subject:null,selectedTypes:{},counts:{},questions:[],timerSec:0,timerInterval:null,graded:false,results:[]};
 var printLastSetup={subject:null,types:{},counts:{}};
 
-function getUsers(){try{return JSON.parse(localStorage.getItem('soy_users')||'{}')}catch(e){return{}}}
-function saveUsers(u){localStorage.setItem('soy_users',JSON.stringify(u))}
-function getCurrentUser(){try{return JSON.parse(localStorage.getItem('soy_current')||'null')}catch(e){return null}}
-function saveCurrentUser(u){localStorage.setItem('soy_current',JSON.stringify(u))}
+function getUsers(){try{return JSON.parse(localStorage.getItem('soy2_users')||'{}')}catch(e){return{}}}
+function saveUsers(u){localStorage.setItem('soy2_users',JSON.stringify(u))}
+function getCurrentUser(){try{return JSON.parse(localStorage.getItem('soy2_current')||'null')}catch(e){return null}}
+function saveCurrentUser(u){localStorage.setItem('soy2_current',JSON.stringify(u))}
 
 function switchLoginTab(t){
   var b=document.querySelectorAll('.tab-btn');
