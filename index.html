@@ -200,6 +200,21 @@
   .avatar-upload-btn{display:inline-block;padding:8px 18px;border-radius:20px;border:1.5px solid var(--blue);color:var(--blue);font-size:13px;font-weight:700;cursor:pointer;background:#fff;}
   .avatar-remove-btn{background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;text-decoration:underline;}
   .privacy-note{background:#F5F5F5;border-radius:10px;padding:12px 14px;font-size:12px;color:var(--text-sub);line-height:1.6;margin:8px 0 20px;}
+  .privacy-section-title{font-size:13px;font-weight:700;color:var(--text-sub);margin:20px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--border);}
+  .privacy-badge{font-size:13px;margin-left:4px;}
+  .form-group-with-toggle{margin-bottom:16px;}
+  .fgt-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;}
+  .fgt-label-row label{font-size:13px;color:var(--text-sub);font-weight:600;}
+  .toggle-wrap{display:flex;align-items:center;gap:6px;}
+  .toggle-lbl{font-size:11px;color:var(--text-sub);}
+  .toggle-switch{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;}
+  .toggle-switch input{opacity:0;width:0;height:0;}
+  .toggle-slider{position:absolute;cursor:pointer;inset:0;background:#ccc;border-radius:24px;transition:.3s;}
+  .toggle-slider:before{content:'';position:absolute;height:18px;width:18px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+  .toggle-switch input:checked + .toggle-slider{background:var(--green);}
+  .toggle-switch input:checked + .toggle-slider:before{transform:translateX(20px);}
+  .form-group-with-toggle input,.form-group-with-toggle select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;outline:none;-webkit-appearance:none;background:#fff;}
+  .form-group-with-toggle input:focus,.form-group-with-toggle select:focus{border-color:var(--blue);}
   /* Stats */
   .stats-summary-hero{background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 100%);padding:20px;color:#fff;}
   .ssh-row{display:flex;gap:8px;}
@@ -472,9 +487,9 @@
   <div class="profile-section">
     <div class="profile-row"><span class="p-label">ユーザーネーム</span><span class="p-value" id="p-username">guest</span></div>
     <div class="profile-row"><span class="p-label">学年</span><span class="p-value" id="p-grade-row">未設定</span></div>
-    <div class="profile-row"><span class="p-label">学校</span><span class="p-value" id="p-school-row">未設定</span></div>
-    <div class="profile-row"><span class="p-label">志望校</span><span class="p-value" id="p-goal-school-row">未設定</span></div>
-    <div class="profile-row"><span class="p-label">好きな教科</span><span class="p-value" id="p-fav-subject-row">未設定</span></div>
+    <div class="profile-row"><span class="p-label">学校</span><span class="p-value" id="p-school-row">未設定</span><span class="privacy-badge" id="badge-school">🔒</span></div>
+    <div class="profile-row"><span class="p-label">志望校</span><span class="p-value" id="p-goal-school-row">未設定</span><span class="privacy-badge" id="badge-goal-school">🔒</span></div>
+    <div class="profile-row"><span class="p-label">好きな教科</span><span class="p-value" id="p-fav-subject-row">未設定</span><span class="privacy-badge" id="badge-fav-subject">🔒</span></div>
     <div class="profile-row" style="cursor:pointer;" onclick="doLogout()"><span class="p-label" style="color:var(--red);">ログアウト</span><span style="color:var(--text-sub);">&#8594;</span></div>
   </div>
 </div>
@@ -502,14 +517,66 @@
     <div class="form-group"><label>学年</label>
       <select id="edit-grade"><option value="">選択してください</option><option>中学1年</option><option>中学2年</option><option>中学3年</option><option>高校1年</option><option>高校2年</option><option>高校3年</option></select>
     </div>
-    <div class="form-group"><label>学校</label><input type="text" id="edit-school" placeholder="〇〇中学校"></div>
-    <div class="form-group"><label>志望校</label><input type="text" id="edit-goal-school" placeholder="〇〇高校"></div>
-    <div class="form-group"><label>好きな教科</label>
+
+    <div class="privacy-section-title">&#128274; 公開設定（将来のプロフィール検索で使われます）</div>
+
+    <div class="form-group-with-toggle">
+      <div class="fgt-label-row">
+        <label>学校</label>
+        <div class="toggle-wrap">
+          <span class="toggle-lbl" id="lbl-school">非公開</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="pub-school" onchange="updateToggleLabel('school')">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <input type="text" id="edit-school" placeholder="〇〇中学校">
+    </div>
+
+    <div class="form-group-with-toggle">
+      <div class="fgt-label-row">
+        <label>志望校</label>
+        <div class="toggle-wrap">
+          <span class="toggle-lbl" id="lbl-goal-school">非公開</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="pub-goal-school" onchange="updateToggleLabel('goal-school')">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <input type="text" id="edit-goal-school" placeholder="〇〇高校">
+    </div>
+
+    <div class="form-group-with-toggle">
+      <div class="fgt-label-row">
+        <label>好きな教科</label>
+        <div class="toggle-wrap">
+          <span class="toggle-lbl" id="lbl-fav-subject">非公開</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="pub-fav-subject" onchange="updateToggleLabel('fav-subject')">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
       <select id="edit-fav-subject"><option value="">選択してください</option><option>数学</option><option>英語</option><option>国語</option><option>理科</option><option>社会</option></select>
     </div>
-    <div class="form-group"><label>自己紹介</label><textarea id="edit-bio" rows="4" placeholder="自己紹介を書いてみよう！" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;outline:none;font-family:inherit;resize:vertical;"></textarea></div>
 
-    <div class="privacy-note">&#128274; これらの情報は現在すべて非公開です。公開設定機能は近日追加予定です。</div>
+    <div class="form-group-with-toggle">
+      <div class="fgt-label-row">
+        <label>自己紹介</label>
+        <div class="toggle-wrap">
+          <span class="toggle-lbl" id="lbl-bio">非公開</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="pub-bio" onchange="updateToggleLabel('bio')">
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+      </div>
+      <textarea id="edit-bio" rows="4" placeholder="自己紹介を書いてみよう！" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;outline:none;font-family:inherit;resize:vertical;"></textarea>
+    </div>
+
+    <div class="privacy-note">&#128274; 非公開の項目はあなただけに表示されます。公開すると将来の検索・グループ機能で他のユーザーに表示される予定です。</div>
 
     <button class="btn-primary" onclick="saveProfileEdit()">保存する</button>
   </div>
@@ -1085,6 +1152,13 @@ function updateProfile(){
   document.getElementById('p-school-row').textContent=u.school||'未設定';
   document.getElementById('p-goal-school-row').textContent=u.goalSchool||'未設定';
   document.getElementById('p-fav-subject-row').textContent=u.favSubject||'未設定';
+  // 公開バッジ更新
+  var privacy=u.privacy||{};
+  var badgeMap={'school':'badge-school','goal-school':'badge-goal-school','fav-subject':'badge-fav-subject'};
+  Object.keys(badgeMap).forEach(function(k){
+    var el=document.getElementById(badgeMap[k]);
+    if(el)el.textContent=privacy[k]?'🌐 公開':'🔒';
+  });
   document.getElementById('p-total').textContent=u.totalAnswered||0;
   var r=u.totalAnswered>0?Math.round((u.totalCorrect||0)/u.totalAnswered*100):'--';
   document.getElementById('p-rate').textContent=r==='--'?'--%':r+'%';
@@ -1093,6 +1167,11 @@ function updateProfile(){
 
 // ===== PROFILE EDIT =====
 var tempAvatarData=null;
+function updateToggleLabel(key){
+  var chk=document.getElementById('pub-'+key);
+  var lbl=document.getElementById('lbl-'+key);
+  if(chk&&lbl)lbl.textContent=chk.checked?'公開':'非公開';
+}
 function openProfileEdit(){
   var u=state.user;if(!u)return;
   if(u.username==='guest'){showToast('ゲストはプロフィール編集できません。新規登録してください');return;}
@@ -1102,6 +1181,16 @@ function openProfileEdit(){
   document.getElementById('edit-goal-school').value=u.goalSchool||'';
   document.getElementById('edit-fav-subject').value=u.favSubject||'';
   document.getElementById('edit-bio').value=u.bio||'';
+  // 公開設定を復元
+  var privacy=u.privacy||{};
+  ['school','goal-school','fav-subject','bio'].forEach(function(k){
+    var chk=document.getElementById('pub-'+k);
+    if(chk){
+      var dataKey=k.replace('-','').replace('goal-school','goalSchool').replace('favsubject','favSubject');
+      chk.checked=privacy[k]===true;
+      updateToggleLabel(k);
+    }
+  });
   tempAvatarData=u.avatar||null;
   var img=document.getElementById('avatar-edit-img');
   var letter=document.getElementById('avatar-edit-letter');
@@ -1143,6 +1232,13 @@ function saveProfileEdit(){
   u.favSubject=document.getElementById('edit-fav-subject').value;
   u.bio=document.getElementById('edit-bio').value.trim();
   u.avatar=tempAvatarData;
+  // 公開設定を保存
+  u.privacy={
+    school:document.getElementById('pub-school').checked,
+    'goal-school':document.getElementById('pub-goal-school').checked,
+    'fav-subject':document.getElementById('pub-fav-subject').checked,
+    bio:document.getElementById('pub-bio').checked
+  };
   var users=getUsers();users[u.username]=u;saveUsers(users);saveCurrentUser(u);
   state.user=u;
   updateProfile();updateHomeStats();
