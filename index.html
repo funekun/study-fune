@@ -200,6 +200,46 @@
   .avatar-upload-btn{display:inline-block;padding:8px 18px;border-radius:20px;border:1.5px solid var(--blue);color:var(--blue);font-size:13px;font-weight:700;cursor:pointer;background:#fff;}
   .avatar-remove-btn{background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;text-decoration:underline;}
   .privacy-note{background:#F5F5F5;border-radius:10px;padding:12px 14px;font-size:12px;color:var(--text-sub);line-height:1.6;margin:8px 0 20px;}
+  /* Stats */
+  .stats-summary-hero{background:linear-gradient(135deg,var(--blue) 0%,var(--purple) 100%);padding:20px;color:#fff;}
+  .ssh-row{display:flex;gap:8px;}
+  .ssh-item{flex:1;background:rgba(255,255,255,0.18);border-radius:12px;padding:12px 8px;text-align:center;}
+  .ssh-val{font-size:22px;font-weight:800;}
+  .ssh-lbl{font-size:10px;opacity:.85;margin-top:2px;}
+  .radar-wrap{display:flex;flex-direction:column;align-items:center;padding:8px 16px 16px;gap:12px;}
+  .radar-legend{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;}
+  .radar-legend-item{display:flex;align-items:center;gap:4px;font-size:12px;}
+  .radar-legend-dot{width:10px;height:10px;border-radius:50%;}
+  .subject-stats-list{padding:0 16px 16px;display:flex;flex-direction:column;gap:10px;}
+  .subj-stat-card{background:var(--card);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);position:relative;overflow:hidden;}
+  .subj-stat-card::before{content:'';position:absolute;top:0;left:0;bottom:0;width:4px;}
+  .subj-stat-card.math::before{background:var(--blue);}
+  .subj-stat-card.english::before{background:var(--green);}
+  .subj-stat-card.japanese::before{background:var(--red);}
+  .subj-stat-card.science::before{background:var(--orange);}
+  .subj-stat-card.social::before{background:var(--purple);}
+  .ssc-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
+  .ssc-icon{font-size:22px;}
+  .ssc-name{font-size:15px;font-weight:700;flex:1;}
+  .ssc-rate{font-size:18px;font-weight:800;color:var(--blue);}
+  .ssc-bar-wrap{height:8px;background:var(--border);border-radius:4px;overflow:hidden;margin-bottom:6px;}
+  .ssc-bar{height:100%;border-radius:4px;transition:width 0.8s;}
+  .subj-stat-card.math .ssc-bar{background:var(--blue);}
+  .subj-stat-card.english .ssc-bar{background:var(--green);}
+  .subj-stat-card.japanese .ssc-bar{background:var(--red);}
+  .subj-stat-card.science .ssc-bar{background:var(--orange);}
+  .subj-stat-card.social .ssc-bar{background:var(--purple);}
+  .ssc-detail{font-size:12px;color:var(--text-sub);}
+  .strong-weak-row{display:flex;gap:10px;padding:0 16px 16px;}
+  .sw-card{flex:1;border-radius:var(--radius);padding:16px;text-align:center;box-shadow:var(--shadow);}
+  .strong-card{background:linear-gradient(135deg,#E8F8EF,#D4EDDA);}
+  .weak-card{background:linear-gradient(135deg,#FFF3E0,#FFE0B2);}
+  .sw-label{font-size:11px;color:var(--text-sub);margin-bottom:6px;}
+  .sw-subject{font-size:20px;font-weight:800;margin-bottom:4px;}
+  .sw-rate{font-size:13px;color:var(--text-sub);}
+  .ai-advice-box{margin:0 16px;background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);display:flex;align-items:flex-start;gap:12px;}
+  .ai-advice-icon{font-size:32px;flex-shrink:0;}
+  .ai-advice-text{font-size:14px;line-height:1.7;color:var(--text);}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2C3E50;color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
   /* Coming Soon */
@@ -572,10 +612,76 @@
   </div>
 </div>
 
+<!-- STATS -->
+<div id="screen-stats" class="screen">
+  <div class="header"><h1>&#128200; あなたの成績</h1></div>
+
+  <!-- 総合サマリー -->
+  <div class="stats-summary-hero">
+    <div class="ssh-row">
+      <div class="ssh-item">
+        <div class="ssh-val" id="st-total">0</div>
+        <div class="ssh-lbl">解いた問題</div>
+      </div>
+      <div class="ssh-item">
+        <div class="ssh-val" id="st-correct">0</div>
+        <div class="ssh-lbl">正解数</div>
+      </div>
+      <div class="ssh-item">
+        <div class="ssh-val" id="st-rate">--%</div>
+        <div class="ssh-lbl">正答率</div>
+      </div>
+      <div class="ssh-item">
+        <div class="ssh-val" id="st-points">0</div>
+        <div class="ssh-lbl">ポイント</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- レーダーチャート -->
+  <div class="section-title">教科バランス</div>
+  <div class="radar-wrap">
+    <canvas id="radar-chart" width="280" height="280"></canvas>
+    <div class="radar-legend" id="radar-legend"></div>
+  </div>
+
+  <!-- 教科別成績 -->
+  <div class="section-title">教科別くわしい成績</div>
+  <div class="subject-stats-list" id="subject-stats-list"></div>
+
+  <!-- 得意・苦手 -->
+  <div class="section-title">得意・苦手教科</div>
+  <div class="strong-weak-row">
+    <div class="sw-card strong-card">
+      <div class="sw-label">&#127942; 得意</div>
+      <div class="sw-subject" id="st-strong">--</div>
+      <div class="sw-rate" id="st-strong-rate"></div>
+    </div>
+    <div class="sw-card weak-card">
+      <div class="sw-label">&#128170; もっと頑張ろう</div>
+      <div class="sw-subject" id="st-weak">--</div>
+      <div class="sw-rate" id="st-weak-rate"></div>
+    </div>
+  </div>
+
+  <!-- AIアドバイス -->
+  <div class="section-title">AIからのアドバイス</div>
+  <div class="ai-advice-box" id="ai-advice-box">
+    <div class="ai-advice-icon">&#129302;</div>
+    <div class="ai-advice-text" id="ai-advice-text">問題を解くとアドバイスが届きます！</div>
+  </div>
+  <div style="padding:16px;">
+    <button class="btn-primary" id="ai-advice-btn" onclick="loadAIAdvice()" style="background:linear-gradient(135deg,var(--blue),var(--purple));">&#10024; AIにアドバイスをもらう</button>
+  </div>
+</div>
+
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottom-nav" style="display:none;">
   <button class="nav-item active" id="nav-home" onclick="showScreen('home')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9L12 2l9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>ホーム
+  </button>
+  <button class="nav-item" id="nav-stats" onclick="showScreen('stats')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>成績
   </button>
   <button class="nav-item" id="nav-gift" onclick="showScreen('gift')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,12 20,22 4,22 4,12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>景品
@@ -629,9 +735,10 @@ function enterApp(){updateHomeStats();updateProfile();buildRanking();showScreen(
 function showScreen(n){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var s=document.getElementById('screen-'+n);if(s){s.classList.add('active');window.scrollTo(0,0);}
-  var nm={home:'nav-home',gift:'nav-gift',ranking:'nav-ranking',profile:'nav-profile'};
+  var nm={home:'nav-home',stats:'nav-stats',gift:'nav-gift',ranking:'nav-ranking',profile:'nav-profile'};
   document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});
   if(nm[n]){var el=document.getElementById(nm[n]);if(el)el.classList.add('active');}
+  if(n==='stats')buildStats();
   if(n==='gift'){var gp=document.getElementById('gift-points');if(gp)gp.textContent=(state.user&&state.user.points)||0;}
   var hideNav=['login','quiz','print','print-setup','print-result','gift-confirm','gift-voucher','profile-edit'].indexOf(n)!==-1;
   document.getElementById('bottom-nav').style.display=hideNav?'none':'flex';
@@ -1044,6 +1151,173 @@ function saveProfileEdit(){
 }
 
 function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+
+// ===== STATS =====
+var SUBJECT_INFO={
+  math:{name:'数学',icon:'📐',color:'#4A90E2',cls:'math'},
+  english:{name:'英語',icon:'🔤',color:'#27AE60',cls:'english'},
+  japanese:{name:'国語',icon:'📖',color:'#E74C3C',cls:'japanese'},
+  science:{name:'理科',icon:'🔬',color:'#E67E22',cls:'science'},
+  social:{name:'社会',icon:'🌍',color:'#8E44AD',cls:'social'}
+};
+function buildStats(){
+  var u=state.user;if(!u)return;
+  var h=u.history||{};
+  var total=u.totalAnswered||0,correct=u.totalCorrect||0;
+  document.getElementById('st-total').textContent=total;
+  document.getElementById('st-correct').textContent=correct;
+  var rate=total>0?Math.round(correct/total*100):0;
+  document.getElementById('st-rate').textContent=total>0?rate+'%':'--%';
+  document.getElementById('st-points').textContent=u.points||0;
+
+  // 教科別データ収集
+  var subjects=['math','english','japanese','science','social'];
+  var rates={};
+  subjects.forEach(function(s){
+    var sh=h[s]||{answered:0,correct:0};
+    rates[s]=sh.answered>0?Math.round((sh.correct||0)/sh.answered*100):0;
+  });
+
+  // レーダーチャート描画
+  drawRadar(rates);
+
+  // 教科別カード
+  var list=document.getElementById('subject-stats-list');
+  list.innerHTML='';
+  subjects.forEach(function(s){
+    var si=SUBJECT_INFO[s];
+    var sh=h[s]||{answered:0,correct:0};
+    var r=sh.answered>0?Math.round((sh.correct||0)/sh.answered*100):0;
+    var card=document.createElement('div');
+    card.className='subj-stat-card '+si.cls;
+    card.innerHTML='<div class="ssc-top">'
+      +'<div class="ssc-icon">'+si.icon+'</div>'
+      +'<div class="ssc-name">'+si.name+'</div>'
+      +'<div class="ssc-rate">'+r+'%</div>'
+      +'</div>'
+      +'<div class="ssc-bar-wrap"><div class="ssc-bar" style="width:'+r+'%"></div></div>'
+      +'<div class="ssc-detail">'+sh.answered+'問解答 / '+(sh.correct||0)+'問正解</div>';
+    list.appendChild(card);
+  });
+
+  // 得意・苦手
+  var answered=subjects.filter(function(s){return (h[s]&&h[s].answered>0);});
+  if(answered.length>0){
+    var best=answered.reduce(function(a,b){return rates[a]>=rates[b]?a:b;});
+    var worst=answered.reduce(function(a,b){return rates[a]<=rates[b]?a:b;});
+    document.getElementById('st-strong').textContent=SUBJECT_INFO[best].icon+' '+SUBJECT_INFO[best].name;
+    document.getElementById('st-strong-rate').textContent='正答率 '+rates[best]+'%';
+    document.getElementById('st-weak').textContent=SUBJECT_INFO[worst].icon+' '+SUBJECT_INFO[worst].name;
+    document.getElementById('st-weak-rate').textContent='正答率 '+rates[worst]+'%';
+  } else {
+    document.getElementById('st-strong').textContent='まだデータなし';
+    document.getElementById('st-weak').textContent='まだデータなし';
+  }
+}
+
+function drawRadar(rates){
+  var canvas=document.getElementById('radar-chart');
+  if(!canvas)return;
+  var ctx=canvas.getContext('2d');
+  var W=280,H=280,cx=140,cy=140,R=100;
+  ctx.clearRect(0,0,W,H);
+  var subjects=['math','english','japanese','science','social'];
+  var n=subjects.length;
+  var colors=['#4A90E2','#27AE60','#E74C3C','#E67E22','#8E44AD'];
+  var labels=['数学','英語','国語','理科','社会'];
+  var angles=subjects.map(function(_,i){return (i*2*Math.PI/n)-Math.PI/2;});
+
+  // グリッド
+  [20,40,60,80,100].forEach(function(pct){
+    ctx.beginPath();
+    angles.forEach(function(a,i){
+      var r=R*pct/100;
+      var x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.strokeStyle='#E0E6ED';ctx.lineWidth=1;ctx.stroke();
+  });
+
+  // 軸
+  angles.forEach(function(a){
+    ctx.beginPath();ctx.moveTo(cx,cy);
+    ctx.lineTo(cx+R*Math.cos(a),cy+R*Math.sin(a));
+    ctx.strokeStyle='#E0E6ED';ctx.lineWidth=1;ctx.stroke();
+  });
+
+  // データ塗り
+  ctx.beginPath();
+  angles.forEach(function(a,i){
+    var r=R*(rates[subjects[i]]||0)/100;
+    var x=cx+r*Math.cos(a),y=cy+r*Math.sin(a);
+    i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+  });
+  ctx.closePath();
+  ctx.fillStyle='rgba(74,144,226,0.25)';ctx.fill();
+  ctx.strokeStyle='#4A90E2';ctx.lineWidth=2;ctx.stroke();
+
+  // 頂点
+  angles.forEach(function(a,i){
+    var r=R*(rates[subjects[i]]||0)/100;
+    ctx.beginPath();
+    ctx.arc(cx+r*Math.cos(a),cy+r*Math.sin(a),4,0,2*Math.PI);
+    ctx.fillStyle=colors[i];ctx.fill();
+  });
+
+  // ラベル
+  ctx.font='bold 12px sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+  angles.forEach(function(a,i){
+    var lx=cx+(R+18)*Math.cos(a),ly=cy+(R+18)*Math.sin(a);
+    ctx.fillStyle='#2C3E50';
+    ctx.fillText(labels[i],lx,ly);
+  });
+
+  // レジェンド
+  var legend=document.getElementById('radar-legend');
+  legend.innerHTML='';
+  subjects.forEach(function(s,i){
+    var div=document.createElement('div');div.className='radar-legend-item';
+    div.innerHTML='<div class="radar-legend-dot" style="background:'+colors[i]+'"></div>'
+      +labels[i]+' '+(rates[s]||0)+'%';
+    legend.appendChild(div);
+  });
+}
+
+function loadAIAdvice(){
+  var u=state.user;if(!u)return;
+  var btn=document.getElementById('ai-advice-btn');
+  var textEl=document.getElementById('ai-advice-text');
+  btn.disabled=true;btn.textContent='考え中...';
+  textEl.textContent='AIがあなたの成績を分析しています...';
+  var h=u.history||{};
+  var subjects=['math','english','japanese','science','social'];
+  var names={math:'数学',english:'英語',japanese:'国語',science:'理科',social:'社会'};
+  var stats='';
+  subjects.forEach(function(s){
+    var sh=h[s]||{answered:0,correct:0};
+    var r=sh.answered>0?Math.round((sh.correct||0)/sh.answered*100):0;
+    stats+=names[s]+': '+sh.answered+'問解答, 正答率'+r+'% / ';
+  });
+  var prompt='中学生の学習アプリの成績データです。\n'
+    +'名前: '+(u.name||u.username)+'\n'
+    +'学年: '+(u.grade||'未設定')+'\n'
+    +'成績: '+stats+'\n'
+    +'合計: '+(u.totalAnswered||0)+'問解答, ポイント'+(u.points||0)+'pt\n\n'
+    +'この生徒に向けた学習アドバイスを200文字以内で、優しく励ますような言葉で書いてください。得意教科は褒め、苦手教科は具体的な改善のヒントを一つ提案してください。';
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:400,messages:[{role:'user',content:prompt}]})
+  }).then(function(r){return r.json();}).then(function(d){
+    var txt=d.content.map(function(c){return c.text||'';}).join('');
+    textEl.textContent=txt||'アドバイスを取得できませんでした。';
+    btn.disabled=false;btn.textContent='✨ もう一度アドバイスをもらう';
+  }).catch(function(){
+    textEl.textContent='アドバイスを取得できませんでした。問題を解いてポイントを貯めましょう！';
+    btn.disabled=false;btn.textContent='✨ AIにアドバイスをもらう';
+  });
+}
 
 // ===== GIFT =====
 var GIFTS=[
