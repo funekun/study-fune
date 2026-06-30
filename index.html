@@ -191,6 +191,15 @@
   .profile-row{background:var(--card);border-radius:var(--radius);padding:16px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow);}
   .profile-row .p-label{font-size:14px;color:var(--text-sub);}
   .profile-row .p-value{font-size:15px;font-weight:600;}
+  .profile-bio{font-size:13px;opacity:.9;margin-top:10px;padding:0 24px;line-height:1.5;}
+  .edit-profile-btn{margin-top:18px;background:rgba(255,255,255,0.25);border:1.5px solid rgba(255,255,255,0.5);color:#fff;padding:8px 18px;border-radius:20px;font-size:13px;font-weight:700;cursor:pointer;}
+  /* Profile Edit */
+  .profile-edit-body{padding:20px;}
+  .avatar-edit-row{display:flex;flex-direction:column;align-items:center;margin-bottom:24px;gap:10px;}
+  .avatar-edit-preview{width:88px;height:88px;border-radius:50%;background:var(--blue);color:#fff;display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;overflow:hidden;position:relative;}
+  .avatar-upload-btn{display:inline-block;padding:8px 18px;border-radius:20px;border:1.5px solid var(--blue);color:var(--blue);font-size:13px;font-weight:700;cursor:pointer;background:#fff;}
+  .avatar-remove-btn{background:none;border:none;color:var(--red);font-size:12px;cursor:pointer;text-decoration:underline;}
+  .privacy-note{background:#F5F5F5;border-radius:10px;padding:12px 14px;font-size:12px;color:var(--text-sub);line-height:1.6;margin:8px 0 20px;}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2C3E50;color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
   /* Coming Soon */
@@ -265,7 +274,7 @@
 <!-- LOGIN -->
 <div id="screen-login" class="screen active">
   <div class="login-logo">Study by Me</div>
-  <p class="login-sub">Enjoy Studying.</p>
+  <p class="login-sub">Enjoy Studying</p>
   <div class="login-card">
     <div class="tab-btns">
       <button class="tab-btn active" onclick="switchLoginTab('login')">ログイン</button>
@@ -406,19 +415,63 @@
 <!-- PROFILE -->
 <div id="screen-profile" class="screen">
   <div class="profile-hero">
-    <div class="profile-avatar" id="profile-avatar">G</div>
+    <div class="profile-avatar" id="profile-avatar">
+      <img id="profile-avatar-img" style="display:none;width:100%;height:100%;border-radius:50%;object-fit:cover;">
+      <span id="profile-avatar-letter">G</span>
+    </div>
     <div class="profile-name" id="profile-name">ゲスト</div>
     <div class="profile-grade" id="profile-grade">学年未設定</div>
+    <div class="profile-bio" id="profile-bio" style="display:none;"></div>
     <div class="profile-stats">
       <div class="p-stat"><div class="val" id="p-total">0</div><div class="lbl">解いた問題</div></div>
       <div class="p-stat"><div class="val" id="p-rate">--%</div><div class="lbl">正答率</div></div>
       <div class="p-stat"><div class="val" id="p-points">0</div><div class="lbl">ポイント</div></div>
     </div>
+    <button class="edit-profile-btn" onclick="openProfileEdit()">&#9999;&#65039; プロフィールを編集</button>
   </div>
   <div class="profile-section">
     <div class="profile-row"><span class="p-label">ユーザーネーム</span><span class="p-value" id="p-username">guest</span></div>
     <div class="profile-row"><span class="p-label">学年</span><span class="p-value" id="p-grade-row">未設定</span></div>
+    <div class="profile-row"><span class="p-label">学校</span><span class="p-value" id="p-school-row">未設定</span></div>
+    <div class="profile-row"><span class="p-label">志望校</span><span class="p-value" id="p-goal-school-row">未設定</span></div>
+    <div class="profile-row"><span class="p-label">好きな教科</span><span class="p-value" id="p-fav-subject-row">未設定</span></div>
     <div class="profile-row" style="cursor:pointer;" onclick="doLogout()"><span class="p-label" style="color:var(--red);">ログアウト</span><span style="color:var(--text-sub);">&#8594;</span></div>
+  </div>
+</div>
+
+<!-- PROFILE EDIT -->
+<div id="screen-profile-edit" class="screen">
+  <div class="header">
+    <button class="back-btn" onclick="showScreen('profile')">&#8592; 戻る</button>
+    <h1>プロフィール編集</h1>
+  </div>
+  <div class="profile-edit-body">
+    <div class="avatar-edit-row">
+      <div class="avatar-edit-preview" id="avatar-edit-preview">
+        <img id="avatar-edit-img" style="display:none;width:100%;height:100%;border-radius:50%;object-fit:cover;">
+        <span id="avatar-edit-letter">G</span>
+      </div>
+      <label class="avatar-upload-btn">
+        画像を選ぶ
+        <input type="file" id="avatar-file-input" accept="image/*" style="display:none;" onchange="handleAvatarUpload(event)">
+      </label>
+      <button class="avatar-remove-btn" id="avatar-remove-btn" style="display:none;" onclick="removeAvatar()">画像を削除</button>
+    </div>
+
+    <div class="form-group"><label>氏名</label><input type="text" id="edit-name" placeholder="山田 太郎"></div>
+    <div class="form-group"><label>学年</label>
+      <select id="edit-grade"><option value="">選択してください</option><option>中学1年</option><option>中学2年</option><option>中学3年</option><option>高校1年</option><option>高校2年</option><option>高校3年</option></select>
+    </div>
+    <div class="form-group"><label>学校</label><input type="text" id="edit-school" placeholder="〇〇中学校"></div>
+    <div class="form-group"><label>志望校</label><input type="text" id="edit-goal-school" placeholder="〇〇高校"></div>
+    <div class="form-group"><label>好きな教科</label>
+      <select id="edit-fav-subject"><option value="">選択してください</option><option>数学</option><option>英語</option><option>国語</option><option>理科</option><option>社会</option></select>
+    </div>
+    <div class="form-group"><label>自己紹介</label><textarea id="edit-bio" rows="4" placeholder="自己紹介を書いてみよう！" style="width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-size:15px;outline:none;font-family:inherit;resize:vertical;"></textarea></div>
+
+    <div class="privacy-note">&#128274; これらの情報は現在すべて非公開です。公開設定機能は近日追加予定です。</div>
+
+    <button class="btn-primary" onclick="saveProfileEdit()">保存する</button>
   </div>
 </div>
 
@@ -580,7 +633,7 @@ function showScreen(n){
   document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});
   if(nm[n]){var el=document.getElementById(nm[n]);if(el)el.classList.add('active');}
   if(n==='gift'){var gp=document.getElementById('gift-points');if(gp)gp.textContent=(state.user&&state.user.points)||0;}
-  var hideNav=['login','quiz','print','print-setup','print-result','gift-confirm','gift-voucher'].indexOf(n)!==-1;
+  var hideNav=['login','quiz','print','print-setup','print-result','gift-confirm','gift-voucher','profile-edit'].indexOf(n)!==-1;
   document.getElementById('bottom-nav').style.display=hideNav?'none':'flex';
   if(n!=='print')stopTimer();
 }
@@ -912,16 +965,84 @@ function buildRanking(){
 function updateProfile(){
   var u=state.user;if(!u)return;
   var ini=(u.name||u.username).charAt(0).toUpperCase();
-  document.getElementById('profile-avatar').textContent=ini;
+  var avImg=document.getElementById('profile-avatar-img');
+  var avLetter=document.getElementById('profile-avatar-letter');
+  if(u.avatar){avImg.src=u.avatar;avImg.style.display='block';avLetter.style.display='none';}
+  else{avImg.style.display='none';avLetter.style.display='block';avLetter.textContent=ini;}
   document.getElementById('profile-name').textContent=u.name||u.username;
   document.getElementById('profile-grade').textContent=u.grade||'学年未設定';
+  var bioEl=document.getElementById('profile-bio');
+  if(u.bio){bioEl.style.display='block';bioEl.textContent=u.bio;}else{bioEl.style.display='none';}
   document.getElementById('p-username').textContent=u.username;
   document.getElementById('p-grade-row').textContent=u.grade||'未設定';
+  document.getElementById('p-school-row').textContent=u.school||'未設定';
+  document.getElementById('p-goal-school-row').textContent=u.goalSchool||'未設定';
+  document.getElementById('p-fav-subject-row').textContent=u.favSubject||'未設定';
   document.getElementById('p-total').textContent=u.totalAnswered||0;
   var r=u.totalAnswered>0?Math.round((u.totalCorrect||0)/u.totalAnswered*100):'--';
   document.getElementById('p-rate').textContent=r==='--'?'--%':r+'%';
   document.getElementById('p-points').textContent=u.points||0;
 }
+
+// ===== PROFILE EDIT =====
+var tempAvatarData=null;
+function openProfileEdit(){
+  var u=state.user;if(!u)return;
+  if(u.username==='guest'){showToast('ゲストはプロフィール編集できません。新規登録してください');return;}
+  document.getElementById('edit-name').value=u.name||'';
+  document.getElementById('edit-grade').value=u.grade||'';
+  document.getElementById('edit-school').value=u.school||'';
+  document.getElementById('edit-goal-school').value=u.goalSchool||'';
+  document.getElementById('edit-fav-subject').value=u.favSubject||'';
+  document.getElementById('edit-bio').value=u.bio||'';
+  tempAvatarData=u.avatar||null;
+  var img=document.getElementById('avatar-edit-img');
+  var letter=document.getElementById('avatar-edit-letter');
+  var removeBtn=document.getElementById('avatar-remove-btn');
+  if(u.avatar){img.src=u.avatar;img.style.display='block';letter.style.display='none';removeBtn.style.display='inline';}
+  else{img.style.display='none';letter.style.display='block';letter.textContent=(u.name||u.username).charAt(0).toUpperCase();removeBtn.style.display='none';}
+  showScreen('profile-edit');
+}
+function handleAvatarUpload(e){
+  var file=e.target.files[0];
+  if(!file)return;
+  if(file.size>2*1024*1024){showToast('画像サイズは2MB以下にしてください');return;}
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    tempAvatarData=ev.target.result;
+    var img=document.getElementById('avatar-edit-img');
+    var letter=document.getElementById('avatar-edit-letter');
+    img.src=tempAvatarData;img.style.display='block';letter.style.display='none';
+    document.getElementById('avatar-remove-btn').style.display='inline';
+  };
+  reader.readAsDataURL(file);
+}
+function removeAvatar(){
+  tempAvatarData=null;
+  var img=document.getElementById('avatar-edit-img');
+  var letter=document.getElementById('avatar-edit-letter');
+  img.style.display='none';letter.style.display='block';
+  letter.textContent=(document.getElementById('edit-name').value||state.user.username).charAt(0).toUpperCase();
+  document.getElementById('avatar-remove-btn').style.display='none';
+}
+function saveProfileEdit(){
+  var u=state.user;if(!u)return;
+  var name=document.getElementById('edit-name').value.trim();
+  if(!name){showToast('氏名を入力してください');return;}
+  u.name=name;
+  u.grade=document.getElementById('edit-grade').value;
+  u.school=document.getElementById('edit-school').value.trim();
+  u.goalSchool=document.getElementById('edit-goal-school').value.trim();
+  u.favSubject=document.getElementById('edit-fav-subject').value;
+  u.bio=document.getElementById('edit-bio').value.trim();
+  u.avatar=tempAvatarData;
+  var users=getUsers();users[u.username]=u;saveUsers(users);saveCurrentUser(u);
+  state.user=u;
+  updateProfile();updateHomeStats();
+  showToast('プロフィールを更新しました！');
+  showScreen('profile');
+}
+
 function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 
 // ===== GIFT =====
