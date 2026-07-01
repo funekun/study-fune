@@ -316,6 +316,40 @@
   .ai-advice-text{font-size:14px;line-height:1.7;color:var(--text);}
   .toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#2C3E50;color:#fff;padding:12px 20px;border-radius:30px;font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;z-index:999;white-space:nowrap;}
   .toast.show{opacity:1;}
+  /* AI先生ページ */
+  #screen-teacher{display:flex;flex-direction:column;height:100vh;padding-bottom:0;}
+  #screen-teacher .header{flex-shrink:0;}
+  .teacher-select-row{display:flex;gap:6px;padding:10px 12px;background:#fff;border-bottom:1px solid var(--border);flex-shrink:0;}
+  .teacher-select-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:8px 4px;border-radius:12px;border:2px solid var(--border);background:#fff;font-size:22px;cursor:pointer;gap:2px;}
+  .teacher-select-btn div{font-size:10px;font-weight:700;color:var(--text-sub);}
+  .teacher-select-btn.active{border-color:var(--blue);background:#EEF4FF;}
+  .teacher-select-btn.active div{color:var(--blue);}
+  .teacher-profile-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--bg);border-bottom:1px solid var(--border);flex-shrink:0;}
+  .tpb-avatar{font-size:32px;}
+  .tpb-info{flex:1;}
+  .tpb-name{font-size:15px;font-weight:800;}
+  .tpb-subject{font-size:12px;color:var(--text-sub);}
+  .tpb-clear{background:none;border:1.5px solid var(--border);border-radius:20px;font-size:11px;color:var(--text-sub);padding:5px 10px;cursor:pointer;}
+  .teacher-chat{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;padding-bottom:120px;}
+  .tc-bubble{display:flex;gap:8px;align-items:flex-start;max-width:100%;}
+  .tc-teacher{flex-direction:row;}
+  .tc-user{flex-direction:row-reverse;}
+  .tc-avatar{font-size:26px;flex-shrink:0;margin-top:2px;}
+  .tc-text{background:var(--card);border-radius:16px;padding:12px 14px;font-size:14px;line-height:1.7;box-shadow:var(--shadow);max-width:calc(100% - 50px);word-break:break-word;white-space:pre-wrap;}
+  .tc-teacher .tc-text{border-top-left-radius:4px;}
+  .tc-user .tc-text{background:var(--blue);color:#fff;border-top-right-radius:4px;}
+  .tc-img{max-width:200px;border-radius:10px;margin-top:4px;}
+  .tc-typing{display:flex;gap:4px;align-items:center;padding:14px 16px;background:var(--card);border-radius:16px;border-top-left-radius:4px;box-shadow:var(--shadow);}
+  .tc-typing span{width:8px;height:8px;border-radius:50%;background:var(--text-sub);animation:blink 1.2s infinite;}
+  .tc-typing span:nth-child(2){animation-delay:.2s;}
+  .tc-typing span:nth-child(3){animation-delay:.4s;}
+  @keyframes blink{0%,60%,100%{transform:translateY(0);}30%{transform:translateY(-6px);}}
+  .teacher-input-bar{position:fixed;bottom:60px;left:0;right:0;background:#fff;border-top:1px solid var(--border);padding:8px 12px;display:flex;align-items:flex-end;gap:8px;z-index:100;}
+  .teacher-img-btn{font-size:22px;cursor:pointer;padding:6px;flex-shrink:0;border:none;background:none;}
+  .teacher-input{flex:1;border:1.5px solid var(--border);border-radius:20px;padding:8px 14px;font-size:15px;outline:none;font-family:inherit;resize:none;max-height:100px;line-height:1.5;}
+  .teacher-input:focus{border-color:var(--blue);}
+  .teacher-send-btn{width:40px;height:40px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .teacher-send-btn:disabled{background:var(--border);}
   /* AI先生 */
   .ai-teacher-btn{position:fixed;bottom:96px;right:16px;background:#fff;border:2px solid var(--border);border-radius:50px;padding:10px 14px;display:flex;flex-direction:column;align-items:center;gap:2px;box-shadow:0 4px 16px rgba(0,0,0,0.15);cursor:pointer;z-index:150;transition:transform 0.2s;}
   .ai-teacher-btn:active{transform:scale(0.95);}
@@ -901,6 +935,48 @@
   </div>
 </div>
 
+<!-- AI先生ページ -->
+<div id="screen-teacher" class="screen">
+  <div class="header"><h1>&#129302; AI先生に質問する</h1></div>
+
+  <!-- 先生選択 -->
+  <div class="teacher-select-row" id="teacher-select-row">
+    <button class="teacher-select-btn active" id="tsel-math" onclick="selectTeacher('math')">🤖<div>ロボ</div></button>
+    <button class="teacher-select-btn" id="tsel-english" onclick="selectTeacher('english')">🦉<div>フク</div></button>
+    <button class="teacher-select-btn" id="tsel-japanese" onclick="selectTeacher('japanese')">👩‍🏫<div>ナナ</div></button>
+    <button class="teacher-select-btn" id="tsel-science" onclick="selectTeacher('science')">🐱<div>ミケ</div></button>
+    <button class="teacher-select-btn" id="tsel-social" onclick="selectTeacher('social')">👨‍🏫<div>ケン</div></button>
+  </div>
+
+  <!-- 先生プロフィール -->
+  <div class="teacher-profile-bar" id="teacher-profile-bar">
+    <div class="tpb-avatar" id="tpb-avatar">🤖</div>
+    <div class="tpb-info">
+      <div class="tpb-name" id="tpb-name">ロボ先生</div>
+      <div class="tpb-subject" id="tpb-subject">数学担当</div>
+    </div>
+    <button class="tpb-clear" onclick="clearTeacherChat()">会話をリセット</button>
+  </div>
+
+  <!-- チャット -->
+  <div class="teacher-chat" id="teacher-chat">
+    <div class="tc-bubble tc-teacher" id="teacher-greeting">
+      <div class="tc-avatar" id="tc-avatar-greeting">🤖</div>
+      <div class="tc-text" id="tc-greeting-text">こんにちは！ロボ先生だよ🤖 数学でわからないことがあったら何でも聞いてね！問題文を入力するか、写真を撮って送ってくれてもOKだよ！</div>
+    </div>
+  </div>
+
+  <!-- 入力エリア -->
+  <div class="teacher-input-bar">
+    <label class="teacher-img-btn" title="写真を送る">
+      📷
+      <input type="file" id="teacher-img-input" accept="image/*" style="display:none;" onchange="sendTeacherImage(event)">
+    </label>
+    <textarea class="teacher-input" id="teacher-input" placeholder="質問を入力してください..." rows="1" oninput="autoResize(this)"></textarea>
+    <button class="teacher-send-btn" onclick="sendTeacherMessage()" id="teacher-send-btn">&#9658;</button>
+  </div>
+</div>
+
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottom-nav" style="display:none;">
   <button class="nav-item active" id="nav-home" onclick="showScreen('home')">
@@ -909,8 +985,8 @@
   <button class="nav-item" id="nav-cal" onclick="showScreen('cal')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>予定
   </button>
-  <button class="nav-item" id="nav-stats" onclick="showScreen('stats')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>成績
+  <button class="nav-item" id="nav-teacher" onclick="showScreen('teacher')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>AI先生
   </button>
   <button class="nav-item" id="nav-gift" onclick="showScreen('gift')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20,12 20,22 4,22 4,12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>景品
@@ -975,7 +1051,7 @@ function enterApp(){updateHomeStats();updateProfile();buildRanking();showScreen(
 function showScreen(n){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   var s=document.getElementById('screen-'+n);if(s){s.classList.add('active');window.scrollTo(0,0);}
-  var nm={home:'nav-home',cal:'nav-cal',stats:'nav-stats',gift:'nav-gift',ranking:'nav-ranking',profile:'nav-profile'};
+  var nm={home:'nav-home',cal:'nav-cal',teacher:'nav-teacher',stats:'nav-stats',gift:'nav-gift',ranking:'nav-ranking',profile:'nav-profile'};
   document.querySelectorAll('.nav-item').forEach(function(x){x.classList.remove('active');});
   if(nm[n]){var el=document.getElementById(nm[n]);if(el)el.classList.add('active');}
   if(n==='stats')buildStats();
@@ -1427,7 +1503,162 @@ function saveProfileEdit(){
 
 function showToast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
 
-// ===== AI先生 =====
+// ===== AI先生ページ =====
+var teacherState={
+  subject:'math',
+  history:[],
+  loading:false
+};
+
+var TEACHER_SUBJECTS={
+  math:'数学担当',english:'英語担当',japanese:'国語担当',science:'理科担当',social:'社会担当'
+};
+
+function selectTeacher(subject){
+  teacherState.subject=subject;
+  var t=AI_TEACHERS[subject];
+  // ボタンのactive切り替え
+  Object.keys(AI_TEACHERS).forEach(function(s){
+    var btn=document.getElementById('tsel-'+s);
+    if(btn)btn.classList.toggle('active',s===subject);
+  });
+  // プロフィールバー更新
+  document.getElementById('tpb-avatar').textContent=t.emoji;
+  document.getElementById('tpb-name').textContent=t.name;
+  document.getElementById('tpb-subject').textContent=TEACHER_SUBJECTS[subject];
+  // 会話リセット＆挨拶
+  clearTeacherChat();
+}
+
+function clearTeacherChat(){
+  var t=AI_TEACHERS[teacherState.subject];
+  teacherState.history=[];
+  var chat=document.getElementById('teacher-chat');
+  chat.innerHTML='';
+  addTeacherBubble('teacher', t.intro, t.emoji);
+}
+
+function addTeacherBubble(role, text, avatar){
+  var chat=document.getElementById('teacher-chat');
+  var bubble=document.createElement('div');
+  bubble.className='tc-bubble tc-'+role;
+  if(role==='teacher'){
+    var t=AI_TEACHERS[teacherState.subject];
+    bubble.innerHTML='<div class="tc-avatar">'+(avatar||t.emoji)+'</div><div class="tc-text">'+text+'</div>';
+  } else {
+    bubble.innerHTML='<div class="tc-text">'+text+'</div>';
+  }
+  chat.appendChild(bubble);
+  chat.scrollTop=chat.scrollHeight;
+  return bubble;
+}
+
+function addTypingIndicator(){
+  var chat=document.getElementById('teacher-chat');
+  var t=AI_TEACHERS[teacherState.subject];
+  var bubble=document.createElement('div');
+  bubble.className='tc-bubble tc-teacher';
+  bubble.id='typing-indicator';
+  bubble.innerHTML='<div class="tc-avatar">'+t.emoji+'</div>'
+    +'<div class="tc-typing"><span></span><span></span><span></span></div>';
+  chat.appendChild(bubble);
+  chat.scrollTop=chat.scrollHeight;
+}
+
+function removeTypingIndicator(){
+  var el=document.getElementById('typing-indicator');
+  if(el)el.remove();
+}
+
+function autoResize(el){
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,100)+'px';
+}
+
+function sendTeacherMessage(){
+  var input=document.getElementById('teacher-input');
+  var text=input.value.trim();
+  if(!text||teacherState.loading)return;
+  input.value='';
+  input.style.height='auto';
+  sendToTeacher(text, null);
+}
+
+function sendTeacherImage(e){
+  var file=e.target.files[0];
+  if(!file)return;
+  if(file.size>4*1024*1024){showToast('画像は4MB以下にしてください');return;}
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    var base64=ev.target.result.split(',')[1];
+    var mediaType=file.type||'image/jpeg';
+    // ユーザー側に画像を表示
+    var chat=document.getElementById('teacher-chat');
+    var bubble=document.createElement('div');
+    bubble.className='tc-bubble tc-user';
+    bubble.innerHTML='<img class="tc-img" src="'+ev.target.result+'">';
+    chat.appendChild(bubble);
+    chat.scrollTop=chat.scrollHeight;
+    sendToTeacher(null, {base64:base64, mediaType:mediaType});
+  };
+  reader.readAsDataURL(file);
+  e.target.value='';
+}
+
+function sendToTeacher(text, imageData){
+  if(teacherState.loading)return;
+  teacherState.loading=true;
+  var sendBtn=document.getElementById('teacher-send-btn');
+  if(sendBtn)sendBtn.disabled=true;
+
+  var t=AI_TEACHERS[teacherState.subject];
+
+  // ユーザーメッセージを表示
+  if(text)addTeacherBubble('user', text);
+
+  // 会話履歴に追加
+  var userContent=[];
+  if(imageData){
+    userContent.push({type:'image',source:{type:'base64',media_type:imageData.mediaType,data:imageData.base64}});
+    userContent.push({type:'text',text:text||'この問題を解説してください。'});
+  } else {
+    userContent.push({type:'text',text:text});
+  }
+  teacherState.history.push({role:'user',content:userContent});
+
+  addTypingIndicator();
+
+  var systemPrompt='あなたは中学生向け学習アプリ「Study by Me」の'+t.name+'です（'+t.emoji+'）。'
+    +TEACHER_SUBJECTS[teacherState.subject]+'の家庭教師として、中学生にわかりやすく丁寧に教えてください。'
+    +'・答えをすぐ教えるのではなく、考え方やヒントを先に伝えてください'
+    +'・中学生が親しみやすいよう、'+t.name+'らしい口調で話してください'
+    +'・数式や記号は読みやすく表記してください'
+    +'・写真の問題は読み取って解説してください'
+    +'・1回の返答は300文字以内を目安にしてください';
+
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:600,
+      system:systemPrompt,
+      messages:teacherState.history
+    })
+  }).then(function(r){return r.json();}).then(function(d){
+    removeTypingIndicator();
+    var reply=d.content&&d.content.map(function(c){return c.text||'';}).join('')||'ごめんね、うまく答えられなかった😅 もう一度聞いてみて！';
+    teacherState.history.push({role:'assistant',content:reply});
+    addTeacherBubble('teacher', reply);
+    teacherState.loading=false;
+    if(sendBtn)sendBtn.disabled=false;
+  }).catch(function(){
+    removeTypingIndicator();
+    addTeacherBubble('teacher', t.emoji+' ごめんね、今ちょっと接続が悪いみたい😅 もう一度送ってみて！');
+    teacherState.loading=false;
+    if(sendBtn)sendBtn.disabled=false;
+  });
+}
 var AI_TEACHERS={
   math:  {emoji:'🤖', name:'ロボ先生', color:'#4A90E2', intro:'数学が得意なロボ先生だよ！論理的に説明するね！'},
   english:{emoji:'🦉', name:'フク先生', color:'#27AE60', intro:'英語ならフク先生におまかせ！一緒に考えよう！'},
